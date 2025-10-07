@@ -1,3 +1,22 @@
+<<<<<<< HEAD
+# 🤖 AI Data Cleaning and EDA Agent
+
+An intelligent data preprocessing and exploratory data analysis tool powered by AI for machine learning workflows. **Now supports datasets up to 2GB with intelligent memory optimization!**
+
+## 🌟 Features
+
+### 🔧 **Intelligent Data Cleaning**
+- **Large Dataset Support**: Handle datasets up to 2GB with automatic optimization
+- Automated missing value detection and imputation
+- Outlier identification using statistical and ML methods
+- Data type optimization and validation (up to 90% memory reduction)
+- Duplicate detection with smart merge suggestions
+- Inconsistent data pattern recognition
+- Memory-efficient chunk processing for very large files
+
+### 📊 **AI-Powered EDA**
+- Automated descriptive statistics generation
+- Smart visualization recommendations
 # 🤖 AI Data Cleaning and EDA Agent
 
 An intelligent data preprocessing and exploratory data analysis tool powered by AI for machine learning workflows. **Now supports datasets up to 2GB with intelligent memory optimization!**

@@ -1626,7 +1626,7 @@ def show_data_cleaning_interface():
     st.header("🧹 Data Cleaning")
     
     # Assessment button
-    if st.button("🔍 Assess Data Quality", type="primary"):
+    if st.button("🔍 Assess Data Quality"):
         with st.spinner("Analyzing data quality..."):
             quality_report = st.session_state.cleaning_agent.assess_data_quality()
             st.session_state.quality_report = quality_report
@@ -1711,7 +1711,7 @@ def show_eda_analysis():
     st.header("🔍 Exploratory Data Analysis")
     
     # Generate EDA report button
-    if st.button("📊 Generate EDA Report", type="primary"):
+    if st.button("📊 Generate EDA Report"):
         with st.spinner("Performing comprehensive EDA analysis..."):
             eda_report = st.session_state.eda_agent.generate_comprehensive_report()
             st.session_state.eda_report = eda_report
@@ -2048,13 +2048,13 @@ def show_ml_pipeline(data):
             st.session_state.preprocessing_agent.set_data(data, target_column)
             
             # Analyze preprocessing needs
-            if st.button("Analyze Preprocessing Requirements", type="primary"):
+            if st.button("Analyze Preprocessing Requirements"):
                 with st.spinner("Analyzing data for preprocessing..."):
                     analysis = st.session_state.preprocessing_agent.analyze_preprocessing_needs()
-                    
+
                     # Display analysis
                     col1, col2 = st.columns(2)
-                    
+
                     with col1:
                         st.write("**Missing Values Analysis:**")
                         if analysis['missing_values']:
@@ -2062,7 +2062,7 @@ def show_ml_pipeline(data):
                             st.dataframe(missing_df)
                         else:
                             st.success("No missing values found!")
-                    
+
                     with col2:
                         st.write("**Categorical Variables:**")
                         if analysis['categorical_variables']:
@@ -2070,7 +2070,7 @@ def show_ml_pipeline(data):
                             st.dataframe(cat_df[['unique_count', 'recommended_encoding']])
                         else:
                             st.info("No categorical variables found.")
-                    
+
                     # Recommendations
                     st.write("**Preprocessing Recommendations:**")
                     for rec in analysis['recommendations']:
@@ -2137,7 +2137,7 @@ def show_ml_pipeline(data):
                 with col1:
                     quick_mode = st.checkbox("Quick Mode", value=True, help="Faster training with default parameters")
                 with col2:
-                    if st.button("Train Selected Models", type="primary"):
+                    if st.button("Train Selected Models"):
                         if selected_models:
                             results = {}
                             progress_bar = st.progress(0)
@@ -2242,7 +2242,7 @@ def show_ml_pipeline(data):
                                                 help="Faster execution with fewer models")
                 
                 with col2:
-                    if st.button("🚀 Run Auto-ML Pipeline", type="primary"):
+                    if st.button("🚀 Run Auto-ML Pipeline"):
                         # Set up ML agent
                         st.session_state.ml_agent.set_data(
                             processed_result['X_train'],
