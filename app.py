@@ -874,97 +874,40 @@ def main():
         # Unified upload message
         st.info("📁 **File Upload**: Use the main area below for uploading datasets (supports up to 2GB)")
         
-        # Large dataset options (placeholder - will be handled in main area)
-        uploaded_file = None
+        # Sidebar file uploader (works like main area uploader)
+        uploaded_file = st.file_uploader(
+            "Upload dataset (sidebar)",
+            type=['csv', 'xlsx', 'xls', 'json', 'parquet'],
+            help="Upload CSV, Excel, JSON, or Parquet files up to 2GB",
+            key="sidebar_uploader",
+            label_visibility="collapsed"
+        )
+
         if uploaded_file is not None:
-            # Calculate file size with progress indication for large files
-            with st.spinner("📊 Analyzing uploaded file..."):
-                file_size_mb = len(uploaded_file.read()) / (1024 * 1024)
-                uploaded_file.seek(0)  # Reset file pointer
-            
-            # Display file size information with enhanced styling
-            if file_size_mb < 1:
-                size_display = f"{file_size_mb*1024:.1f} KB"
-                color = "#4CAF50"
-            elif file_size_mb < 100:
-                size_display = f"{file_size_mb:.1f} MB"
-                color = "#2196F3"
-            elif file_size_mb < 500:
-                size_display = f"{file_size_mb:.1f} MB"
-                color = "#FF9800"
-            else:
-                size_display = f"{file_size_mb/1024:.2f} GB"
-                color = "#9C27B0"
-            
-            st.markdown(f'''
-                <div class="info-box hover-lift" style="margin: 1rem 0;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <span style="font-size: 1.1rem; font-weight: 600;">📁 {uploaded_file.name}</span>
-                        </div>
-                        <div style="text-align: right;">
-                            <span style="font-size: 1.2rem; font-weight: 700; color: {color};">✅ {size_display}</span>
-                        </div>
-                    </div>
-                </div>
-            ''', unsafe_allow_html=True)
-            
-            if file_size_mb > 200:
-                st.markdown(f'''
-                    <div class="warning-box hover-lift" style="margin: 1rem 0;">
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
-                            <div>
-                                <span style="font-weight: 600;">⚠️ Large Dataset Detected</span>
-                                <br><span style="font-size: 0.9rem;">Size: {file_size_mb:.1f} MB</span>
-                            </div>
-                            <div style="font-size: 2rem;">🚀</div>
-                        </div>
-                    </div>
-                ''', unsafe_allow_html=True)
-                
-                st.markdown('''
-                    <div class="custom-info">
-                        <span style="font-weight: 600;">� Automatic Optimizations Enabled</span>
-                        <br><span style="font-size: 0.9rem;">Memory usage will be optimized for better performance</span>
-                    </div>
-                ''', unsafe_allow_html=True)
-                
-                # Enhanced large dataset options
-                with st.expander("⚙️ Advanced Processing Options", expanded=False):
-                    st.markdown('''
-                        <div style="padding: 0.5rem 0;">
-                            <h4 style="color: #667eea; margin-bottom: 1rem;">🔧 Optimization Settings</h4>
-                        </div>
-                    ''', unsafe_allow_html=True)
-                    
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        chunk_processing = st.checkbox(
-                            "🔄 Chunk Processing", 
-                            value=True, 
-                            help="Process data in chunks to manage memory usage"
-                        )
-                        memory_optimization = st.checkbox(
-                            "💾 Memory Optimization", 
-                            value=True, 
-                            help="Optimize data types to reduce memory usage"
-                        )
-                    with col2:
-                        sample_for_analysis = st.checkbox(
-                            "📊 Smart Sampling", 
-                            value=file_size_mb > 500, 
-                            help="Use representative sample for initial analysis"
-                        )
-                        auto_parquet = st.checkbox(
-                            "📦 Auto Parquet Conversion", 
-                            value=file_size_mb > 800,
-                            help="Convert to Parquet format for better performance"
-                        )
-            else:
-                st.success(f"✅ Dataset size: {file_size_mb:.1f} MB")
-                chunk_processing = False
-                memory_optimization = False
-                sample_for_analysis = False
+            # Try to load the uploaded file using the shared loader
+            with st.spinner("📊 Loading uploaded file..."):
+                data = load_uploaded_file(uploaded_file)
+
+            if data is not None:
+                st.session_state.data = data
+                st.session_state.file_name = getattr(uploaded_file, 'name', 'uploaded_dataset')
+                st.session_state.demo_loaded = False
+                # Initialize agents with the loaded data
+                if hasattr(st.session_state, 'cleaning_agent'):
+                    st.session_state.cleaning_agent.load_data(data)
+                else:
+                    st.session_state.cleaning_agent = DataCleaningAgent(use_large_dataset_optimization=True, memory_limit_gb=1.5)
+                    st.session_state.cleaning_agent.load_data(data)
+
+                if hasattr(st.session_state, 'eda_agent'):
+                    st.session_state.eda_agent.set_data(data)
+                else:
+                    st.session_state.eda_agent = EDAAgent()
+                    st.session_state.eda_agent.set_data(data)
+
+                st.success("✅ Dataset uploaded successfully from sidebar!")
+                st.balloons()
+                st.rerun()
         
         # Demo data option
         use_demo_data = st.checkbox("Use Demo Dataset", help="Load a sample dataset for testing")
@@ -1007,8 +950,9 @@ def main():
     # Load data (from session state - main uploader handles the loading)
     data = st.session_state.data
     
-    if st.session_state.demo_loaded and st.session_state.data is not None:
-        # Handle previously loaded demo data
+    # Show analysis interface if ANY data is loaded (demo or uploaded)
+    if st.session_state.data is not None:
+        # Handle previously loaded data (demo or uploaded)
         data = st.session_state.data
         if not hasattr(st.session_state.cleaning_agent, 'data') or st.session_state.cleaning_agent.data is None:
             st.session_state.cleaning_agent.load_data(data)
@@ -1060,7 +1004,8 @@ def main():
     
     else:
         # Unified data loading section (works for all devices)
-        if not st.session_state.demo_loaded and st.session_state.data is None:
+        # Show welcome/upload screen only if no data is loaded
+        if st.session_state.data is None:
             
             # Universal file uploader with custom styling
             st.markdown("### 📁 Upload Your Dataset")
@@ -1084,6 +1029,8 @@ def main():
                 data = load_uploaded_file(uploaded_file_main)
                 if data is not None:
                     st.session_state.data = data
+                    st.session_state.file_name = uploaded_file_main.name
+                    st.session_state.demo_loaded = False  # Mark as uploaded (not demo)
                     st.session_state.cleaning_agent.load_data(data)
                     st.session_state.eda_agent.set_data(data)
                     st.success("✅ Dataset uploaded successfully!")
