@@ -39,14 +39,22 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+html, body {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
 body {
   font-family: var(--font-sans);
   color: var(--text-main);
   background-color: var(--bg-main);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5 { color: var(--secondary); font-weight: 700; line-height: 1.22; letter-spacing: -0.025em; }
@@ -783,6 +791,68 @@ a { color: inherit; text-decoration: none; }
   .legal-modal-body { padding: 16px; }
 }
 
+
+/* STRICT ZERO HORIZONTAL SCROLL ENFORCEMENT */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+}
+.navbar {
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+.container {
+  width: 100%;
+  max-width: 1240px;
+  box-sizing: border-box;
+}
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mobile-cta { display: none; }
+.mobile-menu-actions { display: none; }
+
+@media (max-width: 860px) {
+  .desktop-only { display: none !important; }
+  .mobile-cta {
+    display: inline-flex !important;
+    padding: 6px 12px !important;
+    font-size: 0.8rem !important;
+    border-radius: var(--radius-sm) !important;
+  }
+  .mobile-menu-btn {
+    display: inline-flex !important;
+    padding: 6px 8px !important;
+  }
+  .navbar-actions {
+    gap: 8px !important;
+  }
+  .mobile-menu-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+    padding-top: 12px !important;
+    border-top: 1px solid var(--border-light) !important;
+  }
+  .navbar-inner {
+    padding: 0 4px !important;
+  }
+  .brand-group {
+    font-size: 1.2rem !important;
+    gap: 8px !important;
+  }
+  .brand-icon {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 1rem !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -795,7 +865,7 @@ a { color: inherit; text-decoration: none; }
       <span>Metriva</span>
     </a>
 
-    <ul class="nav-menu">
+    <ul class="nav-menu" id="nav-menu">
       <!-- Product Dropdown Mega-Menu (Executive Business Intelligence) -->
       <li class="nav-item nav-item-dropdown">
         <div class="nav-link-dropdown">
@@ -852,15 +922,19 @@ a { color: inherit; text-decoration: none; }
       <li class="nav-item"><a href="#comparison">Compare</a></li>
       <li class="nav-item"><a href="#features">Features</a></li>
       <li class="nav-item"><a href="#pricing">Pricing</a></li>
+      <li class="mobile-menu-actions">
+        <a href="/app" class="btn btn-secondary" style="width:100%; justify-content:center;">Sign In</a>
+        <a href="/app" class="btn btn-primary" style="width:100%; justify-content:center;">Start Free</a>
+      </li>
     </ul>
 
-    <button class="mobile-menu-btn" onclick="toggleNavMenu()" aria-label="Open Navigation">
-      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
-
-    <div style="display:flex; align-items:center; gap:12px;">
-      <a href="/app" class="btn btn-secondary">Sign In</a>
-      <a href="/app" class="btn btn-primary">Start Free</a>
+    <div class="navbar-actions">
+      <a href="/app" class="btn btn-primary btn-sm mobile-cta">Start Free</a>
+      <a href="/app" class="btn btn-secondary desktop-only">Sign In</a>
+      <a href="/app" class="btn btn-primary desktop-only">Start Free</a>
+      <button class="mobile-menu-btn" onclick="toggleNavMenu()" aria-label="Open Navigation">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
     </div>
   </div>
 </header>
