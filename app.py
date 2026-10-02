@@ -529,6 +529,15 @@ def index():
 def workspace():
     return render_template("app.html")
 
+
+@app.route("/privacy")
+@app.route("/terms")
+@app.route("/security")
+@app.route("/cookies")
+@app.route("/status")
+def legal_routes():
+    return render_template("index.html")
+
 @app.route("/health")
 def health():
     return jsonify({"status": "ok"})

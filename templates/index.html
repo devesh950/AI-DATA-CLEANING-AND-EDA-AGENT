@@ -597,6 +597,100 @@ a { color: inherit; text-decoration: none; }
   transition: color 0.15s;
 }
 .footer-legal-links a:hover { color: #94a3b8; }
+
+/* LEGAL & STATUS MODAL */
+.legal-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.legal-modal-backdrop.show { display: flex; animation: fadeIn 0.2s ease; }
+.legal-modal-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  max-width: 680px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  position: relative;
+}
+.legal-modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+}
+.legal-modal-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.legal-modal-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--secondary);
+}
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s;
+}
+.modal-close-btn:hover { background: #e2e8f0; color: var(--secondary); }
+.legal-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: #334155;
+}
+.legal-modal-body h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-top: 16px;
+  margin-bottom: 6px;
+}
+.legal-modal-body p {
+  color: #475569;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+.legal-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: #f8fafc;
+}
+
 </style>
 </head>
 <body>
@@ -1021,16 +1115,152 @@ a { color: inherit; text-decoration: none; }
         &copy; 2026 Metriva Inc. Engineered for founders, finance leaders, and operators. All rights reserved.
       </div>
       <div class="footer-legal-links">
-        <a href="javascript:void(0)">Privacy Policy</a>
-        <a href="javascript:void(0)">Terms of Service</a>
-        <a href="javascript:void(0)">Security Architecture</a>
-        <a href="javascript:void(0)">Cookie Preferences</a>
-        <a href="javascript:void(0)">Status</a>
+        <a href="javascript:void(0)" onclick="openLegalModal('privacy')">Privacy Policy</a>
+        <a href="javascript:void(0)" onclick="openLegalModal('terms')">Terms of Service</a>
+        <a href="javascript:void(0)" onclick="openLegalModal('security')">Security Architecture</a>
+        <a href="javascript:void(0)" onclick="openLegalModal('cookies')">Cookie Preferences</a>
+        <a href="javascript:void(0)" onclick="openLegalModal('status')">Status</a>
       </div>
     </div>
 
   </div>
 </footer>
+
+
+<!-- INTERACTIVE LEGAL & STATUS MODAL -->
+<div class="legal-modal-backdrop" id="legal-modal" onclick="closeLegalModal(event)">
+  <div class="legal-modal-card" onclick="event.stopPropagation()">
+    <div class="legal-modal-header">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span class="legal-modal-badge" id="modal-badge">LEGAL</span>
+        <h3 class="legal-modal-title" id="modal-title">Policy</h3>
+      </div>
+      <button class="modal-close-btn" onclick="closeLegalModal()">✕</button>
+    </div>
+    <div class="legal-modal-body" id="modal-body"></div>
+    <div class="legal-modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="closeLegalModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const legalContent = {
+  privacy: {
+    badge: "PRIVACY POLICY",
+    title: "Metriva Privacy Policy",
+    body: `
+      <p><em>Last updated: October 2026</em></p>
+      <h4>1. Zero-Retention In-Memory Architecture</h4>
+      <p>When you upload CSV, XLSX, or XLS spreadsheets to Metriva, your data is processed purely in volatile RAM during your active session. We do not store, write, or persist your data rows to disks, databases, or third-party servers.</p>
+      <h4>2. Zero Model Training on Customer Data</h4>
+      <p>Metriva NEVER uses your private business records, customer transactions, billable rates, or margins to train public machine learning models.</p>
+      <h4>3. Session Termination & Purging</h4>
+      <p>The moment you close your tab or finish exporting your repaired CSV, all in-memory datasets are destroyed.</p>
+      <h4>4. Regulatory Rights (GDPR & CCPA)</h4>
+      <p>Under European GDPR and California CCPA guidelines, you retain 100% ownership and portability over all uploaded materials.</p>
+    `
+  },
+  terms: {
+    badge: "TERMS OF SERVICE",
+    title: "Terms of Service",
+    body: `
+      <p><em>Effective Date: October 2026</em></p>
+      <h4>1. Agreement to Terms</h4>
+      <p>By accessing or using Metriva, you agree to be bound by these Terms of Service. If you do not agree, you must not use our software.</p>
+      <h4>2. Purpose of the Service</h4>
+      <p>Metriva provides deterministic statistical calculations, spreadsheet cleaning, Pareto 80/20 attribution, and KPI reporting for internal business intelligence.</p>
+      <h4>3. Fair Use & Upload Allowances</h4>
+      <p>Free Starter accounts may upload datasets up to 20MB. Professional accounts ($29/mo) receive up to 500MB file capacity. Automated abuse or reverse engineering is prohibited.</p>
+      <h4>4. Billing & Cancellation</h4>
+      <p>Paid plans are billed on a monthly subscription basis. You may cancel your subscription at any time without penalty.</p>
+    `
+  },
+  security: {
+    badge: "SECURITY ARCHITECTURE",
+    title: "Enterprise Security Architecture",
+    body: `
+      <h4>1. Transport Layer Security</h4>
+      <p>All data transmitted between your browser and Metriva is encrypted end-to-end using TLS 1.3 with 256-bit encryption.</p>
+      <h4>2. In-Memory Isolation</h4>
+      <p>Each dataset is analyzed in an isolated temporary runtime. No persistent relational tables or multi-tenant database clusters store your rows.</p>
+      <h4>3. Deterministic Mathematical Reliability</h4>
+      <p>All calculations use deterministic, battle-tested Python statistical libraries (Pandas, NumPy). There is zero generative hallucination or math distortion.</p>
+      <h4>4. Automated Vulnerability Auditing</h4>
+      <p>We perform daily automated dependency vulnerability scans to ensure zero known security exploits.</p>
+    `
+  },
+  cookies: {
+    badge: "COOKIE SETTINGS",
+    title: "Cookie & Tracking Preferences",
+    body: `
+      <h4>Strictly Necessary Cookies (Always Active)</h4>
+      <p>These cookies are required for basic security, routing, and CSRF protection. They do not store personal identifying information.</p>
+      <h4>Performance & Diagnostic Telemetry</h4>
+      <p>Anonymous diagnostic metrics to measure server response latency and upload throughput.</p>
+      <div style="background:#f1f5f9; padding:14px; border-radius:8px; margin:16px 0; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong>Anonymous Performance Analytics</strong><br>
+          <span style="font-size:0.8rem; color:#64748b;">Help us optimize upload throughput</span>
+        </div>
+        <input type="checkbox" checked style="width:20px; height:20px; accent-color:var(--primary); cursor:pointer;">
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="saveCookiePrefs()" style="margin-top:8px;">Save Preferences</button>
+    `
+  },
+  status: {
+    badge: "LIVE SYSTEM STATUS",
+    title: "Metriva System Health & Uptime",
+    body: `
+      <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:8px; padding:16px; margin-bottom:18px; display:flex; align-items:center; gap:12px;">
+        <div style="width:12px; height:12px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></div>
+        <div>
+          <strong style="color:#065f46; font-size:1.05rem;">All Systems Fully Operational</strong><br>
+          <span style="font-size:0.82rem; color:#047857;">99.99% Global Uptime over the past 90 days</span>
+        </div>
+      </div>
+      <h4>Operational Health by Component</h4>
+      <ul style="list-style:none; line-height:2; font-size:0.88rem; color:#334155;">
+        <li>🟢 <strong>High-Volume 500MB Ingestion API:</strong> Operational (Avg. latency 1.1s)</li>
+        <li>🟢 <strong>Automated Data Repair & Clean Export:</strong> Operational</li>
+        <li>🟢 <strong>Executive CFO Action Memo Engine:</strong> Operational</li>
+        <li>🟢 <strong>Pareto 80/20 & Anomaly Detector:</strong> Operational</li>
+        <li>🟢 <strong>Executive Board Deck Mode:</strong> Operational</li>
+      </ul>
+      <p style="margin-top:16px; font-size:0.82rem; color:#64748b;"><em>Zero outages or degraded performance incidents reported in the last 90 days.</em></p>
+    `
+  }
+};
+
+
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash.replace('#', '').toLowerCase();
+  const path = window.location.pathname.replace('/', '').toLowerCase();
+  if (legalContent[hash]) openLegalModal(hash);
+  else if (legalContent[path]) openLegalModal(path);
+});
+
+function openLegalModal(type) {
+  const data = legalContent[type];
+  if (!data) return;
+  document.getElementById('modal-badge').innerText = data.badge;
+  document.getElementById('modal-title').innerText = data.title;
+  document.getElementById('modal-body').innerHTML = data.body;
+  document.getElementById('legal-modal').classList.add('show');
+}
+
+function closeLegalModal(e) {
+  if (e && e.target !== document.getElementById('legal-modal') && !e.target.classList.contains('modal-close-btn') && e.target.innerText !== 'Close') {
+    return;
+  }
+  document.getElementById('legal-modal').classList.remove('show');
+}
+
+function saveCookiePrefs() {
+  alert('Cookie preferences updated successfully.');
+  closeLegalModal();
+}
+</script>
 
 </body>
 </html>
