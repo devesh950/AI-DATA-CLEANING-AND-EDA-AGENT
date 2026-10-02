@@ -675,7 +675,7 @@ def clean_export():
 
 @app.route("/api/chat_query", methods=["POST"])
 def chat_query():
-    """Julius-grade conversational analytical engine for natural language Q&A."""
+    """Executive-grade conversational analytical engine for natural language Q&A."""
     data = request.get_json(silent=True) or {}
     query = data.get("query", "").strip().lower()
     industry = data.get("industry", "saas")
