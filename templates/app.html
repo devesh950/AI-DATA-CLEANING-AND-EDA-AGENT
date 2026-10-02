@@ -7,11 +7,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
 <script>
-if (typeof Plotly === 'undefined') {
-  document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.29.1/plotly.min.js"><\/script>');
+window.__plotlyReady = false;
+function onPlotlyLoad() { window.__plotlyReady = true; console.log('[Metriva] Plotly loaded successfully'); }
+function loadPlotlyFallback(urls, idx) {
+  idx = idx || 0;
+  if (idx >= urls.length) { console.error('[Metriva] All Plotly CDNs failed'); return; }
+  if (typeof Plotly !== 'undefined') { onPlotlyLoad(); return; }
+  var s = document.createElement('script');
+  s.src = urls[idx];
+  s.onload = function() { if (typeof Plotly !== 'undefined') onPlotlyLoad(); else loadPlotlyFallback(urls, idx+1); };
+  s.onerror = function() { console.warn('[Metriva] CDN failed:', urls[idx]); loadPlotlyFallback(urls, idx+1); };
+  document.head.appendChild(s);
 }
+loadPlotlyFallback([
+  'https://cdn.plot.ly/plotly-2.29.1.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.29.1/plotly.min.js',
+  'https://unpkg.com/plotly.js@2.29.1/dist/plotly.min.js'
+]);
 </script>
 <style>
 :root {
@@ -1384,6 +1397,49 @@ function loadIndustry(ind) {
     });
 }
 
+// Global chart renderer with retry - waits for Plotly to be ready
+window.__pendingCharts = [];
+window.__tryRenderCharts = function(attempt) {
+  attempt = attempt || 0;
+  if (typeof Plotly === 'undefined') {
+    if (attempt < 50) { // retry for up to 10 seconds (50 * 200ms)
+      console.log('[Metriva] Waiting for Plotly... attempt', attempt);
+      setTimeout(function() { window.__tryRenderCharts(attempt + 1); }, 200);
+    } else {
+      console.error('[Metriva] Plotly never loaded after 10s');
+      (window.__pendingCharts || []).forEach(function(item) {
+        var el = document.getElementById(item.id);
+        if (el) el.innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444;font-weight:600;">⚠️ Chart library failed to load.<br><small style="color:#94a3b8;font-weight:400;">Check your internet connection and refresh.</small></div>';
+      });
+    }
+    return;
+  }
+  console.log('[Metriva] Plotly ready! Rendering', (window.__pendingCharts || []).length, 'charts');
+  (window.__pendingCharts || []).forEach(function(item) {
+    var el = document.getElementById(item.id);
+    if (!el) { console.warn('[Metriva] Missing element:', item.id); return; }
+    try {
+      var w = el.offsetWidth || el.clientWidth || 400;
+      item.chart.layout.width = w - 40; // account for padding
+      Plotly.newPlot(el, item.chart.data, item.chart.layout, {
+        responsive: true,
+        displayModeBar: false
+      }).then(function() {
+        console.log('[Metriva] Chart rendered:', item.id);
+        setTimeout(function() {
+          try { Plotly.Plots.resize(el); } catch(e) {}
+        }, 150);
+      }).catch(function(err) {
+        console.error('[Metriva] Chart error:', item.id, err);
+        el.innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444;">Chart failed: ' + (err.message || err) + '</div>';
+      });
+    } catch(err) {
+      console.error('[Metriva] newPlot threw:', item.id, err);
+      el.innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444;">Render error: ' + err.message + '</div>';
+    }
+  });
+};
+
 function renderAll(d) {
   const totalRecs = (d.rows != null ? d.rows : (d.quality && d.quality.rows != null ? d.quality.rows : 0));
   document.getElementById('status-tag').innerText = (d.filename || 'Dataset') + ' (' + totalRecs.toLocaleString() + ' rows)';
@@ -1420,65 +1476,32 @@ function renderAll(d) {
   // 3. Render Charts
   const chartBox = document.getElementById('charts-container');
   chartBox.innerHTML = '';
-  
-  function renderSinglePlot(wrapId, chartObj, retryCount) {
-    retryCount = retryCount || 0;
-    var el = document.getElementById(wrapId);
-    if (!el) {
-      console.warn('[Metriva] Chart container not found:', wrapId);
-      return;
-    }
-    if (typeof Plotly === 'undefined') {
-      if (retryCount < 20) {
-        setTimeout(function() { renderSinglePlot(wrapId, chartObj, retryCount + 1); }, 200);
-      } else {
-        console.error('[Metriva] Plotly failed to load after retries');
-        el.innerHTML = '<div style="padding:40px;text-align:center;color:#94a3b8;">Chart library failed to load. Please refresh the page.</div>';
-      }
-      return;
-    }
-    try {
-      Plotly.newPlot(el, chartObj.data, chartObj.layout, { responsive: true, displayModeBar: false })
-        .then(function() {
-          // Force resize after render to fix dimension issues
-          setTimeout(function() {
-            try { Plotly.Plots.resize(el); } catch(e) {}
-          }, 100);
-        })
-        .catch(function(err) {
-          console.error('[Metriva] Plotly render error for', wrapId, ':', err);
-          el.innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444;">Chart rendering failed. Try refreshing.</div>';
-        });
-    } catch(err) {
-      console.error('[Metriva] Plotly.newPlot threw:', err);
-      el.innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444;">Chart error: ' + err.message + '</div>';
-    }
-  }
+  window.__pendingCharts = [];
 
   const validCharts = (d.charts || []).filter(c => c && c.data && c.data.length > 0);
+  console.log('[Metriva] Charts to render:', validCharts.length, '| Plotly loaded:', typeof Plotly !== 'undefined');
+
   if (validCharts.length === 0) {
-    chartBox.innerHTML = '<div style="grid-column:1/-1; padding:36px; text-align:center; color:var(--text-muted); background:#ffffff; border:1px dashed var(--border-light); border-radius:var(--radius-md);">Visualizing distributions... Please select dimensions from the mapping bar above.</div>';
+    chartBox.innerHTML = '<div style="grid-column:1/-1; padding:36px; text-align:center; color:var(--text-muted); background:#ffffff; border:1px dashed var(--border-light); border-radius:var(--radius-md);">No chart data available. Select dimensions from the mapping bar above.</div>';
   } else {
     validCharts.forEach((c, idx) => {
       const wrap = document.createElement('div');
       wrap.className = 'chart-card';
       wrap.id = 'chart-plot-' + idx;
+      wrap.style.position = 'relative';
+      wrap.innerHTML = '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:0.9rem;">Loading chart...</div>';
       chartBox.appendChild(wrap);
       c.layout = c.layout || {};
       c.layout.autosize = true;
       c.layout.height = 340;
+      c.layout.width = undefined;
       c.layout.margin = { l: 45, r: 25, t: 45, b: 40 };
       c.layout.paper_bgcolor = '#ffffff';
       c.layout.plot_bgcolor = '#ffffff';
+      window.__pendingCharts.push({ id: 'chart-plot-' + idx, chart: c });
     });
-    // Render charts AFTER DOM reflow so containers have computed dimensions
-    requestAnimationFrame(function() {
-      setTimeout(function() {
-        validCharts.forEach((c, idx) => {
-          renderSinglePlot('chart-plot-' + idx, c);
-        });
-      }, 50);
-    });
+    // Trigger chart rendering
+    window.__tryRenderCharts(0);
   }
 
 
