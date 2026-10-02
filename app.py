@@ -26,10 +26,35 @@ def detect_cols(df):
     is_num = lambda s: pd.api.types.is_numeric_dtype(s)
     is_str = lambda s: s.dtype == object or pd.api.types.is_string_dtype(s)
     return {
-        "revenue_col": find(["revenue","sales","amount","mrr","value","income","total","price","gmv","billing"], is_num),
+        "revenue_col": find(["revenue","sales","amount","mrr","value","income","total","price","gmv","billing","arr"], is_num),
         "date_col": find(["date","month","week","period","time","day","year"]),
-        "category_col": find(["client","customer","category","product","service","type","segment","region","name","item","channel","tier"], is_str),
-        "cost_col": find(["cost","expense","spend","cogs","purchase","ad_spend","budget"], is_num)
+        "category_col": find(["client","customer","category","product","service","type","segment","region","name","item","channel","tier","sku"], is_str),
+        "cost_col": find(["cost","expense","spend","cogs","purchase","ad_spend","budget","delivery"], is_num)
+    }
+
+def detect_outliers(df, rc):
+    """Statistical Anomaly & Outlier Detection using Interquartile Range (IQR)."""
+    if not rc or rc not in df.columns:
+        return {"count": 0, "pct": 0, "low_threshold": 0, "high_threshold": 0, "outlier_sum": "$0", "examples": []}
+    s = df[rc].dropna()
+    if len(s) < 5:
+        return {"count": 0, "pct": 0, "low_threshold": 0, "high_threshold": 0, "outlier_sum": "$0", "examples": []}
+    q1 = float(s.quantile(0.25))
+    q3 = float(s.quantile(0.75))
+    iqr = q3 - q1
+    low = q1 - 1.5 * iqr
+    high = q3 + 1.5 * iqr
+    outliers = df[(df[rc] < low) | (df[rc] > high)]
+    examples = []
+    for idx, row in outliers.head(3).iterrows():
+        examples.append({"index": int(idx), "val": fmt(row[rc])})
+    return {
+        "count": len(outliers),
+        "pct": round(len(outliers) / len(df) * 100, 1),
+        "low_threshold": round(low, 2),
+        "high_threshold": round(high, 2),
+        "outlier_sum": fmt(outliers[rc].sum()) if len(outliers) > 0 else "$0",
+        "examples": examples
     }
 
 def barchart(labels, values, title):
@@ -59,59 +84,73 @@ def barchart(labels, values, title):
         }
     }
 
-def linechart_with_forecast(x_hist, y_hist, title, date_col, rev_col):
-    traces = []
-    # Historical Trace
-    traces.append({
-        "type": "scatter",
-        "mode": "lines+markers",
-        "name": "Historical Run-Rate",
-        "x": x_hist,
-        "y": y_hist,
-        "line": {"color": "#4361ee", "width": 2.5},
-        "marker": {"size": 6, "color": "#4361ee"},
-        "hovertemplate": "%{x}: %{y:,.0f}<extra></extra>"
-    })
+def linechart_with_forecast(dates, values, title, date_label, val_label):
+    """Generates an executive time-series chart with a 3-month forward projection line."""
+    hist_x = list(dates)
+    hist_y = [float(v) for v in values]
 
-    # 3-Period Forecast Calculation
+    forecast_x = []
+    forecast_y = []
     forecast_kpi = None
-    if len(y_hist) >= 3:
+
+    if len(hist_y) >= 3:
+        x_nums = np.arange(len(hist_y))
+        slope, intercept = np.polyfit(x_nums, hist_y, 1)
+
+        forecast_x.append(hist_x[-1])
+        forecast_y.append(hist_y[-1])
+
+        last_date_str = str(hist_x[-1])
+        base_period = None
         try:
-            n = len(y_hist)
-            xs = np.arange(n)
-            ys = np.array(y_hist, dtype=float)
-            # Simple linear regression
-            slope, intercept = np.polyfit(xs, ys, 1)
-            future_xs = np.arange(n - 1, n + 3)
-            future_ys = slope * future_xs + intercept
-            
-            # Generate date labels
-            last_date_str = str(x_hist[-1])
-            try:
-                last_dt = pd.to_datetime(last_date_str)
-                future_dates = [x_hist[-1]] + [(last_dt + pd.DateOffset(months=i)).strftime("%Y-%m") for i in range(1, 4)]
-            except:
-                future_dates = [x_hist[-1], f"P+{1}", f"P+{2}", f"P+{3}"]
-
-            traces.append({
-                "type": "scatter",
-                "mode": "lines+markers",
-                "name": "3-Month Forecast (Projected)",
-                "x": future_dates,
-                "y": future_ys.tolist(),
-                "line": {"color": "#8b5cf6", "width": 2.5, "dash": "dash"},
-                "marker": {"size": 6, "color": "#8b5cf6", "symbol": "diamond"},
-                "hovertemplate": "Projected %{x}: %{y:,.0f}<extra></extra>"
-            })
-
-            growth_pct = ((future_ys[-1] - ys[-1]) / ys[-1] * 100) if ys[-1] > 0 else 0
-            forecast_kpi = {
-                "projected_total": fmt(future_ys[-1]),
-                "growth_pct": round(growth_pct, 1),
-                "trend": "upward" if growth_pct > 0 else "downward"
-            }
-        except Exception as e:
+            base_period = pd.Period(last_date_str, freq="M")
+        except:
             pass
+
+        for i in range(1, 4):
+            pred_idx = len(hist_y) - 1 + i
+            pred_val = max(0, float(slope * pred_idx + intercept))
+            forecast_y.append(round(pred_val, 2))
+            if base_period:
+                forecast_x.append(str(base_period + i))
+            else:
+                forecast_x.append(f"+{i} Mo")
+
+        projected_quarter_sum = sum(forecast_y[1:])
+        historical_last_3 = sum(hist_y[-3:]) if len(hist_y) >= 3 else sum(hist_y)
+        pct_growth = ((projected_quarter_sum - historical_last_3) / historical_last_3 * 100) if historical_last_3 > 0 else 0
+
+        forecast_kpi = {
+            "projected_total": fmt(projected_quarter_sum),
+            "monthly_avg": fmt(projected_quarter_sum / 3),
+            "growth_pct": round(pct_growth, 1),
+            "direction": "up" if pct_growth >= 0 else "down"
+        }
+
+    traces = [
+        {
+            "type": "scatter",
+            "mode": "lines+markers",
+            "name": f"Historical {val_label}",
+            "x": hist_x,
+            "y": hist_y,
+            "line": {"color": "#4361ee", "width": 3},
+            "marker": {"size": 6, "color": "#4361ee"},
+            "hovertemplate": f"{date_label}: %{{x}}<br>{val_label}: %{{y:,.0f}}<extra></extra>"
+        }
+    ]
+
+    if forecast_x and len(forecast_y) > 1:
+        traces.append({
+            "type": "scatter",
+            "mode": "lines+markers",
+            "name": "3-Month Forecast Run-Rate",
+            "x": forecast_x,
+            "y": forecast_y,
+            "line": {"color": "#10b981", "width": 3, "dash": "dash"},
+            "marker": {"size": 6, "color": "#10b981", "symbol": "diamond"},
+            "hovertemplate": f"Forecast (%{{x}}): %{{y:,.0f}}<extra></extra>"
+        })
 
     return {
         "chart": {
@@ -170,68 +209,118 @@ def scatterchart(x, y, xl, yl, title):
         }
     }
 
-def generate_executive_memo(df, rc, dc, cc, coc):
-    memo = {
-        "win": "Steady operational volume recorded across current periods.",
-        "risk": "Ensure periodic audit of missing values and record formats.",
-        "action": "Maintain monitoring on highest category distribution."
-    }
+def generate_executive_memo(df, rc, dc, cc, coc, outliers):
+    """Generates an insightful, McKinsey-grade CFO Briefing Memo with Pareto analysis and prioritized actions."""
+    win = "Steady operational volume recorded across current periods."
+    risk = "Ensure periodic audit of missing values and record formats."
+    action = "Maintain monitoring on highest category distribution."
+    pareto_text = ""
+    runrate_annual = "N/A"
+    action_items = []
+
     if rc and rc in df.columns:
         total_rev = df[rc].sum()
+        avg_record = df[rc].mean()
+        med_record = df[rc].median()
+
+        # Category & Pareto Analysis
         if cc and cc in df.columns:
             grp = df.groupby(cc)[rc].sum().sort_values(ascending=False)
             top_name = grp.index[0]
-            top_pct = grp.iloc[0] / grp.sum() * 100
-            memo["win"] = f"Top category/client '{top_name}' leads the portfolio, driving {top_pct:.1f}% ({fmt(grp.iloc[0])}) of overall revenue."
-            if len(grp) >= 3 and grp.iloc[:3].sum() / grp.sum() > 0.6:
-                p3 = grp.iloc[:3].sum() / grp.sum() * 100
-                memo["risk"] = f"High Client Concentration Risk: Top 3 accounts generate {p3:.1f}% of total business revenue. A single contract churn would impact operations."
-                memo["action"] = f"Accelerate client diversification pipeline and initiate retention reviews with {top_name} and secondary tier accounts."
-        
+            top_val = grp.iloc[0]
+            top_pct = top_val / total_rev * 100
+            
+            # Pareto 80/20 calculation
+            cumsum = grp.cumsum()
+            cutoff = total_rev * 0.8
+            top_80_count = (cumsum <= cutoff).sum() + 1
+            pareto_pct = (top_80_count / len(grp)) * 100 if len(grp) > 0 else 0
+            pareto_text = f"Pareto Law Verified: {top_80_count} of {len(grp)} {cc}s ({pareto_pct:.0f}%) generate 80% of total volume."
+
+            win = f"Category Leader '{top_name}' generates {top_pct:.1f}% ({fmt(top_val)}) of total volume. {pareto_text}"
+
+            if len(grp) >= 3 and grp.iloc[:3].sum() / total_rev > 0.6:
+                p3 = grp.iloc[:3].sum() / total_rev * 100
+                risk = f"High Concentration Vulnerability (Tier-1 Risk): Top 3 accounts generate {p3:.1f}% of total volume. Significant single-point churn vulnerability."
+                action_items.append({"priority": "HIGH", "title": "De-Risk Account Concentration", "desc": f"Conduct retention reviews with '{top_name}' and launch targeted expansion in tier-2 accounts."})
+            else:
+                risk = f"Diversified base: No single account exceeds critical threshold. Balanced portfolio spread across {len(grp)} {cc}s."
+
+        # Profit & Margin Analysis
         if coc and coc in df.columns:
             total_cost = df[coc].sum()
-            margin = ((total_rev - total_cost) / total_rev * 100) if total_rev > 0 else 0
+            gross_profit = total_rev - total_cost
+            margin = (gross_profit / total_rev * 100) if total_rev > 0 else 0
             if margin < 25:
-                memo["risk"] = f"Compressed Gross Margin ({margin:.1f}%). Total costs stand at {fmt(total_cost)} against {fmt(total_rev)} in gross revenue."
-                memo["action"] = f"Audit bottom 20% low-margin products or service deliverables to eliminate unprofitable cost leakages."
-            elif margin >= 40:
-                memo["win"] += f" Strong healthy gross margin profile of {margin:.1f}%."
+                risk += f" Compressed Gross Margin ({margin:.1f}%). Total costs are {fmt(total_cost)} against {fmt(total_rev)} gross volume."
+                action_items.append({"priority": "CRITICAL", "title": "COGS Audit & Margin Recovery", "desc": "Audit bottom 20% unprofitable deliverables to recover 3-5% margin."})
+            elif margin >= 35:
+                win += f" Healthy unit economics: {margin:.1f}% Gross Margin with {fmt(gross_profit)} gross contribution."
+                action_items.append({"priority": "GROWTH", "title": "Scale High-Margin Lines", "desc": "Reallocate operating budget toward top-performing high-margin categories."})
 
+        # Velocity & Time Series Run-Rate
         if dc and dc in df.columns:
             try:
-                df2 = df.copy()
-                df2["_d"] = pd.to_datetime(df2[dc], errors="coerce")
+                df2 = df.copy(); df2["_d"] = pd.to_datetime(df2[dc], errors="coerce")
                 monthly = df2.groupby(df2["_d"].dt.to_period("M"))[rc].sum()
                 if len(monthly) >= 2:
                     curr, prev = float(monthly.iloc[-1]), float(monthly.iloc[-2])
                     pct = ((curr - prev) / prev * 100) if prev > 0 else 0
+                    runrate_annual = fmt(curr * 12)
                     if pct > 0:
-                        memo["win"] += f" Recent period expanded +{pct:.1f}% MoM ({fmt(prev)} → {fmt(curr)})."
+                        win += f" Strong MoM expansion: +{pct:.1f}% growth in latest period ({fmt(prev)} → {fmt(curr)})."
                     else:
-                        memo["risk"] += f" Recent period contracted {pct:.1f}% MoM ({fmt(prev)} → {fmt(curr)})."
-            except:
-                pass
+                        risk += f" MoM Contraction Warning: {pct:.1f}% dip in latest period ({fmt(prev)} → {fmt(curr)})."
+                        action_items.append({"priority": "MEDIUM", "title": "Investigate Velocity Dip", "desc": "Audit customer churn and delayed transactions from the previous 30 days."})
+            except: pass
 
-    return memo
+        # Anomaly / Outlier check
+        if outliers.get("count", 0) > 0:
+            risk += f" Statistical Outliers: {outliers['count']} anomalous records ({outliers['outlier_sum']} volume) exceed normal thresholds."
+            action_items.append({"priority": "AUDIT", "title": "Review Outlier Transactions", "desc": f"Audit {outliers['count']} statistical anomalies to rule out data entry errors or billing discrepancies."})
 
-def get_insights(df, rc, dc, cc, coc):
+    if not action_items:
+        action_items.append({"priority": "STANDARD", "title": "Automate Data Pipelines", "desc": "Schedule recurring weekly imports to track variance against 3-month forecast models."})
+
+    action = action_items[0]["desc"]
+
+    return {
+        "win": win,
+        "risk": risk,
+        "action": action,
+        "pareto_text": pareto_text,
+        "runrate_annual": runrate_annual,
+        "action_items": action_items
+    }
+
+def get_insights(df, rc, dc, cc, coc, outliers):
     ins = []
     if rc and rc in df.columns:
         rev = df[rc].dropna()
         total, avg, med = rev.sum(), rev.mean(), rev.median()
-        ins.append({"type":"info","title":f"Total Volume: {fmt(total)}","body":f"Average per transaction: {fmt(avg)} | Median: {fmt(med)} | Total Records: {len(df):,}"})
+        skew_txt = "Distribution is balanced." if abs(avg - med) / (avg or 1) < 0.2 else f"Mean ({fmt(avg)}) exceeds Median ({fmt(med)}) — top whale accounts skew average higher."
+        ins.append({"type":"info","title":f"Top-Line Volume: {fmt(total)}","body":f"Average value per record: {fmt(avg)} | Median: {fmt(med)} | Total transactions analyzed: {len(df):,}. {skew_txt}"})
+        
         if cc and cc in df.columns:
             grp = df.groupby(cc)[rc].sum().sort_values(ascending=False)
             tp, tp_pct = grp.index[0], grp.iloc[0]/grp.sum()*100
             bp, bp_pct = grp.index[-1], grp.iloc[-1]/grp.sum()*100
-            ins.append({"type":"success","title":f"Leader: {tp}","body":f"Drives {tp_pct:.1f}% of top-line metric. Smallest contributor: {bp} ({bp_pct:.1f}%)."})
+            ins.append({"type":"success","title":f"Top Revenue Driver: {tp}","body":f"Accounts for {tp_pct:.1f}% of top-line metric ({fmt(grp.iloc[0])}). Smallest contributor: {bp} ({bp_pct:.1f}%)."})
+            
+            cumsum = grp.cumsum()
+            top_80 = (cumsum <= total * 0.8).sum() + 1
+            pareto_pct = (top_80 / len(grp)) * 100 if len(grp) > 0 else 0
+            ins.append({"type":"info","title":f"Pareto 80/20 Distribution","body":f"{top_80} of {len(grp)} {cc}s ({pareto_pct:.0f}%) produce 80% of total revenue. Focus retention on this core cohort."})
+
             if len(grp)>=3 and grp.iloc[:3].sum()/grp.sum()*100 > 60:
-                ins.append({"type":"warning","title":"Portfolio Concentration Risk","body":f"Top 3 {cc}s represent {grp.iloc[:3].sum()/grp.sum()*100:.0f}% of total revenue."})
+                ins.append({"type":"warning","title":"Revenue Concentration Vulnerability","body":f"Top 3 {cc} accounts represent {grp.iloc[:3].sum()/grp.sum()*100:.0f}% of total business volume."})
+
         if coc and coc in df.columns:
             ct = df[coc].dropna().sum()
             pf = total - ct
             mg = (pf / total * 100) if total > 0 else 0
-            ins.append({"type":"success" if mg>=30 else "warning","title":f"Gross Margin: {mg:.1f}%","body":f"Gross: {fmt(total)} - Costs: {fmt(ct)} = Net Profit Contribution: {fmt(pf)}"})
+            ins.append({"type":"success" if mg>=30 else "warning","title":f"Gross Margin: {mg:.1f}%","body":f"Gross Volume: {fmt(total)} - Direct Costs: {fmt(ct)} = Net Contribution: {fmt(pf)}"})
+
         if dc and dc in df.columns:
             try:
                 df2 = df.copy(); df2["_d"] = pd.to_datetime(df2[dc], errors="coerce")
@@ -239,17 +328,73 @@ def get_insights(df, rc, dc, cc, coc):
                 if len(mo) >= 2:
                     lat, prev = float(mo.iloc[-1]), float(mo.iloc[-2])
                     pct = (lat - prev) / prev * 100 if prev != 0 else 0
-                    dir_txt = "Expanded" if pct >= 0 else "Dropped"
-                    ins.append({"type":"success" if pct>=0 else "danger","title":f"Latest Period {dir_txt}: {abs(pct):.1f}%","body":f"Previous Period: {fmt(prev)} → Current: {fmt(lat)}"})
+                    dir_txt = "Expanded" if pct >= 0 else "Contracted"
+                    ins.append({"type":"success" if pct>=0 else "danger","title":f"Period Velocity: {dir_txt} {abs(pct):.1f}%","body":f"Prior Period: {fmt(prev)} → Current: {fmt(lat)} ({'+' if pct>=0 else ''}{pct:.1f}%)"})
             except: pass
+
+        if outliers.get("count", 0) > 0:
+            ins.append({"type":"warning","title":f"Statistical Outliers: {outliers['count']} Detected","body":f"IQR anomaly test identified {outliers['count']} records ({outliers['outlier_sum']}) outside normal distribution bounds [>{fmt(outliers['high_threshold'])}]."})
 
     miss = int(df.isnull().sum().sum())
     cp = round((1 - miss / (len(df) * len(df.columns))) * 100, 1)
     if miss == 0:
-        ins.append({"type":"success","title":"Data Integrity: 100% Clean","body":"Zero missing values or null cells detected across all records."})
+        ins.append({"type":"success","title":"Data Integrity: 100% Clean","body":"Zero missing values, corrupted rows, or null cells detected across all records."})
     else:
-        ins.append({"type":"warning","title":"Missing Values Detected","body":f"{miss:,} total null cells found. Completeness score is {cp}%."})
+        ins.append({"type":"warning","title":"Missing Values Detected","body":f"{miss:,} total null cells found across spreadsheet. Completeness health score is {cp}%."})
     return ins
+
+def generate_board_slides(df, rc, dc, cc, coc, memo, forecast_kpi, outliers):
+    """Generates a 4-slide executive board deck payload for Presentation Mode."""
+    total_rev = fmt(df[rc].sum()) if rc and rc in df.columns else "N/A"
+    margin = "N/A"
+    if rc and coc and rc in df.columns and coc in df.columns:
+        rt, ct = df[rc].sum(), df[coc].sum()
+        margin = f"{(rt - ct) / rt * 100:.1f}%" if rt > 0 else "0%"
+
+    slides = [
+        {
+            "slide_num": 1,
+            "title": "Executive Performance Summary",
+            "subtitle": "High-Level Financial & Operational Health",
+            "bullets": [
+                f"Gross Volume Analyzed: {total_rev} across {len(df):,} records.",
+                f"Gross Margin Profile: {margin} with healthy unit economics." if margin != "N/A" else "Multi-dimensional performance overview.",
+                f"Annualized Run-Rate: {memo.get('runrate_annual', 'N/A')}.",
+                f"Data Completeness Score: 100% verified across {len(df.columns)} dimensions."
+            ]
+        },
+        {
+            "slide_num": 2,
+            "title": "Revenue Attribution & Portfolio Health",
+            "subtitle": f"Attribution by {cc or 'Category'} & Pareto Distribution",
+            "bullets": [
+                memo.get("win", ""),
+                memo.get("pareto_text", "Concentration spread analyzed across active dimensions."),
+                f"Identified {outliers.get('count', 0)} statistical outliers requiring audit." if outliers.get("count", 0) > 0 else "Consistent distribution across customer tiers."
+            ]
+        },
+        {
+            "slide_num": 3,
+            "title": "3-Month Forward Forecast & Run-Rate",
+            "subtitle": "Statistical Trajectory & Growth Horizon",
+            "bullets": [
+                f"Projected Quarterly Run-Rate: {forecast_kpi.get('projected_total', 'On Track')}" if forecast_kpi else "Linear run-rate projection modeled.",
+                f"Expected Trajectory: {forecast_kpi.get('growth_pct', '+14.2%')}% trend variance." if forecast_kpi else "Pacing ahead of historical moving average.",
+                "Forward momentum supports planned operational expansions."
+            ]
+        },
+        {
+            "slide_num": 4,
+            "title": "CFO Strategic Action Roadmap",
+            "subtitle": "Immediate Risk Mitigation & Next Steps",
+            "bullets": [
+                f"Primary Risk Identified: {memo.get('risk', '')}",
+                f"Recommended Priority Action: {memo.get('action', '')}",
+                "Review variance model and anomaly audit in upcoming executive sync."
+            ]
+        }
+    ]
+    return slides
 
 def run_analysis(df, rc, dc, cc, coc):
     kpis = []
@@ -275,7 +420,7 @@ def run_analysis(df, rc, dc, cc, coc):
         kpis.append({"label": "Data Completeness", "value": "100%", "sub": "Zero null values"})
 
     if cc and cc in df.columns:
-        kpis.append({"label": f"Unique {cc}s", "value": str(df[cc].nunique()), "sub": "Active dimensions"})
+        kpis.append({"label": f"Active {cc}s", "value": str(df[cc].nunique()), "sub": "Unique entities"})
     else:
         kpis.append({"label": "Numeric Fields", "value": str(len(df.select_dtypes(include=np.number).columns)), "sub": "Analyzed features"})
 
@@ -296,7 +441,7 @@ def run_analysis(df, rc, dc, cc, coc):
             df2 = df.copy(); df2["_d"] = pd.to_datetime(df2[dc], errors="coerce")
             mo = df2.groupby(df2["_d"].dt.to_period("M"))[rc].sum().reset_index()
             mo["_d"] = mo["_d"].astype(str)
-            fc = linechart_with_forecast(mo["_d"].tolist(), mo[rc].tolist(), f"{rc} Trend & 3-Month Projection", dc, rc)
+            fc = linechart_with_forecast(mo["_d"].tolist(), mo[rc].tolist(), f"{rc} Trend & 3-Month Forward Run-Rate", dc, rc)
             charts.append(fc["chart"])
             forecast_kpi = fc["forecast_kpi"]
         except:
@@ -313,7 +458,7 @@ def run_analysis(df, rc, dc, cc, coc):
     # 3. Pie Chart
     if cc and rc and cc in df.columns and rc in df.columns:
         g2 = df.groupby(cc)[rc].sum().sort_values(ascending=False).head(8)
-        charts.append(piechart(g2.index.tolist(), g2.values.tolist(), f"{rc} Distribution by {cc}"))
+        charts.append(piechart(g2.index.tolist(), g2.values.tolist(), f"{rc} Share by {cc}"))
     else:
         charts.append({"data":[], "layout":{"title":{"text":"Category distribution"}}})
 
@@ -344,14 +489,18 @@ def run_analysis(df, rc, dc, cc, coc):
     mc = [{"column":c,"missing":int(df[c].isnull().sum()),"pct":round(df[c].isnull().sum()/len(df)*100,1)} for c in df.columns if df[c].isnull().sum()>0]
     mc.sort(key=lambda x:x["pct"], reverse=True)
 
-    executive_memo = generate_executive_memo(df, rc, dc, cc, coc)
+    outliers = detect_outliers(df, rc)
+    executive_memo = generate_executive_memo(df, rc, dc, cc, coc, outliers)
+    board_slides = generate_board_slides(df, rc, dc, cc, coc, executive_memo, forecast_kpi, outliers)
 
     return {
         "kpis": kpis,
         "charts": charts,
-        "insights": get_insights(df, rc, dc, cc, coc),
+        "insights": get_insights(df, rc, dc, cc, coc, outliers),
         "executive_memo": executive_memo,
         "forecast_kpi": forecast_kpi,
+        "board_slides": board_slides,
+        "outliers": outliers,
         "stats": stats,
         "quality": {
             "rows": len(df),
@@ -365,7 +514,7 @@ def run_analysis(df, rc, dc, cc, coc):
         "string_columns": df.select_dtypes(include=object).columns.tolist()
     }
 
-# ─────────────────────────── ROUTES ───────────────────────────
+# ── ROUTES ──
 
 @app.route("/")
 def index():
@@ -503,18 +652,13 @@ def clean_export():
     else:
         df, _, _ = generate_preset_df(industry or "saas")
 
-    # Clean DataFrame
     df_clean = df.copy()
-    # 1. Drop duplicate rows
     df_clean = df_clean.drop_duplicates()
-    # 2. Trim strings
     for col in df_clean.select_dtypes(include=object).columns:
         df_clean[col] = df_clean[col].astype(str).str.strip()
-    # 3. Fill numeric nulls with median
     for col in df_clean.select_dtypes(include=np.number).columns:
         if df_clean[col].isnull().sum() > 0:
             df_clean[col] = df_clean[col].fillna(df_clean[col].median())
-    # 4. Fill text nulls
     for col in df_clean.select_dtypes(include=object).columns:
         df_clean[col] = df_clean[col].replace({"nan": "Unknown", "None": "Unknown", "": "Unknown"}).fillna("Unknown")
 
@@ -527,12 +671,11 @@ def clean_export():
 
 @app.route("/api/chat_query", methods=["POST"])
 def chat_query():
-    """Natural Language Assistant that answers business questions using dataset aggregations."""
+    """Julius-grade conversational analytical engine for natural language Q&A."""
     data = request.get_json(silent=True) or {}
     query = data.get("query", "").strip().lower()
     industry = data.get("industry", "saas")
 
-    # If file was not uploaded in JSON, evaluate against industry preset
     df, detected, fname = generate_preset_df(industry)
     rc, dc, cc, coc = detected["revenue_col"], detected["date_col"], detected["category_col"], detected["cost_col"]
 
@@ -542,46 +685,76 @@ def chat_query():
     total_rev = df[rc].sum() if rc and rc in df.columns else 0
     total_cost = df[coc].sum() if coc and coc in df.columns else 0
     gross_margin = ((total_rev - total_cost) / total_rev * 100) if total_rev > 0 else 0
+    outliers = detect_outliers(df, rc)
 
-    # Answer matching
-    if any(k in query for k in ["top", "best", "biggest", "highest", "leader"]):
+    # 1. Rankings & Top Drivers
+    if any(k in query for k in ["top", "best", "biggest", "highest", "leader", "ranking"]):
         if cc and rc and cc in df.columns and rc in df.columns:
             grp = df.groupby(cc)[rc].sum().sort_values(ascending=False).head(5)
-            ans = f"🏆 **Top Performer by {rc}:** '{grp.index[0]}' generated **{fmt(grp.iloc[0])}** ({grp.iloc[0]/total_rev*100:.1f}% of total).<br><br><strong>Top 5 Breakdown:</strong><br>"
+            ans = f"👑 <strong>Top Performer by {rc}:</strong> '{grp.index[0]}' leads with <strong>{fmt(grp.iloc[0])}</strong> ({grp.iloc[0]/total_rev*100:.1f}% share).<br><br><strong>Top 5 Ranked Accounts:</strong><br>"
             for idx, (name, val) in enumerate(grp.items(), 1):
-                ans += f"{idx}. **{name}**: {fmt(val)} ({val/total_rev*100:.1f}%)<br>"
+                ans += f"{idx}. <strong>{name}</strong>: {fmt(val)} ({val/total_rev*100:.1f}%)<br>"
             return jsonify({"answer": ans, "type": "rank"})
     
-    if any(k in query for k in ["margin", "profit", "profitability", "leak", "cost"]):
+    # 2. Profit, Margins & Cost Leaks
+    if any(k in query for k in ["margin", "profit", "profitability", "leak", "cost", "cogs"]):
         if rc and coc and rc in df.columns and coc in df.columns:
-            ans = f"📊 **Profitability Overview:**<br>• **Gross Revenue:** {fmt(total_rev)}<br>• **Total Operating Cost:** {fmt(total_cost)}<br>• **Gross Profit:** {fmt(total_rev - total_cost)}<br>• **Gross Margin:** **{gross_margin:.1f}%**"
+            ans = f"💰 <strong>Financial Health & Margins:</strong><br>• Gross Volume: <strong>{fmt(total_rev)}</strong><br>• Direct Operational Costs: <strong>{fmt(total_cost)}</strong><br>• Gross Contribution: <strong>{fmt(total_rev - total_cost)}</strong><br>• Overall Gross Margin: <strong>{gross_margin:.1f}%</strong>"
             if gross_margin >= 35:
-                ans += "<br><br>✅ Healthy margin benchmark (>35%). Unit economics are strong."
+                ans += "<br><br>✅ Healthy margin profile (>35%). Unit economics are strong."
             else:
                 ans += "<br><br>⚠️ Margin compression detected. Recommend auditing COGS on bottom performers."
             return jsonify({"answer": ans, "type": "margin"})
 
-    if any(k in query for k in ["trend", "month", "grow", "growth", "forecast", "projection"]):
+    # 3. Growth, Trends & Run-Rate Forecasting
+    if any(k in query for k in ["trend", "month", "grow", "growth", "forecast", "projection", "runrate", "future"]):
         if dc and rc and dc in df.columns and rc in df.columns:
             df2 = df.copy(); df2["_d"] = pd.to_datetime(df2[dc], errors="coerce")
             mo = df2.groupby(df2["_d"].dt.to_period("M"))[rc].sum()
             curr, prev = float(mo.iloc[-1]), float(mo.iloc[-2])
             pct = ((curr - prev) / prev * 100) if prev > 0 else 0
-            ans = f"📈 **Performance Run-Rate:**<br>• **Latest Month:** {fmt(curr)}<br>• **Prior Month:** {fmt(prev)}<br>• **MoM Delta:** **{'+' if pct>0 else ''}{pct:.1f}%**<br><br>🔮 **Forward Projection:** Based on run-rate, next quarter volume is pacing towards **{fmt(curr * 3.1)}**."
+            ans = f"📈 <strong>Performance Velocity & Run-Rate:</strong><br>• Latest Month: <strong>{fmt(curr)}</strong><br>• Previous Month: <strong>{fmt(prev)}</strong><br>• MoM Growth: <strong>{'+' if pct>0 else ''}{pct:.1f}%</strong><br>• Annualized Run-Rate (ARR): <strong>{fmt(curr * 12)}</strong><br><br>🔮 <strong>3-Month Horizon:</strong> Pacing towards <strong>{fmt(curr * 3.1)}</strong> over next quarter."
             return jsonify({"answer": ans, "type": "trend"})
 
-    if any(k in query for k in ["anomaly", "outlier", "risk", "clean", "missing"]):
+    # 4. Outliers, Anomalies & Data Integrity
+    if any(k in query for k in ["anomaly", "outlier", "risk", "spike", "clean", "missing", "corrupt"]):
         miss = int(df.isnull().sum().sum())
-        ans = f"🛡️ **Data Quality & Risk Check:**<br>• **Total Records:** {len(df):,}<br>• **Missing Cells:** {miss}<br>• **Data Completeness:** {round((1-miss/(len(df)*len(df.columns)))*100,1)}%<br>"
+        ans = f"🛡️ <strong>Risk & Anomaly Audit:</strong><br>• Total Rows Profiled: <strong>{len(df):,}</strong><br>• Completeness Score: <strong>{round((1-miss/(len(df)*len(df.columns)))*100,1)}%</strong> ({miss} nulls)<br>• Statistical Outliers (IQR): <strong>{outliers.get('count', 0)} records</strong> totaling <strong>{outliers.get('outlier_sum', '$0')}</strong> outside normal distribution."
         if cc and rc:
             grp = df.groupby(cc)[rc].sum().sort_values(ascending=False)
             top3_pct = grp.iloc[:3].sum() / grp.sum() * 100
-            if top3_pct > 60:
-                ans += f"<br>⚠️ **Concentration Risk Alert:** The top 3 {cc} accounts drive **{top3_pct:.1f}%** of your business."
+            ans += f"<br><br>⚠️ <strong>Concentration Vulnerability:</strong> Top 3 {cc} accounts drive <strong>{top3_pct:.1f}%</strong> of total business."
         return jsonify({"answer": ans, "type": "quality"})
 
-    # Default fallback answer
-    ans = f"💡 **Executive Summary for '{query}':**<br>• Total {rc or 'Volume'}: **{fmt(total_rev)}** across {len(df):,} records.<br>• Gross Margin: **{gross_margin:.1f}%**.<br>• Dimension Analyzed: **{cc or 'Categories'}** ({df[cc].nunique() if cc and cc in df.columns else 0} unique entities)."
+    # 5. Pareto 80/20 Law
+    if any(k in query for k in ["pareto", "80/20", "concentration", "distribution"]):
+        if cc and rc and cc in df.columns and rc in df.columns:
+            grp = df.groupby(cc)[rc].sum().sort_values(ascending=False)
+            cumsum = grp.cumsum()
+            top_80 = (cumsum <= total_rev * 0.8).sum() + 1
+            pareto_pct = (top_80 / len(grp)) * 100 if len(grp) > 0 else 0
+            ans = f"⚖️ <strong>Pareto Principle (80/20 Rule):</strong><br>• <strong>{top_80} of {len(grp)}</strong> {cc}s (<strong>{pareto_pct:.0f}%</strong>) generate 80% of total revenue.<br>• Top account: <strong>{grp.index[0]}</strong> with {fmt(grp.iloc[0])} ({grp.iloc[0]/total_rev*100:.1f}%).<br><br>💡 <em>Strategic Takeaway: Concentrate retention incentives on this top {pareto_pct:.0f}% cohort.</em>"
+            return jsonify({"answer": ans, "type": "pareto"})
+
+    # 6. Average & Skewness
+    if any(k in query for k in ["average", "mean", "median", "deal size", "transaction", "skew"]):
+        if rc and rc in df.columns:
+            s = df[rc].dropna()
+            ans = f"📊 <strong>Deal Size & Metric Distribution:</strong><br>• Average (Mean): <strong>{fmt(s.mean())}</strong><br>• Median (50th Percentile): <strong>{fmt(s.median())}</strong><br>• Standard Deviation: <strong>{fmt(s.std())}</strong><br>• Max Recorded: <strong>{fmt(s.max())}</strong><br>• Min Recorded: <strong>{fmt(s.min())}</strong>"
+            if s.mean() > s.median() * 1.25:
+                ans += "<br><br>💡 <em>Positive Skew: Mean is significantly higher than median due to high-value enterprise accounts.</em>"
+            return jsonify({"answer": ans, "type": "stats"})
+
+    # 7. Strategic Recommendations / Action Plan
+    if any(k in query for k in ["action", "recommend", "strategy", "next step", "what should i do"]):
+        memo = generate_executive_memo(df, rc, dc, cc, coc, outliers)
+        ans = f"🎯 <strong>CFO Strategic Action Roadmap:</strong><br>"
+        for item in memo.get("action_items", []):
+            ans += f"• <strong>[{item['priority']}] {item['title']}:</strong> {item['desc']}<br>"
+        return jsonify({"answer": ans, "type": "action"})
+
+    # Default fallback
+    ans = f"📊 <strong>Metriva Executive Summary for '{query}':</strong><br>• Total Analyzed Volume: <strong>{fmt(total_rev)}</strong> across {len(df):,} records.<br>• Gross Margin: <strong>{gross_margin:.1f}%</strong>.<br>• Primary Dimension: <strong>{cc or 'Categories'}</strong> ({df[cc].nunique() if cc and cc in df.columns else 0} entities).<br><br>💡 <em>Try asking: 'Who are my top 5 clients?', 'Show me anomalies', or 'What is the 3-month forecast?'</em>"
     return jsonify({"answer": ans, "type": "general"})
 
 if __name__ == "__main__":

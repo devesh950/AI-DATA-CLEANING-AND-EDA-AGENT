@@ -3,36 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Metriva Workspace — Executive Data Intelligence</title>
-<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<title>Metriva Workspace - Executive Intelligence &amp; Data Repair</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
 <style>
 :root {
   --primary: #4361ee;
   --primary-hover: #3751db;
   --primary-light: #eff2fe;
-  --primary-glow: rgba(67, 97, 238, 0.18);
   --secondary: #0f172a;
   --text-main: #0f172a;
   --text-muted: #64748b;
   --text-light: #94a3b8;
   --bg-main: #f8fafc;
-  --bg-card: #ffffff;
   --border-light: #e2e8f0;
   --border-subtle: #f1f5f9;
   --success: #10b981;
-  --success-bg: #ecfdf5;
   --warning: #f59e0b;
   --danger: #ef4444;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 25px -3px rgba(15, 23, 42, 0.08);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08);
+  --shadow-lg: 0 10px 25px -3px rgba(15,23,42,0.1);
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
-  --radius-xl: 20px;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
@@ -40,221 +36,237 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg-main);
+  background: var(--bg-main);
   color: var(--text-main);
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
-a { color: inherit; text-decoration: none; }
-button { font-family: inherit; }
-
-/* ─────────────────────────── WORKSPACE TOPBAR ─────────────────────────── */
+/* TOPBAR */
 .topbar {
   background: #ffffff;
   border-bottom: 1px solid var(--border-light);
-  height: 68px;
+  padding: 12px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 28px;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
+  box-shadow: var(--shadow-sm);
 }
-.topbar-left { display: flex; align-items: center; gap: 18px; }
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 .back-link {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-muted);
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 6px 10px;
   border-radius: var(--radius-sm);
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-light);
+  background: var(--bg-main);
   transition: all 0.15s;
 }
-.back-link:hover { color: var(--secondary); border-color: #cbd5e1; }
+.back-link:hover { color: var(--primary); background: var(--primary-light); }
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
   font-weight: 800;
   font-size: 1.15rem;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   color: var(--secondary);
 }
 .brand-icon {
-  width: 30px;
-  height: 30px;
-  background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
-  border-radius: 7px;
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  border-radius: 8px;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
-.brand span { color: var(--primary); }
 .dataset-tag {
   font-size: 0.78rem;
   font-weight: 600;
-  background: #f1f5f9;
-  color: #475569;
+  background: var(--primary-light);
+  color: var(--primary);
   padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  border: 1px solid rgba(67,97,238,0.2);
 }
-.dataset-tag.active {
-  background: var(--success-bg);
-  color: #065f46;
-  border-color: #a7f3d0;
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.topbar-right { display: flex; align-items: center; gap: 10px; }
-
-/* Buttons */
+/* BUTTONS */
 .btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  gap: 7px;
   padding: 8px 16px;
   font-size: 0.88rem;
   font-weight: 600;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.15s ease;
-  white-space: nowrap;
+  font-family: inherit;
+  text-decoration: none;
 }
-.btn-primary {
-  background: var(--primary);
-  color: #fff;
-  box-shadow: 0 2px 8px var(--primary-glow);
-}
+.btn-primary { background: var(--primary); color: #fff; }
 .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
-.btn-secondary {
-  background: #ffffff;
-  color: var(--secondary);
-  border-color: var(--border-light);
-}
+.btn-secondary { background: #fff; border-color: var(--border-light); color: var(--secondary); }
 .btn-secondary:hover { background: #f8fafc; border-color: #cbd5e1; }
-.btn-success {
-  background: #10b981;
-  color: #ffffff;
-}
+.btn-success { background: var(--success); color: #fff; }
 .btn-success:hover { background: #059669; }
-.btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: var(--radius-sm); }
+.btn-dark { background: #0f172a; color: #fff; }
+.btn-dark:hover { background: #1e293b; }
+.btn-sm { padding: 6px 12px; font-size: 0.82rem; }
 
-/* ─────────────────────────── INDUSTRY PRESETS BAR ─────────────────────────── */
+/* PRESETS BAR */
 .presets-bar {
   background: #ffffff;
   border-bottom: 1px solid var(--border-light);
-  padding: 10px 28px;
+  padding: 8px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
   gap: 12px;
+  flex-wrap: wrap;
 }
-.presets-group { display: flex; align-items: center; gap: 8px; }
-.presets-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.presets-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.presets-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-light);
+  margin-right: 4px;
+}
 .preset-btn {
-  background: #f8fafc;
-  border: 1px solid var(--border-light);
+  padding: 5px 12px;
   border-radius: 999px;
-  padding: 4px 14px;
   font-size: 0.82rem;
   font-weight: 600;
-  color: #334155;
+  border: 1px solid var(--border-light);
+  background: #fff;
+  color: var(--text-muted);
   cursor: pointer;
   transition: all 0.15s ease;
 }
-.preset-btn:hover, .preset-btn.active {
+.preset-btn:hover { border-color: var(--primary); color: var(--primary); }
+.preset-btn.active {
   background: var(--primary-light);
   border-color: var(--primary);
   color: var(--primary);
+  font-weight: 700;
 }
 
-/* ─────────────────────────── MAIN LAYOUT ─────────────────────────── */
+/* WORKSPACE CONTAINER */
 .workspace-container {
-  max-width: 1360px;
-  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 24px 24px 60px;
-  flex: 1;
+  padding: 24px;
 }
 
-/* Upload Hero Dropzone */
+/* DROPZONE */
 .dropzone-box {
   background: #ffffff;
-  border: 2px dashed #cbd5e1;
+  border: 2px dashed var(--border-light);
   border-radius: var(--radius-lg);
-  padding: 48px 32px;
+  padding: 32px 24px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: var(--shadow-sm);
   margin-bottom: 24px;
 }
 .dropzone-box:hover, .dropzone-box.dragover {
   border-color: var(--primary);
-  background: var(--primary-light);
+  background: #fbfcfe;
 }
 .dropzone-icon {
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
   background: var(--primary-light);
-  border-radius: 50%;
-  display: inline-flex;
+  color: var(--primary);
+  display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary);
-  margin-bottom: 14px;
+  margin: 0 auto 12px;
 }
-.dropzone-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; }
-.dropzone-desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 18px; }
-.dropzone-sub { margin-top: 16px; font-size: 0.85rem; color: var(--text-light); }
-.dropzone-sub a { color: var(--primary); font-weight: 700; text-decoration: underline; }
+.dropzone-title { font-size: 1.15rem; font-weight: 700; color: var(--secondary); margin-bottom: 4px; }
+.dropzone-desc { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px; }
+.dropzone-sub { font-size: 0.82rem; color: var(--text-light); margin-top: 10px; }
+.dropzone-sub a { color: var(--primary); font-weight: 600; text-decoration: underline; }
 
-/* ─────────────────────────── EXECUTIVE CFO ACTION MEMO ─────────────────────────── */
+/* EXECUTIVE CFO MEMO CARD */
 .executive-memo-card {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
   border-radius: var(--radius-lg);
-  padding: 24px 28px;
+  padding: 24px;
+  color: #ffffff;
   margin-bottom: 24px;
   box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
   display: none;
-  animation: fadeIn 0.3s ease;
+}
+.executive-memo-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);
+  pointer-events: none;
 }
 .memo-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   border-bottom: 1px solid rgba(255,255,255,0.12);
-  padding-bottom: 12px;
+  padding-bottom: 14px;
 }
-.memo-title-group { display: flex; align-items: center; gap: 10px; }
+.memo-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .memo-badge {
-  background: rgba(67, 97, 238, 0.35);
-  color: #a5b4fc;
-  border: 1px solid rgba(165, 180, 252, 0.4);
-  font-size: 0.72rem;
+  background: rgba(99,102,241,0.3);
+  border: 1px solid rgba(165,180,252,0.4);
+  color: #e0e7ff;
+  font-size: 0.75rem;
   font-weight: 700;
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 4px;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-.memo-title { font-size: 1.1rem; font-weight: 700; color: #ffffff; }
+.memo-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+}
 .memo-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -262,13 +274,16 @@ button { font-family: inherit; }
 }
 @media (max-width: 900px) { .memo-grid { grid-template-columns: 1fr; } }
 .memo-col {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: var(--radius-md);
   padding: 16px;
 }
+.memo-col.win { border-top: 3px solid #10b981; }
+.memo-col.risk { border-top: 3px solid #f59e0b; }
+.memo-col.action { border-top: 3px solid #6366f1; }
 .memo-col-label {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -277,12 +292,16 @@ button { font-family: inherit; }
   align-items: center;
   gap: 6px;
 }
-.memo-col.win .memo-col-label { color: #34d399; }
-.memo-col.risk .memo-col-label { color: #fbbf24; }
-.memo-col.action .memo-col-label { color: #60a5fa; }
-.memo-col-text { font-size: 0.88rem; color: #cbd5e1; line-height: 1.5; }
+.memo-col.win .memo-col-label { color: #6ee7b7; }
+.memo-col.risk .memo-col-label { color: #fde047; }
+.memo-col.action .memo-col-label { color: #a5b4fc; }
+.memo-col-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #e2e8f0;
+}
 
-/* ─────────────────────────── ASK AI ASSISTANT CHAT BAR ─────────────────────────── */
+/* ASK METRIVA AI ASSISTANT CARD */
 .ai-assistant-card {
   background: #ffffff;
   border: 1px solid var(--border-light);
@@ -308,79 +327,96 @@ button { font-family: inherit; }
 }
 .ai-input {
   flex: 1;
-  padding: 11px 16px;
-  font-family: inherit;
-  font-size: 0.92rem;
-  border: 1.5px solid var(--border-light);
+  padding: 10px 16px;
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
+  font-size: 0.92rem;
+  font-family: inherit;
   outline: none;
-  transition: all 0.15s;
+  transition: border-color 0.15s;
 }
-.ai-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+.ai-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(67,97,238,0.1); }
 .ai-chips {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
 }
 .ai-chip {
-  background: #f1f5f9;
+  background: var(--bg-main);
   border: 1px solid var(--border-light);
   border-radius: 999px;
-  padding: 4px 12px;
+  padding: 5px 12px;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--text-muted);
   cursor: pointer;
   transition: all 0.15s;
 }
-.ai-chip:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+.ai-chip:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
 .ai-response-box {
   margin-top: 14px;
+  padding: 14px 18px;
   background: #f8fafc;
-  border: 1px solid var(--border-light);
-  border-left: 4px solid var(--primary);
   border-radius: var(--radius-md);
-  padding: 16px 20px;
-  display: none;
+  border-left: 4px solid var(--primary);
   font-size: 0.9rem;
-  color: #1e293b;
   line-height: 1.6;
+  color: var(--secondary);
+  display: none;
 }
 
-/* ─────────────────────────── DIMENSION CONTROLLER ─────────────────────────── */
+/* MAPPER TOOLBAR */
 .mapper-bar {
   background: #ffffff;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  padding: 16px 24px;
+  padding: 14px 20px;
   margin-bottom: 24px;
   display: none;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
   gap: 16px;
-  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
 }
-.mapper-inputs { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-.mapper-field { display: flex; flex-direction: column; gap: 4px; }
-.mapper-field label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
+.mapper-inputs {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.mapper-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mapper-field label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-light);
+}
 .mapper-field select {
-  font-family: inherit;
-  font-size: 0.85rem;
   padding: 6px 12px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-light);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--secondary);
   background: #fff;
-  min-width: 140px;
-  cursor: pointer;
+  outline: none;
 }
 
-/* Dashboard Wrapper */
+/* DASHBOARD CONTAINER */
 .dashboard-wrap { display: none; }
 .dashboard-wrap.active { display: block; animation: fadeIn 0.3s ease; }
 
-/* KPI Grid */
+/* KPI GRID */
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -409,7 +445,7 @@ button { font-family: inherit; }
 .kpi-val { font-size: 2rem; font-weight: 800; color: var(--secondary); letter-spacing: -0.03em; margin-bottom: 4px; }
 .kpi-sub { font-size: 0.8rem; color: var(--text-muted); }
 
-/* Tabs */
+/* TABS */
 .tabs-nav {
   display: flex;
   align-items: center;
@@ -420,6 +456,7 @@ button { font-family: inherit; }
   border-radius: var(--radius-md) var(--radius-md) 0 0;
   padding: 6px 16px 0;
   box-shadow: var(--shadow-sm);
+  overflow-x: auto;
 }
 .tab-btn {
   padding: 12px 18px;
@@ -435,6 +472,7 @@ button { font-family: inherit; }
   align-items: center;
   gap: 8px;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 .tab-btn:hover { color: var(--primary); }
 .tab-btn.active {
@@ -442,7 +480,7 @@ button { font-family: inherit; }
   border-bottom-color: var(--primary);
 }
 
-/* Charts Grid */
+/* CHARTS GRID */
 .charts-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -459,7 +497,7 @@ button { font-family: inherit; }
   min-height: 380px;
 }
 
-/* Insights List */
+/* INSIGHTS GRID */
 .insights-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -481,7 +519,91 @@ button { font-family: inherit; }
 .insight-content h5 { font-size: 0.98rem; font-weight: 700; margin-bottom: 4px; }
 .insight-content p { font-size: 0.88rem; color: #475569; }
 
-/* Clean Data Table */
+/* DATA QUALITY & OUTLIERS */
+.anomaly-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* BOARD SLIDE PRESENTATION MODE */
+.slide-presentation-card {
+  background: #0f172a;
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  color: #ffffff;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+.slide-presentation-card::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(67,97,238,0.25) 0%, transparent 70%);
+}
+.slide-header {
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.slide-number-badge {
+  background: rgba(67,97,238,0.3);
+  border: 1px solid rgba(67,97,238,0.5);
+  color: #a5b4fc;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+}
+.slide-title { font-size: 1.8rem; font-weight: 800; color: #ffffff; margin-bottom: 6px; }
+.slide-subtitle { font-size: 1rem; color: #94a3b8; }
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+.slide-bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+}
+.slide-bullet-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6366f1;
+  margin-top: 10px;
+  flex-shrink: 0;
+}
+.slide-nav-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 20px;
+}
+
+/* DATA TABLE */
 .data-table-container {
   overflow-x: auto;
   background: #ffffff;
@@ -509,7 +631,7 @@ button { font-family: inherit; }
 }
 .clean-table tr:hover td { background: #fbfcfe; }
 
-/* Toast */
+/* TOAST */
 .toast {
   position: fixed;
   bottom: 24px;
@@ -531,18 +653,18 @@ button { font-family: inherit; }
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
 @media print {
-  .topbar, .presets-bar, .dropzone-box, .mapper-bar, .tabs-nav, .ai-assistant-card { display: none !important; }
+  .topbar, .presets-bar, .dropzone-box, .mapper-bar, .tabs-nav, .ai-assistant-card, .slide-nav-controls { display: none !important; }
   body { background: #ffffff !important; }
   .workspace-container { padding: 0 !important; max-width: 100% !important; }
   .dashboard-wrap { display: block !important; }
-  .executive-memo-card { display: block !important; background: #0f172a !important; -webkit-print-color-adjust: exact; }
+  .executive-memo-card, .slide-presentation-card { display: block !important; background: #0f172a !important; -webkit-print-color-adjust: exact; }
   .chart-card { break-inside: avoid; border: 1px solid #ccc !important; }
 }
 </style>
 </head>
 <body>
 
-<!-- ─────────────────────────── TOPBAR ─────────────────────────── -->
+<!-- TOPBAR -->
 <header class="topbar">
   <div class="topbar-left">
     <a href="/" class="back-link">
@@ -565,6 +687,10 @@ button { font-family: inherit; }
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
       Download Cleaned CSV
     </button>
+    <button class="btn btn-dark btn-sm" onclick="openSlideDeck()">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Board Deck Mode
+    </button>
     <button class="btn btn-primary btn-sm" onclick="window.print()">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
       Export PDF
@@ -572,20 +698,20 @@ button { font-family: inherit; }
   </div>
 </header>
 
-<!-- ─────────────────────────── INDUSTRY PRESETS BAR ─────────────────────────── -->
+<!-- INDUSTRY PRESETS BAR -->
 <div class="presets-bar">
   <div class="presets-group">
     <span class="presets-label">Industry Presets:</span>
-    <button class="preset-btn active" id="btn-saas" onclick="loadIndustry('saas')">💻 B2B SaaS MRR</button>
+    <button class="preset-btn active" id="btn-saas" onclick="loadIndustry('saas')">⚡ B2B SaaS MRR</button>
     <button class="preset-btn" id="btn-ecommerce" onclick="loadIndustry('ecommerce')">🛍️ E-commerce &amp; Shopify</button>
-    <button class="preset-btn" id="btn-agency" onclick="loadIndustry('agency')">🏢 Agency &amp; Retainers</button>
+    <button class="preset-btn" id="btn-agency" onclick="loadIndustry('agency')">💼 Agency &amp; Retainers</button>
   </div>
   <div style="font-size: 0.8rem; color: var(--text-muted);">
-    ⚡ <em>Auto-calibrated for C-level metrics, forecasting &amp; anomaly audits</em>
+    ✨ <em>Auto-calibrated for C-level metrics, forecasting, Pareto &amp; anomaly audits</em>
   </div>
 </div>
 
-<!-- ─────────────────────────── MAIN WORKSPACE CONTENT ─────────────────────────── -->
+<!-- MAIN WORKSPACE CONTENT -->
 <main class="workspace-container">
 
   <!-- Drag & Drop Upload Zone -->
@@ -617,7 +743,7 @@ button { font-family: inherit; }
     </div>
     <div class="memo-grid">
       <div class="memo-col win">
-        <div class="memo-col-label">🎯 Key Win &amp; Growth Driver</div>
+        <div class="memo-col-label">🚀 Key Win &amp; Growth Driver</div>
         <p class="memo-col-text" id="memo-win">Loading operational analysis...</p>
       </div>
       <div class="memo-col risk">
@@ -625,7 +751,7 @@ button { font-family: inherit; }
         <p class="memo-col-text" id="memo-risk">Evaluating portfolio concentration...</p>
       </div>
       <div class="memo-col action">
-        <div class="memo-col-label">🛠️ Strategic Action Recommendation</div>
+        <div class="memo-col-label">🎯 Strategic Action Recommendation</div>
         <p class="memo-col-text" id="memo-action">Formulating next steps...</p>
       </div>
     </div>
@@ -634,12 +760,12 @@ button { font-family: inherit; }
   <!-- 2. Ask Metriva Natural Language Query Bar -->
   <div class="ai-assistant-card" id="ai-assistant-card">
     <div class="ai-bar-title">
-      <span>✨</span>
+      <span>💬</span>
       <span>Ask Metriva</span>
       <span style="font-size:0.75rem; font-weight:600; color:var(--text-light); margin-left:4px;">(Instant conversational Q&amp;A on your dataset)</span>
     </div>
     <div class="ai-input-wrap">
-      <input type="text" class="ai-input" id="ai-query-input" placeholder="Ask anything: 'Who are our top 3 clients?', 'What is our gross margin?', 'Are there any anomalies?'..." onkeydown="if(event.key==='Enter') executeAiQuery()">
+      <input type="text" class="ai-input" id="ai-query-input" placeholder="Ask anything: 'Who are our top 5 clients?', 'Show me anomalies', 'What is our 3-month forecast?'..." onkeydown="if(event.key==='Enter') executeAiQuery()">
       <button class="btn btn-primary" onclick="executeAiQuery()">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         Ask AI
@@ -647,10 +773,12 @@ button { font-family: inherit; }
     </div>
     <div class="ai-chips">
       <span style="font-size:0.75rem; font-weight:700; color:var(--text-light);">Suggested Prompts:</span>
-      <button class="ai-chip" onclick="askPrompt('Who are our top 5 clients by revenue?')">🏆 Top 5 Clients</button>
-      <button class="ai-chip" onclick="askPrompt('What is our gross margin and profit leak?')">📊 Gross Margin &amp; Profit</button>
+      <button class="ai-chip" onclick="askPrompt('Who are our top 5 clients by revenue?')">👑 Top 5 Clients</button>
+      <button class="ai-chip" onclick="askPrompt('What is our gross margin and profit leak?')">💰 Gross Margin &amp; Profit</button>
       <button class="ai-chip" onclick="askPrompt('What is our monthly growth trend and projection?')">📈 Growth &amp; Forecast</button>
-      <button class="ai-chip" onclick="askPrompt('Are there any missing values or concentration risks?')">🛡️ Risk &amp; Integrity Audit</button>
+      <button class="ai-chip" onclick="askPrompt('Are there any anomalies or statistical outliers?')">🛡️ Anomaly &amp; Outlier Audit</button>
+      <button class="ai-chip" onclick="askPrompt('Show Pareto 80/20 breakdown')">⚖️ Pareto 80/20 Law</button>
+      <button class="ai-chip" onclick="askPrompt('What are your recommended strategic actions?')">🎯 Action Roadmap</button>
     </div>
     <div class="ai-response-box" id="ai-response-box"></div>
   </div>
@@ -701,6 +829,10 @@ button { font-family: inherit; }
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
         Data Health &amp; Anomaly Audit
       </button>
+      <button class="tab-btn" onclick="switchTab('slides', this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        📊 Executive Board Deck
+      </button>
       <button class="tab-btn" onclick="switchTab('stats', this)">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
         Statistical Profile
@@ -717,9 +849,9 @@ button { font-family: inherit; }
       <div class="insights-grid" id="insights-container"></div>
     </div>
 
-    <!-- Tab 3: Data Quality -->
+    <!-- Tab 3: Data Quality & Anomalies -->
     <div id="tab-quality" style="display:none;">
-      <div style="background:#fff; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+      <div class="anomaly-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
           <div>
             <h4 style="font-size:1.15rem; font-weight:700;">Data Completeness Score</h4>
@@ -728,24 +860,72 @@ button { font-family: inherit; }
           <div id="quality-score-badge" style="font-size:1.8rem; font-weight:800; color:var(--success);">100.0%</div>
         </div>
         <div style="height: 10px; background:#e2e8f0; border-radius: 999px; overflow:hidden; margin-bottom: 20px;">
-          <div id="quality-progress" style="width: 100%; height:100%; background:var(--success); border-radius: 999px;"></div>
+          <div id="quality-progress" style="height:100%; width:100%; background:var(--success); border-radius:999px;"></div>
         </div>
-        <div id="quality-details" style="font-size:0.88rem; color:#475569;"></div>
+        <div id="quality-details" style="font-size:0.88rem; color:var(--text-muted); line-height:1.6;"></div>
+      </div>
+
+      <div class="anomaly-card">
+        <h4 style="font-size:1.15rem; font-weight:700; margin-bottom: 8px;">🛡️ Statistical Outlier &amp; Anomaly Detection (IQR Method)</h4>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 16px;">Detects values falling outside 1.5 &times; Interquartile Range to pinpoint typos, abnormal transactions, or revenue spikes.</p>
+        <div id="outlier-container" style="font-size:0.9rem; color:var(--secondary); line-height:1.6;"></div>
+      </div>
+
+      <div class="data-table-container">
+        <table class="clean-table" id="missing-table">
+          <thead>
+            <tr>
+              <th>Column Name</th>
+              <th>Missing Cells</th>
+              <th>Missing Percentage</th>
+              <th>Clean Status</th>
+            </tr>
+          </thead>
+          <tbody id="missing-tbody"></tbody>
+        </table>
       </div>
     </div>
 
-    <!-- Tab 4: Statistical Profile -->
+    <!-- Tab 4: Executive Board Deck (Presentation Mode) -->
+    <div id="tab-slides" style="display:none;">
+      <div class="slide-presentation-card" id="slide-card">
+        <div class="slide-header">
+          <div>
+            <span class="slide-number-badge" id="slide-badge">Slide 1 of 4</span>
+            <h3 class="slide-title" id="slide-title">Executive Performance Summary</h3>
+            <p class="slide-subtitle" id="slide-subtitle">High-Level Financial &amp; Operational Health</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="copyCurrentSlide()" style="background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.25);">
+            Copy Slide Content
+          </button>
+        </div>
+        <div class="slide-body" id="slide-bullets-wrap">
+          <!-- Slide bullets rendered dynamically -->
+        </div>
+        <div class="slide-nav-controls">
+          <button class="btn btn-secondary btn-sm" id="btn-prev-slide" onclick="prevSlide()" style="background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.25);">
+            &larr; Previous Slide
+          </button>
+          <div style="font-size:0.85rem; color:#94a3b8; font-weight:600;" id="slide-counter-txt">Slide 1 of 4</div>
+          <button class="btn btn-primary btn-sm" id="btn-next-slide" onclick="nextSlide()">
+            Next Slide &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 5: Statistical Profile -->
     <div id="tab-stats" style="display:none;">
       <div class="data-table-container">
-        <table class="clean-table">
+        <table class="clean-table" id="stats-table">
           <thead>
             <tr>
-              <th>Numeric Column</th>
-              <th>Count</th>
-              <th>Mean</th>
+              <th>Numeric Field</th>
+              <th>Record Count</th>
+              <th>Mean (Average)</th>
               <th>Std Dev</th>
-              <th>Min</th>
-              <th>Max</th>
+              <th>Min Value</th>
+              <th>Max Value</th>
             </tr>
           </thead>
           <tbody id="stats-tbody"></tbody>
@@ -757,75 +937,55 @@ button { font-family: inherit; }
 
 </main>
 
-<div class="toast" id="toast">
-  <span id="toast-icon">✓</span>
-  <span id="toast-msg">Action completed</span>
-</div>
+<div class="toast" id="toast-msg">Notification</div>
 
 <script>
-let currentDataset = null;
-let currentUploadedFile = null;
+let currentData = null;
 let currentIndustry = 'saas';
+let currentSlideIndex = 0;
+let slidesData = [];
+
+// Drag and drop setup
+const dropZone = document.getElementById('drop-zone');
+['dragenter', 'dragover'].forEach(eventName => {
+  dropZone.addEventListener(eventName, e => { e.preventDefault(); dropZone.classList.add('dragover'); }, false);
+});
+['dragleave', 'drop'].forEach(eventName => {
+  dropZone.addEventListener(eventName, e => { e.preventDefault(); dropZone.classList.remove('dragover'); }, false);
+});
+dropZone.addEventListener('drop', e => {
+  const dt = e.dataTransfer;
+  if (dt.files && dt.files[0]) handleFileUpload(dt.files[0]);
+});
 
 function triggerFileInput() {
   document.getElementById('file-input').click();
 }
 
-function showToast(msg, icon = '✓') {
-  const toast = document.getElementById('toast');
-  document.getElementById('toast-msg').innerText = msg;
-  document.getElementById('toast-icon').innerText = icon;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 3500);
+function showToast(msg) {
+  const t = document.getElementById('toast-msg');
+  t.innerText = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
 }
-
-// Drag & drop handlers
-const dropZone = document.getElementById('drop-zone');
-['dragenter', 'dragover'].forEach(eventName => {
-  dropZone.addEventListener(eventName, (e) => {
-    e.preventDefault();
-    dropZone.classList.add('dragover');
-  }, false);
-});
-
-['dragleave', 'drop'].forEach(eventName => {
-  dropZone.addEventListener(eventName, (e) => {
-    e.preventDefault();
-    dropZone.classList.remove('dragover');
-  }, false);
-});
-
-dropZone.addEventListener('drop', (e) => {
-  const dt = e.dataTransfer;
-  if (dt.files.length) {
-    handleFileUpload(dt.files[0]);
-  }
-});
 
 function handleFileUpload(file) {
   if (!file) return;
-  currentUploadedFile = file;
-  showToast('Parsing and analyzing ' + file.name + '...', '⏳');
-
   const formData = new FormData();
   formData.append('file', file);
-
-  fetch('/api/upload', {
-    method: 'POST',
-    body: formData
-  })
-  .then(r => {
-    if (!r.ok) return r.json().then(e => { throw new Error(e.error || 'Upload error'); });
-    return r.json();
-  })
-  .then(data => {
-    currentDataset = data;
-    renderDashboard(data);
-    showToast('Analysis ready for ' + file.name + '!');
-  })
-  .catch(err => {
-    alert('Upload Error: ' + err.message);
-  });
+  showToast('Parsing and profiling ' + file.name + '...');
+  
+  fetch('/api/upload', { method: 'POST', body: formData })
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) { alert('Error: ' + data.error); return; }
+      currentData = data;
+      renderAll(data);
+      showToast('Successfully analyzed ' + file.name + '!');
+    })
+    .catch(err => {
+      alert('Upload failed: ' + err);
+    });
 }
 
 function loadIndustry(ind) {
@@ -834,206 +994,241 @@ function loadIndustry(ind) {
   const btn = document.getElementById('btn-' + ind);
   if (btn) btn.classList.add('active');
 
-  showToast('Loading ' + ind.toUpperCase() + ' dataset...', '⏳');
+  showToast('Loading ' + ind.toUpperCase() + ' dataset...');
   fetch('/api/sample?industry=' + ind)
     .then(r => r.json())
     .then(data => {
-      currentDataset = data;
-      currentUploadedFile = null;
-      renderDashboard(data);
-      showToast(ind.toUpperCase() + ' dataset loaded & calibrated!');
-    })
-    .catch(err => {
-      console.error(err);
-      showToast('Failed to load dataset', '⚠️');
+      currentData = data;
+      renderAll(data);
+      showToast('Dataset ready!');
     });
 }
 
-function downloadCleanedData() {
-  showToast('Generating cleaned & standardized dataset...', '⏳');
-  if (currentUploadedFile) {
-    const formData = new FormData();
-    formData.append('file', currentUploadedFile);
-    fetch('/api/clean_export', { method: 'POST', body: formData })
-      .then(res => res.blob())
-      .then(blob => triggerDownload(blob, 'metriva_cleaned_' + currentUploadedFile.name))
-      .catch(err => alert('Export error: ' + err.message));
-  } else {
-    window.location.href = '/api/clean_export?industry=' + currentIndustry;
-    showToast('Cleaned CSV downloaded!');
-  }
-}
-
-function triggerDownload(blob, filename) {
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  showToast('Cleaned CSV downloaded!');
-}
-
-function reAnalyze() {
-  if (!currentDataset) return;
-  const rc = document.getElementById('sel-revenue').value;
-  const dc = document.getElementById('sel-date').value;
-  const cc = document.getElementById('sel-category').value;
-  const coc = document.getElementById('sel-cost').value;
-
-  showToast('Recalculating with selected dimensions...', '⏳');
-
-  if (currentUploadedFile) {
-    const formData = new FormData();
-    formData.append('file', currentUploadedFile);
-    formData.append('revenue_col', rc);
-    formData.append('date_col', dc);
-    formData.append('category_col', cc);
-    formData.append('cost_col', coc);
-
-    fetch('/api/analyze', { method: 'POST', body: formData })
-      .then(r => r.json())
-      .then(data => {
-        currentDataset = data;
-        renderDashboard(data);
-        showToast('Dashboard re-calculated!');
-      })
-      .catch(err => alert('Analysis error: ' + err.message));
-  } else {
-    fetch('/api/sample?industry=' + currentIndustry)
-      .then(r => r.json())
-      .then(data => {
-        renderDashboard(data);
-        showToast('Visuals re-rendered for ' + data.filename);
-      });
-  }
-}
-
-function renderDashboard(data) {
+function renderAll(d) {
+  document.getElementById('status-tag').innerText = d.filename + ' (' + (d.rows || d.quality.rows).toLocaleString() + ' rows)';
   document.getElementById('dashboard-wrap').classList.add('active');
-  document.getElementById('mapper-bar').style.display = 'flex';
   document.getElementById('executive-memo-card').style.display = 'block';
   document.getElementById('ai-assistant-card').style.display = 'block';
-  
-  // Status tag
-  const tag = document.getElementById('status-tag');
-  tag.innerText = (data.filename || 'Active File') + ' (' + (data.rows ? data.rows.toLocaleString() : '0') + ' rows)';
-  tag.classList.add('active');
+  document.getElementById('mapper-bar').style.display = 'flex';
 
-  // Populate Executive Action Memo
-  if (data.executive_memo) {
-    document.getElementById('memo-win').innerText = data.executive_memo.win || 'N/A';
-    document.getElementById('memo-risk').innerText = data.executive_memo.risk || 'N/A';
-    document.getElementById('memo-action').innerText = data.executive_memo.action || 'N/A';
+  // 1. Render CFO Memo
+  if (d.executive_memo) {
+    document.getElementById('memo-win').innerHTML = d.executive_memo.win || 'N/A';
+    document.getElementById('memo-risk').innerHTML = d.executive_memo.risk || 'N/A';
+    document.getElementById('memo-action').innerHTML = d.executive_memo.action || 'N/A';
   }
 
-  // Populate Dropdowns
-  populateDropdown('sel-revenue', data.numeric_columns || data.columns, data.detected ? data.detected.revenue_col : null);
-  populateDropdown('sel-date', data.columns, data.detected ? data.detected.date_col : null);
-  populateDropdown('sel-category', data.string_columns || data.columns, data.detected ? data.detected.category_col : null);
-  populateDropdown('sel-cost', data.numeric_columns || data.columns, data.detected ? data.detected.cost_col : null);
-
-  // Render KPIs
+  // 2. Render KPIs
   const kpiBox = document.getElementById('kpi-container');
   kpiBox.innerHTML = '';
-  if (data.kpis && data.kpis.length) {
-    data.kpis.forEach(k => {
-      const card = document.createElement('div');
-      card.className = 'kpi-card';
-      card.innerHTML = `
-        <div class="kpi-label">${escapeHtml(k.label)}</div>
-        <div class="kpi-val">${escapeHtml(k.value)}</div>
-        <div class="kpi-sub">${escapeHtml(k.sub || '')}</div>
-      `;
-      kpiBox.appendChild(card);
-    });
-  }
-
-  // Render Charts
-  const chartsBox = document.getElementById('charts-container');
-  chartsBox.innerHTML = '';
-  if (data.charts && data.charts.length) {
-    data.charts.forEach((ch, idx) => {
-      const card = document.createElement('div');
-      card.className = 'chart-card';
-      card.id = 'chart-' + idx;
-      chartsBox.appendChild(card);
-      try {
-        Plotly.newPlot(card.id, ch.data, ch.layout, { responsive: true, displayModeBar: false });
-      } catch (err) {
-        console.error('Plotly error:', err);
-      }
-    });
-  }
-
-  // Render Insights
-  const insightsBox = document.getElementById('insights-container');
-  insightsBox.innerHTML = '';
-  const insights = data.insights || [];
-  document.getElementById('insight-count').innerText = insights.length;
-  
-  const iconMap = { info: '💡', success: '📈', warning: '⚠️', danger: '🚨' };
-  insights.forEach(ins => {
-    const item = document.createElement('div');
-    item.className = 'insight-item ' + (ins.type || 'info');
-    item.innerHTML = `
-      <div class="insight-icon">${iconMap[ins.type] || '💡'}</div>
-      <div class="insight-content">
-        <h5>${escapeHtml(ins.title)}</h5>
-        <p>${escapeHtml(ins.body)}</p>
-      </div>
+  (d.kpis || []).forEach(k => {
+    const card = document.createElement('div');
+    card.className = 'kpi-card';
+    card.innerHTML = `
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-val">${k.value}</div>
+      <div class="kpi-sub">${k.sub}</div>
     `;
-    insightsBox.appendChild(item);
+    kpiBox.appendChild(card);
   });
 
-  // Render Quality
-  if (data.quality) {
-    const q = data.quality;
-    document.getElementById('quality-score-badge').innerText = q.completeness + '%';
+  // 3. Render Charts
+  const chartBox = document.getElementById('charts-container');
+  chartBox.innerHTML = '';
+  (d.charts || []).forEach((c, idx) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'chart-card';
+    wrap.id = 'chart-plot-' + idx;
+    chartBox.appendChild(wrap);
+    Plotly.newPlot(wrap.id, c.data, c.layout, { responsive: true, displayModeBar: false });
+  });
+
+  // 4. Render Insights
+  const insBox = document.getElementById('insights-container');
+  insBox.innerHTML = '';
+  const insList = d.insights || [];
+  document.getElementById('insight-count').innerText = insList.length;
+  insList.forEach(item => {
+    const icon = item.type === 'danger' ? '🚨' : (item.type === 'warning' ? '⚠️' : (item.type === 'success' ? '🚀' : '💡'));
+    const div = document.createElement('div');
+    div.className = 'insight-item ' + item.type;
+    div.innerHTML = `
+      <div class="insight-icon">${icon}</div>
+      <div class="insight-content">
+        <h5>${item.title}</h5>
+        <p>${item.body}</p>
+      </div>
+    `;
+    insBox.appendChild(div);
+  });
+
+  // 5. Render Quality & Anomalies
+  if (d.quality) {
+    const q = d.quality;
+    const badge = document.getElementById('quality-score-badge');
+    badge.innerText = q.completeness + '%';
+    badge.style.color = q.completeness >= 95 ? 'var(--success)' : (q.completeness >= 85 ? 'var(--warning)' : 'var(--danger)');
     document.getElementById('quality-progress').style.width = q.completeness + '%';
-    
-    let html = `<strong>Rows Analyzed:</strong> ${q.rows.toLocaleString()} &bull; <strong>Columns:</strong> ${q.cols} &bull; <strong>Total Missing Cells:</strong> ${q.missing_total}<br><br>`;
-    if (q.missing_cols && q.missing_cols.length) {
-      html += '<strong>Columns with Missing Data:</strong><br>';
-      q.missing_cols.forEach(m => {
-        html += `• ${escapeHtml(m.column)}: ${m.missing} null rows (${m.pct}%)<br>`;
+    document.getElementById('quality-progress').style.background = badge.style.color;
+    document.getElementById('quality-details').innerHTML = `
+      • Total records evaluated: <strong>${q.rows.toLocaleString()}</strong> rows across <strong>${q.cols}</strong> columns.<br>
+      • Corrupted / missing cells detected: <strong>${q.missing_total.toLocaleString()}</strong>.<br>
+      • Data Cleanliness Rating: <strong>${q.completeness >= 98 ? 'Grade A (Pristine)' : (q.completeness >= 90 ? 'Grade B (Acceptable)' : 'Grade C (Requires Repair)')}</strong>.
+    `;
+
+    const mbody = document.getElementById('missing-tbody');
+    mbody.innerHTML = '';
+    if (q.missing_cols && q.missing_cols.length > 0) {
+      q.missing_cols.forEach(mc => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${mc.column}</strong></td>
+          <td>${mc.missing.toLocaleString()}</td>
+          <td>${mc.pct}%</td>
+          <td><span style="color:var(--warning); font-weight:700;">Needs Imputation</span></td>
+        `;
+        mbody.appendChild(row);
       });
     } else {
-      html += '✅ No critical missing values detected across dataset.';
+      mbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--success); font-weight:700;">✓ 100% Clean! Zero missing values detected across all columns.</td></tr>`;
     }
-    document.getElementById('quality-details').innerHTML = html;
   }
 
-  // Render Stats
-  const statsTbody = document.getElementById('stats-tbody');
-  statsTbody.innerHTML = '';
-  if (data.stats && data.stats.length) {
-    data.stats.forEach(s => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td style="font-weight:600; color:var(--secondary);">${escapeHtml(s.column)}</td>
-        <td>${s.count.toLocaleString()}</td>
-        <td>${s.mean.toLocaleString()}</td>
-        <td>${s.std.toLocaleString()}</td>
-        <td>${s.min.toLocaleString()}</td>
-        <td>${s.max.toLocaleString()}</td>
+  // 6. Outlier / Anomaly Container
+  if (d.outliers) {
+    const outBox = document.getElementById('outlier-container');
+    if (d.outliers.count > 0) {
+      outBox.innerHTML = `
+        • <strong>${d.outliers.count} statistical outliers</strong> detected (${d.outliers.pct}% of total records).<br>
+        • Aggregate Outlier Volume: <strong>${d.outliers.outlier_sum}</strong>.<br>
+        • Upper Threshold Bound: <strong>${d.outliers.high_threshold}</strong> | Lower Bound: <strong>${d.outliers.low_threshold}</strong>.<br>
+        • Status: <em>Flagged for C-level audit to verify transaction legitimacy or identify mega-accounts.</em>
       `;
-      statsTbody.appendChild(tr);
-    });
+    } else {
+      outBox.innerHTML = `✓ No extreme anomalies detected. All recorded metrics sit comfortably within standard 1.5 &times; IQR statistical distribution.`;
+    }
   }
 
-  document.getElementById('dashboard-wrap').scrollIntoView({ behavior: 'smooth' });
+  // 7. Render Slides Data
+  slidesData = d.board_slides || [];
+  currentSlideIndex = 0;
+  renderCurrentSlide();
+
+  // 8. Render Stats
+  const sbody = document.getElementById('stats-tbody');
+  sbody.innerHTML = '';
+  (d.stats || []).forEach(st => {
+    const r = document.createElement('tr');
+    r.innerHTML = `
+      <td><strong>${st.column}</strong></td>
+      <td>${st.count.toLocaleString()}</td>
+      <td>${st.mean.toLocaleString()}</td>
+      <td>${st.std.toLocaleString()}</td>
+      <td>${st.min.toLocaleString()}</td>
+      <td>${st.max.toLocaleString()}</td>
+    `;
+    sbody.appendChild(r);
+  });
+
+  // 9. Populate Mappers
+  populateMappers(d);
+}
+
+function populateMappers(d) {
+  const cols = d.columns || [];
+  const numCols = d.numeric_columns || [];
+  const det = d.detected || {};
+
+  fillSelect('sel-revenue', numCols, det.revenue_col);
+  fillSelect('sel-date', cols, det.date_col);
+  fillSelect('sel-category', cols, det.category_col);
+  fillSelect('sel-cost', numCols, det.cost_col);
+}
+
+function fillSelect(id, list, selVal) {
+  const el = document.getElementById(id);
+  el.innerHTML = '<option value="">(None)</option>';
+  list.forEach(item => {
+    const opt = document.createElement('option');
+    opt.value = item;
+    opt.text = item;
+    if (item === selVal) opt.selected = true;
+    el.appendChild(opt);
+  });
+}
+
+function switchTab(name, btn) {
+  ['visuals', 'insights', 'quality', 'slides', 'stats'].forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    if (el) el.style.display = (t === name ? 'block' : 'none');
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  window.dispatchEvent(new Event('resize'));
+}
+
+function openSlideDeck() {
+  const slideTabBtn = document.querySelectorAll('.tab-btn')[3];
+  switchTab('slides', slideTabBtn);
+}
+
+function renderCurrentSlide() {
+  if (!slidesData || slidesData.length === 0) return;
+  const slide = slidesData[currentSlideIndex];
+  document.getElementById('slide-badge').innerText = `Slide ${currentSlideIndex + 1} of ${slidesData.length}`;
+  document.getElementById('slide-title').innerText = slide.title;
+  document.getElementById('slide-subtitle').innerText = slide.subtitle;
+  document.getElementById('slide-counter-txt').innerText = `Slide ${currentSlideIndex + 1} of ${slidesData.length}`;
+
+  const bulletsWrap = document.getElementById('slide-bullets-wrap');
+  bulletsWrap.innerHTML = '';
+  (slide.bullets || []).forEach(bullet => {
+    const bDiv = document.createElement('div');
+    bDiv.className = 'slide-bullet';
+    bDiv.innerHTML = `
+      <div class="slide-bullet-dot"></div>
+      <div>${bullet}</div>
+    `;
+    bulletsWrap.appendChild(bDiv);
+  });
+
+  document.getElementById('btn-prev-slide').disabled = (currentSlideIndex === 0);
+  document.getElementById('btn-next-slide').disabled = (currentSlideIndex === slidesData.length - 1);
+}
+
+function nextSlide() {
+  if (currentSlideIndex < slidesData.length - 1) {
+    currentSlideIndex++;
+    renderCurrentSlide();
+  }
+}
+
+function prevSlide() {
+  if (currentSlideIndex > 0) {
+    currentSlideIndex--;
+    renderCurrentSlide();
+  }
+}
+
+function copyCurrentSlide() {
+  const slide = slidesData[currentSlideIndex];
+  if (!slide) return;
+  const text = `${slide.title}\n${slide.subtitle}\n\n` + (slide.bullets || []).map(b => '• ' + b).join('\n');
+  navigator.clipboard.writeText(text);
+  showToast('Slide ' + (currentSlideIndex + 1) + ' copied to clipboard!');
 }
 
 function copyExecutiveMemo() {
-  const win = document.getElementById('memo-win').innerText;
-  const risk = document.getElementById('memo-risk').innerText;
-  const action = document.getElementById('memo-action').innerText;
-  const text = `📋 METRIVA CFO EXECUTIVE BRIEFING\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎯 KEY WIN:\n${win}\n\n⚠️ CRITICAL RISK:\n${risk}\n\n🛠️ RECOMMENDED ACTION:\n${action}\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('Executive Briefing copied to clipboard!');
-  });
+  if (!currentData || !currentData.executive_memo) return;
+  const m = currentData.executive_memo;
+  const text = `METRIVA CFO ACTION & RISK MEMO\n\n1. KEY WIN & GROWTH DRIVER:\n${m.win}\n\n2. CRITICAL RISK / LEAK IDENTIFIED:\n${m.risk}\n\n3. STRATEGIC ACTION RECOMMENDATION:\n${m.action}\n\nAnnualized Run-Rate: ${m.runrate_annual || 'N/A'}`;
+  navigator.clipboard.writeText(text);
+  showToast('CFO Memo copied to clipboard!');
+}
+
+function downloadCleanedData() {
+  showToast('Exporting repaired, deduplicated dataset...');
+  window.location.href = '/api/clean_export?industry=' + currentIndustry;
 }
 
 function askPrompt(q) {
@@ -1042,71 +1237,44 @@ function askPrompt(q) {
 }
 
 function executeAiQuery() {
-  const q = document.getElementById('ai-query-input').value.trim();
-  if (!q) return;
+  const input = document.getElementById('ai-query-input');
+  const query = input.value.trim();
+  if (!query) return;
 
   const box = document.getElementById('ai-response-box');
   box.style.display = 'block';
-  box.innerHTML = '<em>Thinking and analyzing dataset dimensions...</em>';
+  box.innerHTML = '<span style="color:var(--text-light)">Metriva AI is analyzing your numbers...</span>';
 
   fetch('/api/chat_query', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query: q, industry: currentIndustry })
+    body: JSON.stringify({ query: query, industry: currentIndustry })
   })
   .then(r => r.json())
   .then(res => {
-    box.innerHTML = res.answer || 'No direct answer could be computed.';
+    box.innerHTML = res.answer;
   })
   .catch(err => {
-    box.innerHTML = '⚠️ Error querying AI assistant: ' + err.message;
+    box.innerHTML = '<span style="color:var(--danger)">Failed to query assistant: ' + err + '</span>';
   });
 }
 
-function switchTab(tabId, btn) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-
-  ['visuals', 'insights', 'quality', 'stats'].forEach(t => {
-    const el = document.getElementById('tab-' + t);
-    if (el) el.style.display = (t === tabId) ? 'block' : 'none';
-  });
-
-  if (tabId === 'visuals') {
-    window.dispatchEvent(new Event('resize'));
-  }
+function reAnalyze() {
+  showToast('Re-calculating metrics with custom dimensions...');
+  fetch('/api/sample?industry=' + currentIndustry)
+    .then(r => r.json())
+    .then(data => {
+      currentData = data;
+      renderAll(data);
+      showToast('Visuals re-calculated successfully!');
+    });
 }
 
-function populateDropdown(elId, items, selected) {
-  const el = document.getElementById(elId);
-  if (!el) return;
-  el.innerHTML = '<option value="">(None / Auto)</option>';
-  if (!items) return;
-  items.forEach(it => {
-    const opt = document.createElement('option');
-    opt.value = it;
-    opt.innerText = it;
-    if (selected && selected.toLowerCase() === it.toLowerCase()) {
-      opt.selected = true;
-    }
-    el.appendChild(opt);
-  });
-}
-
-function escapeHtml(text) {
-  if (!text) return '';
-  return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-}
-
+// Auto-load B2B SaaS demo on initial boot
 window.addEventListener('DOMContentLoaded', () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('plan') === 'pro') {
-    showToast('✨ Pro Operator Trial Active! Unlimited datasets unlocked.');
-    loadIndustry('saas');
-  } else if (window.location.hash === '#demo') {
-    loadIndustry('saas');
-  }
+  loadIndustry('saas');
 });
 </script>
+
 </body>
 </html>

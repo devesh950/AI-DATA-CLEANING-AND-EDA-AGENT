@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Metriva — Turn Spreadsheets into Executive Business Intelligence</title>
+<title>Metriva - Turn Spreadsheets into Executive Business Intelligence</title>
 <meta name="description" content="Instant automated data cleaning, revenue attribution, anomaly detection, AI chat assistant, and executive dashboards for business owners. No SQL, no complex BI setup.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,7 +54,7 @@ p { color: var(--text-muted); font-size: 1rem; }
 a { color: inherit; text-decoration: none; }
 .container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
 
-/* ─────────────────────────── BUTTONS ─────────────────────────── */
+/* BUTTONS */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -78,260 +78,285 @@ a { color: inherit; text-decoration: none; }
 .btn-primary:hover {
   background: var(--primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px var(--primary-glow);
+  box-shadow: 0 4px 16px rgba(67, 97, 238, 0.3);
 }
 .btn-secondary {
-  background: #ffffff;
+  background: #fff;
   color: var(--secondary);
   border-color: var(--border-light);
-  box-shadow: var(--shadow-sm);
 }
 .btn-secondary:hover {
   background: var(--bg-subtle);
   border-color: #cbd5e1;
-  transform: translateY(-1px);
 }
-.btn-outline-white {
-  background: transparent;
-  color: #ffffff;
-  border-color: rgba(255,255,255,0.3);
+.btn-lg {
+  padding: 14px 28px;
+  font-size: 1.05rem;
+  border-radius: var(--radius-md);
 }
-.btn-outline-white:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: #ffffff;
-}
-.btn-lg { padding: 14px 28px; font-size: 1rem; border-radius: var(--radius-md); }
-.btn-sm { padding: 6px 14px; font-size: 0.82rem; border-radius: var(--radius-sm); }
-.btn-full { width: 100%; }
 
-/* ─────────────────────────── NAVBAR ─────────────────────────── */
+/* NAVBAR */
 .navbar {
   position: sticky;
   top: 0;
-  z-index: 1000;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-light);
+  z-index: 1000;
 }
-.nav-inner {
+.navbar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 72px;
 }
-.brand {
+.brand-group {
   display: flex;
   align-items: center;
   gap: 10px;
   font-weight: 800;
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   letter-spacing: -0.03em;
   color: var(--secondary);
 }
 .brand-icon {
-  width: 34px;
-  height: 34px;
-  background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
-  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  background: var(--primary);
+  border-radius: 10px;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
   font-weight: 800;
-  box-shadow: 0 4px 10px var(--primary-glow);
+  font-size: 1.15rem;
+  box-shadow: 0 2px 8px var(--primary-glow);
 }
-.brand span { color: var(--primary); }
 .nav-menu {
   display: flex;
   align-items: center;
   gap: 28px;
   list-style: none;
 }
-@media (max-width: 860px) { .nav-menu { display: none; } }
-.nav-item a {
-  font-size: 0.92rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  transition: color 0.15s ease;
-}
+.nav-item { font-size: 0.92rem; font-weight: 600; color: var(--text-muted); cursor: pointer; position: relative; }
 .nav-item a:hover { color: var(--primary); }
-.nav-actions { display: flex; align-items: center; gap: 12px; }
 
-/* ─────────────────────────── HERO SECTION ─────────────────────────── */
-.hero {
-  position: relative;
-  padding: 85px 0 65px;
-  background: radial-gradient(circle at 50% 0%, rgba(67, 97, 238, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
-  overflow: hidden;
+/* MEGA MENU */
+.nav-item-dropdown { position: relative; }
+.nav-link-dropdown { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 8px 0; }
+.mega-menu {
+  position: absolute;
+  top: 100%;
+  left: -20px;
+  width: 580px;
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: 16px;
+  display: none;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  z-index: 1100;
 }
-.hero-content {
+.nav-item-dropdown:hover .mega-menu { display: grid; }
+.mega-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  transition: background 0.15s;
+}
+.mega-item:hover { background: #f8fafc; }
+.mega-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+.mega-content h5 { font-size: 0.92rem; font-weight: 700; color: var(--secondary); margin-bottom: 2px; }
+.mega-content p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+
+/* HERO */
+.hero-section {
+  padding: 80px 0 60px;
   text-align: center;
-  max-width: 880px;
-  margin: 0 auto;
+  position: relative;
 }
-.hero-pill {
+.badge-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 6px 16px;
-  background: #ffffff;
-  border: 1px solid #e0e7ff;
   border-radius: 999px;
+  background: var(--primary-light);
+  border: 1px solid rgba(67, 97, 238, 0.2);
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 700;
   margin-bottom: 24px;
-  box-shadow: var(--shadow-sm);
 }
-.hero-pill .stars { color: #f59e0b; font-size: 0.85rem; }
-.hero-pill span { font-size: 0.82rem; font-weight: 600; color: #475569; }
 .hero-title {
   font-size: 3.5rem;
   font-weight: 800;
+  letter-spacing: -0.04em;
+  max-width: 920px;
+  margin: 0 auto 20px;
   line-height: 1.12;
-  margin-bottom: 20px;
-  letter-spacing: -0.035em;
 }
-@media (max-width: 768px) { .hero-title { font-size: 2.3rem; } }
-.hero-title .gradient-text {
-  background: linear-gradient(135deg, var(--primary) 0%, #6366f1 50%, #8b5cf6 100%);
+.hero-title span {
+  background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .hero-desc {
-  font-size: 1.2rem;
-  color: var(--text-muted);
+  font-size: 1.15rem;
   max-width: 720px;
   margin: 0 auto 36px;
   line-height: 1.6;
 }
-.hero-cta {
+.hero-actions {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 16px;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
+  margin-bottom: 30px;
 }
-.hero-trust-bullets {
+.hero-footnote {
+  font-size: 0.82rem;
+  color: var(--text-light);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 28px;
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-bottom: 50px;
-  flex-wrap: wrap;
+  gap: 16px;
 }
-.hero-trust-bullets span { display: flex; align-items: center; gap: 6px; }
-.hero-trust-bullets svg { color: var(--success); }
 
-/* ─────────────────────────── HERO PREVIEW CARD ─────────────────────────── */
-.hero-preview {
-  margin: 20px auto 0;
-  max-width: 1040px;
-  background: #ffffff;
-  border: 1px solid var(--border-light);
+/* DEMO APP PREVIEW */
+.app-preview-wrap {
+  margin: 40px auto 70px;
+  max-width: 1100px;
   border-radius: var(--radius-xl);
-  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(226, 232, 240, 0.8);
+  border: 1px solid var(--border-light);
+  background: #ffffff;
+  box-shadow: var(--shadow-xl);
   overflow: hidden;
-  position: relative;
-  transition: transform 0.3s ease;
-  display: block;
-  text-align: left;
 }
-.hero-preview:hover { transform: translateY(-3px); }
-.preview-window-bar {
-  background: #f8fafc;
+.preview-topbar {
+  background: #0f172a;
   padding: 12px 20px;
-  border-bottom: 1px solid var(--border-light);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: #fff;
 }
 .preview-dots { display: flex; gap: 6px; }
 .preview-dot { width: 10px; height: 10px; border-radius: 50%; }
-.preview-dot.red { background: #ef4444; }
-.preview-dot.yellow { background: #f59e0b; }
-.preview-dot.green { background: #10b981; }
-.preview-url {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  background: #ffffff;
-  padding: 4px 20px;
-  border-radius: 6px;
-  border: 1px solid var(--border-light);
+.preview-content {
+  padding: 24px;
+  background: #f8fafc;
 }
-.preview-body { padding: 32px; background: #ffffff; }
 
-/* ─────────────────────────── LOGOS MARQUEE ─────────────────────────── */
-.logos-section {
-  padding: 38px 0;
-  border-top: 1px solid var(--border-subtle);
-  border-bottom: 1px solid var(--border-subtle);
-  background: #fafbfc;
+/* COMPETITOR COMPARISON SECTION */
+.comparison-section {
+  padding: 90px 0;
+  background: #ffffff;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+.section-tag {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  margin-bottom: 8px;
   text-align: center;
 }
-.logos-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-light);
-  margin-bottom: 24px;
+.section-title {
+  font-size: 2.3rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 12px;
 }
-.logos-grid {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 48px;
-  flex-wrap: wrap;
-  opacity: 0.75;
+.section-subtitle {
+  font-size: 1.05rem;
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 48px;
 }
-.logo-item {
-  font-weight: 700;
-  font-size: 1.15rem;
-  color: #64748b;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.comparison-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  background: #ffffff;
 }
-.logo-item:hover { color: var(--secondary); }
-
-/* ─────────────────────────── FEATURES SECTION ─────────────────────────── */
-.section { padding: 90px 0; }
-.section-header { text-align: center; max-width: 720px; margin: 0 auto 56px; }
-.section-eyebrow {
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.92rem;
+}
+.comparison-table th {
+  padding: 18px 20px;
+  background: #f8fafc;
+  color: var(--secondary);
+  font-weight: 800;
+  border-bottom: 2px solid var(--border-light);
+}
+.comparison-table th.highlight {
+  background: var(--primary-light);
   color: var(--primary);
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 10px;
+  font-size: 1.05rem;
+  border-bottom-color: var(--primary);
 }
-.section-title { font-size: 2.35rem; font-weight: 800; margin-bottom: 14px; }
-.section-subtitle { font-size: 1.1rem; color: var(--text-muted); }
+.comparison-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+}
+.comparison-table td.highlight {
+  background: rgba(67, 97, 238, 0.03);
+  color: var(--secondary);
+  font-weight: 700;
+}
+.check-icon { color: var(--success); font-weight: 800; }
+.cross-icon { color: #94a3b8; }
 
+/* FEATURES GRID */
+.features-section {
+  padding: 90px 0;
+  background: var(--bg-subtle);
+}
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
 }
+@media (max-width: 900px) { .features-grid { grid-template-columns: 1fr; } }
 .feature-card {
   background: #ffffff;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
-  padding: 36px 30px;
+  padding: 28px;
   box-shadow: var(--shadow-sm);
-  transition: all 0.25s ease;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 .feature-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-lg);
-  border-color: #cbd5e1;
 }
 .feature-icon-wrap {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border-radius: 12px;
   background: var(--primary-light);
   color: var(--primary);
@@ -339,927 +364,444 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   justify-content: center;
   font-size: 1.4rem;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
-.feature-card h4 { font-size: 1.25rem; font-weight: 700; margin-bottom: 10px; }
-.feature-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+.feature-card h4 { font-size: 1.18rem; margin-bottom: 8px; color: var(--secondary); }
+.feature-card p { font-size: 0.9rem; line-height: 1.6; color: var(--text-muted); }
 
-/* ─────────────────────────── HOW IT WORKS ─────────────────────────── */
-.how-it-works-bg { background: #fafbfc; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
-.steps-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-}
-@media (max-width: 860px) { .steps-grid { grid-template-columns: 1fr; } }
-.step-card {
-  background: #ffffff;
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  padding: 36px 28px;
-  box-shadow: var(--shadow-sm);
-}
-.step-number {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--secondary);
-  color: #fff;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  margin-bottom: 20px;
-}
-.step-card h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
-.step-card p { font-size: 0.92rem; color: var(--text-muted); }
-
-/* ─────────────────────────── PRICING SECTION (MONTHLY ONLY) ─────────────────────────── */
+/* PRICING */
 .pricing-section {
   padding: 90px 0;
   background: #ffffff;
-  scroll-margin-top: 60px;
 }
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
-  align-items: stretch;
+  max-width: 1080px;
+  margin: 0 auto;
 }
-@media (max-width: 960px) { .pricing-grid { grid-template-columns: 1fr; } }
-.price-card {
+@media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } }
+.pricing-card {
   background: #ffffff;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-xl);
-  padding: 40px 32px;
-  display: flex;
-  flex-direction: column;
+  padding: 36px 32px;
   box-shadow: var(--shadow-sm);
   position: relative;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
 }
-.price-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-.price-card.featured {
+.pricing-card.featured {
   border-color: var(--primary);
-  box-shadow: 0 15px 35px -5px rgba(67, 97, 238, 0.18);
+  box-shadow: 0 10px 30px rgba(67, 97, 238, 0.15);
+  transform: scale(1.03);
 }
 .featured-badge {
   position: absolute;
-  top: -14px;
+  top: -12px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--primary);
   color: #fff;
-  padding: 4px 16px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.72rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  padding: 4px 14px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
 }
-.plan-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; }
-.plan-desc { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px; min-height: 42px; }
-.plan-price-wrap { display: flex; align-items: baseline; gap: 4px; margin-bottom: 24px; }
-.plan-price { font-size: 2.8rem; font-weight: 800; color: var(--secondary); letter-spacing: -0.03em; }
-.plan-period { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
-.plan-features { list-style: none; margin-bottom: 32px; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
-.plan-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: #334155; }
-.plan-features svg { color: var(--success); flex-shrink: 0; margin-top: 3px; }
-
-/* ─────────────────────────── TESTIMONIALS ─────────────────────────── */
-.testimonials-section {
-  padding: 90px 0;
-  background: #f8fafc;
-  border-top: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
-  scroll-margin-top: 60px;
-}
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
-}
-@media (max-width: 900px) { .testimonials-grid { grid-template-columns: 1fr; } }
-.testimonial-card {
-  background: #ffffff;
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  padding: 32px 28px;
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.test-stars { color: #f59e0b; margin-bottom: 16px; font-size: 0.95rem; }
-.test-quote { font-size: 0.96rem; color: #334155; font-style: normal; line-height: 1.6; margin-bottom: 24px; }
-.test-author { display: flex; align-items: center; gap: 12px; }
-.test-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #e2e8f0;
-  font-weight: 700;
-  color: var(--secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.95rem;
-}
-.test-meta h5 { font-size: 0.92rem; font-weight: 700; }
-.test-meta p { font-size: 0.8rem; color: var(--text-light); }
-
-/* ─────────────────────────── FAQ ACCORDION ─────────────────────────── */
-.faq-section { padding: 90px 0; background: #ffffff; scroll-margin-top: 60px; }
-.faq-wrap { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
-.faq-item {
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  transition: border-color 0.2s ease;
-}
-.faq-item.open { border-color: #cbd5e1; }
-.faq-question {
-  padding: 20px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  background: #ffffff;
-  user-select: none;
-}
-.faq-question h4 { font-size: 1.05rem; font-weight: 600; }
-.faq-chevron {
-  transition: transform 0.2s ease;
-  color: var(--text-muted);
-}
-.faq-item.open .faq-chevron { transform: rotate(180deg); color: var(--primary); }
-.faq-answer {
-  padding: 0 24px 20px;
-  display: none;
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-.faq-item.open .faq-answer { display: block; }
-
-/* ─────────────────────────── BOTTOM CTA BANNER ─────────────────────────── */
-.cta-banner {
-  padding: 80px 0;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  color: #ffffff;
-  text-align: center;
-}
-.cta-banner h2 { color: #ffffff; font-size: 2.6rem; font-weight: 800; margin-bottom: 16px; }
-.cta-banner p { color: #94a3b8; font-size: 1.15rem; max-width: 620px; margin: 0 auto 36px; }
-.cta-banner-actions { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-
-/* ─────────────────────────── FOOTER ─────────────────────────── */
-.footer {
-  background: #090d16;
-  color: #94a3b8;
-  padding: 60px 0 30px;
-  border-top: 1px solid #1e293b;
-  font-size: 0.88rem;
-}
-.footer-top {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 48px;
-  margin-bottom: 48px;
-}
-@media (max-width: 860px) { .footer-top { grid-template-columns: 1fr; } }
-.footer-brand .brand { color: #ffffff; margin-bottom: 16px; }
-.footer-brand p { color: #64748b; font-size: 0.88rem; max-width: 320px; line-height: 1.6; }
-.footer-col h5 { color: #ffffff; font-size: 0.9rem; font-weight: 700; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.05em; }
-.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.footer-col a { color: #94a3b8; transition: color 0.15s; }
-.footer-col a:hover { color: #ffffff; }
-.footer-bottom {
-  padding-top: 28px;
-  border-top: 1px solid #1e293b;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-  color: #64748b;
-  font-size: 0.82rem;
-}
-
-/* ─────────────────────────── MODALS ─────────────────────────── */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(4px);
-  z-index: 2000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.modal-overlay.active { display: flex; animation: fadeIn 0.2s ease; }
-.modal-card {
-  background: #ffffff;
-  border-radius: var(--radius-xl);
-  max-width: 480px;
-  width: 100%;
-  padding: 32px;
-  box-shadow: var(--shadow-xl);
-  position: relative;
-}
-.modal-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--text-light);
-  cursor: pointer;
-}
-.modal-close:hover { color: var(--secondary); }
-.modal-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
-.modal-desc { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px; }
-.form-group { margin-bottom: 18px; }
-.form-label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; }
-.form-input {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-light);
-  font-family: inherit;
+.plan-name { font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; }
+.plan-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; }
+.plan-price { font-size: 2.8rem; font-weight: 800; color: var(--secondary); margin-bottom: 24px; }
+.plan-price span { font-size: 0.95rem; font-weight: 600; color: var(--text-muted); }
+.plan-features { list-style: none; margin-bottom: 30px; flex: 1; }
+.plan-features li {
   font-size: 0.9rem;
-}
-.form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
-
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--secondary);
-  color: #ffffff;
-  padding: 12px 20px;
-  border-radius: var(--radius-md);
-  font-size: 0.88rem;
-  font-weight: 500;
-  box-shadow: var(--shadow-lg);
-  z-index: 3000;
-  display: none;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  display: flex;
   align-items: center;
   gap: 10px;
 }
-.toast.show { display: flex; animation: slideUp 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* FOOTER */
+.footer {
+  background: #0f172a;
+  color: #94a3b8;
+  padding: 60px 0 30px;
+  font-size: 0.88rem;
+}
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.footer-brand {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.footer-copy { text-align: center; font-size: 0.8rem; color: #64748b; }
 </style>
 </head>
 <body>
 
-<!-- ─────────────────────────── NAVBAR ─────────────────────────── -->
-<nav class="navbar">
-  <div class="container nav-inner">
-    <a href="/" class="brand">
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="container navbar-inner">
+    <a href="/" class="brand-group">
       <div class="brand-icon">M</div>
-      <div>Metriva</div>
+      <span>Metriva</span>
     </a>
+
     <ul class="nav-menu">
-      <li class="nav-item"><a href="/app#demo">Product Demo</a></li>
+      <!-- Product Dropdown Mega-Menu (Julius-Inspired, Focused on Business) -->
+      <li class="nav-item nav-item-dropdown">
+        <div class="nav-link-dropdown">
+          <span>Product</span>
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="mega-menu">
+          <a href="/app" class="mega-item">
+            <div class="mega-icon">📊</div>
+            <div class="mega-content">
+              <h5>Executive Dashboards</h5>
+              <p>Instant revenue attribution, margin tracking &amp; KPI summaries.</p>
+            </div>
+          </a>
+          <a href="/app" class="mega-item">
+            <div class="mega-icon">📋</div>
+            <div class="mega-content">
+              <h5>CFO Action Memo</h5>
+              <p>Automated briefing with Key Win, Critical Risk &amp; Next Steps.</p>
+            </div>
+          </a>
+          <a href="/app" class="mega-item">
+            <div class="mega-icon">📈</div>
+            <div class="mega-content">
+              <h5>Run-Rate Forecasting</h5>
+              <p>3-month statistical trajectory for cash flow and boards.</p>
+            </div>
+          </a>
+          <a href="/app" class="mega-item">
+            <div class="mega-icon">💬</div>
+            <div class="mega-content">
+              <h5>Ask Metriva Assistant</h5>
+              <p>Natural language Q&amp;A on your numbers without SQL.</p>
+            </div>
+          </a>
+          <a href="/app" class="mega-item">
+            <div class="mega-icon">🛠️</div>
+            <div class="mega-content">
+              <h5>1-Click Data Repair</h5>
+              <p>Clean corrupted cells, deduplicate &amp; download ready CSV.</p>
+            </div>
+          </a>
+          <a href="/app" class="mega-item">
+            <div class="mega-icon">🎯</div>
+            <div class="mega-content">
+              <h5>Executive Slide Decks</h5>
+              <p>Turn raw numbers into board-ready presentation slides.</p>
+            </div>
+          </a>
+        </div>
+      </li>
+
+      <li class="nav-item"><a href="/app">Live Workspace</a></li>
+      <li class="nav-item"><a href="#comparison">Compare</a></li>
       <li class="nav-item"><a href="#features">Features</a></li>
-      <li class="nav-item"><a href="#how-it-works">How It Works</a></li>
       <li class="nav-item"><a href="#pricing">Pricing</a></li>
-      <li class="nav-item"><a href="#testimonials">Reviews</a></li>
-      <li class="nav-item"><a href="#faq">FAQ</a></li>
     </ul>
-    <div class="nav-actions">
-      <button class="btn btn-secondary btn-sm" onclick="openLoginModal()">Sign In</button>
-      <a href="/app" class="btn btn-primary btn-sm">Start Free &rarr;</a>
+
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a href="/app" class="btn btn-secondary">Sign In</a>
+      <a href="/app" class="btn btn-primary">Start Free</a>
     </div>
   </div>
-</nav>
+</header>
 
-<!-- ─────────────────────────── HERO SECTION ─────────────────────────── -->
-<section class="hero">
-  <div class="container hero-content">
-    <div class="hero-pill">
-      <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-      <span>Loved by 2,400+ Business Owners &amp; Financial Analysts</span>
+<!-- HERO SECTION -->
+<section class="hero-section">
+  <div class="container">
+    <div class="badge-pill">
+      <span>🚀</span> No SQL. Zero Coding. 100% In-Memory Confidentiality
     </div>
     <h1 class="hero-title">
-      Turn messy spreadsheets into <br><span class="gradient-text">board-ready intelligence</span> in 10s.
+      Turn Messy Spreadsheets into <span>Executive Intelligence</span> in 10 Seconds
     </h1>
     <p class="hero-desc">
-      Stop wasting hours wrestling broken VLOOKUPs and pivot tables. Upload your CSV or Excel, auto-clean anomalies, chat with your data in natural English, and generate executive summaries with zero code.
+      Metriva repairs corrupt data, detects anomalies, calculates Pareto concentration risk, and writes a board-ready CFO action memo — without prompt limits or expensive data teams.
     </p>
-    <div class="hero-cta">
+    <div class="hero-actions">
       <a href="/app" class="btn btn-primary btn-lg">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        Start Free Now
+        <span>⚡ Launch Metriva Free</span>
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="/app#demo" class="btn btn-secondary btn-lg">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        Explore Live Interactive Demo
-      </a>
+      <a href="#comparison" class="btn btn-secondary btn-lg">See Metriva vs Julius</a>
     </div>
-    <div class="hero-trust-bullets">
-      <span>
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        No Credit Card Required
-      </span>
-      <span>
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        Instant Heuristic Schema Detection
-      </span>
-      <span>
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        100% In-Memory Private Processing
-      </span>
+    <div class="hero-footnote">
+      <span>✓ No credit card required</span>
+      <span>•</span>
+      <span>✓ Unlimited queries</span>
+      <span>•</span>
+      <span>✓ In-memory security</span>
     </div>
 
-    <!-- Hero Interactive Teaser Preview Link -->
-    <a href="/app#demo" class="hero-preview" title="Click to open interactive workspace">
-      <div class="preview-window-bar">
+    <!-- PREVIEW BOX -->
+    <div class="app-preview-wrap">
+      <div class="preview-topbar">
         <div class="preview-dots">
-          <div class="preview-dot red"></div>
-          <div class="preview-dot yellow"></div>
-          <div class="preview-dot green"></div>
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#10b981;"></div>
         </div>
-        <div class="preview-url">app.metriva.com/workspace/cfo-briefing</div>
-        <div style="font-size: 0.75rem; font-weight: 600; color: var(--primary);">Live Interactive Workspace &bull; Click to Open &rarr;</div>
+        <div style="font-size:0.82rem; font-weight:600; color:#94a3b8;">metriva.app/workspace &mdash; CFO Intelligence</div>
+        <div style="font-size:0.75rem; color:#10b981; font-weight:700;">● LIVE ENGINE</div>
       </div>
-      <div class="preview-body">
-        <div style="display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 140px; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
-            <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Total Run-Rate</div>
-            <div style="font-size: 1.45rem; font-weight: 800; color: #0f172a;">$1,842,500</div>
-            <div style="font-size: 0.72rem; color: #10b981; font-weight: 600;">&uarr; 18.4% vs prev period</div>
+      <div class="preview-content">
+        <div style="background:#0f172a; border-radius:12px; padding:20px; color:#fff; text-align:left; margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <span style="font-size:0.75rem; font-weight:800; color:#a5b4fc; background:rgba(99,102,241,0.25); padding:3px 8px; border-radius:4px;">CFO ACTION BRIEFING</span>
+            <span style="font-size:0.78rem; color:#94a3b8;">Annualized Run-Rate: $2.14M</span>
           </div>
-          <div style="flex: 1; min-width: 140px; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
-            <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Gross Profit Margin</div>
-            <div style="font-size: 1.45rem; font-weight: 800; color: #0f172a;">34.8%</div>
-            <div style="font-size: 0.72rem; color: #64748b;">Healthy benchmark (>30%)</div>
-          </div>
-          <div style="flex: 1; min-width: 140px; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
-            <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Data Completeness</div>
-            <div style="font-size: 1.45rem; font-weight: 800; color: #10b981;">100.0%</div>
-            <div style="font-size: 0.72rem; color: #64748b;">0 missing values detected</div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px; font-size:0.85rem;">
+            <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px; border-top:2px solid #10b981;">
+              <strong style="color:#6ee7b7; display:block; margin-bottom:4px;">🚀 Growth Driver</strong>
+              Top 20% accounts generate 82% of revenue. MoM velocity expanded +14.2%.
+            </div>
+            <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px; border-top:2px solid #f59e0b;">
+              <strong style="color:#fde047; display:block; margin-bottom:4px;">⚠️ Revenue Leak</strong>
+              Top 3 clients account for 68% of total MRR. Concentration risk flagged.
+            </div>
+            <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px; border-top:2px solid #6366f1;">
+              <strong style="color:#a5b4fc; display:block; margin-bottom:4px;">🎯 Priority Action</strong>
+              De-risk enterprise cohort; reallocate Q4 spend toward high-margin lines.
+            </div>
           </div>
         </div>
-        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
-          <div style="font-size: 0.85rem; color: #1e40af; font-weight: 600;">
-            💡 <strong>AI CFO Memo:</strong> Top account "GlobalTrade" drives 26.1% of top-line revenue. Forward 3-month run-rate trending upward.
-          </div>
-          <span class="btn btn-primary btn-sm">Open Workspace &rarr;</span>
+        <div style="display:flex; justify-content:center;">
+          <a href="/app" class="btn btn-primary btn-sm">Try Interactive Workspace &rarr;</a>
         </div>
       </div>
-    </a>
+    </div>
+
   </div>
 </section>
 
-<!-- ─────────────────────────── LOGOS MARQUEE ─────────────────────────── -->
-<section class="logos-section">
+<!-- COMPETITOR COMPARISON SECTION -->
+<section class="comparison-section" id="comparison">
   <div class="container">
-    <div class="logos-label">Powering strategic analysis at growth-stage businesses</div>
-    <div class="logos-grid">
-      <div class="logo-item"><span>⚡</span> ApexLogistics</div>
-      <div class="logo-item"><span>🔷</span> HorizonFintech</div>
-      <div class="logo-item"><span>🟢</span> PureRetail Co</div>
-      <div class="logo-item"><span>🔶</span> NexaCommerce</div>
-      <div class="logo-item"><span>🌐</span> CloudScale SaaS</div>
-      <div class="logo-item"><span>⭐</span> MetroHealth</div>
+    <div class="section-tag">Market Differentiation</div>
+    <h2 class="section-title">Why Founders &amp; CFOs Choose Metriva</h2>
+    <p class="section-subtitle">
+      Rows was acquired and shutting down. Julius AI is token-gated and slow. Metriva delivers instant C-level clarity with zero usage caps.
+    </p>
+
+    <div class="comparison-table-wrap">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Key Capability</th>
+            <th class="highlight">Metriva</th>
+            <th>Julius AI</th>
+            <th>Polymer</th>
+            <th>Power BI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Time to First Executive Insight</strong></td>
+            <td class="highlight">⚡ 10 Seconds</td>
+            <td>3-5 Minutes</td>
+            <td>15-20 Minutes</td>
+            <td>2-3 Weeks</td>
+          </tr>
+          <tr>
+            <td><strong>1-Click Repaired Spreadsheet Download</strong></td>
+            <td class="highlight"><span class="check-icon">✓</span> Included (.CSV)</td>
+            <td><span class="cross-icon">✕</span> No</td>
+            <td><span class="cross-icon">✕</span> No</td>
+            <td><span class="cross-icon">✕</span> No</td>
+          </tr>
+          <tr>
+            <td><strong>Automated McKinsey CFO Action Memo</strong></td>
+            <td class="highlight"><span class="check-icon">✓</span> Built-In</td>
+            <td><span class="cross-icon">✕</span> Prompt required</td>
+            <td><span class="cross-icon">✕</span> No</td>
+            <td><span class="cross-icon">✕</span> No</td>
+          </tr>
+          <tr>
+            <td><strong>Pareto 80/20 &amp; Concentration Risk Audit</strong></td>
+            <td class="highlight"><span class="check-icon">✓</span> Automatic</td>
+            <td>Requires prompt</td>
+            <td><span class="cross-icon">✕</span> Manual chart</td>
+            <td>Requires DAX</td>
+          </tr>
+          <tr>
+            <td><strong>Query / Prompt Limits</strong></td>
+            <td class="highlight"><span class="check-icon">✓</span> Unlimited (No token caps)</td>
+            <td>Strict message limits</td>
+            <td>Tiered views</td>
+            <td>User seat licenses</td>
+          </tr>
+          <tr>
+            <td><strong>Presentation-Ready Board Slides</strong></td>
+            <td class="highlight"><span class="check-icon">✓</span> 4-Slide Executive Deck</td>
+            <td>Code notebook export</td>
+            <td>Dashboard iframe</td>
+            <td>PowerPoint plugin</td>
+          </tr>
+          <tr>
+            <td><strong>Math Accuracy (Zero Hallucination)</strong></td>
+            <td class="highlight"><span class="check-icon">✓</span> 100% Deterministic</td>
+            <td>LLM Code execution</td>
+            <td>Database queries</td>
+            <td>DAX formulas</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
 
-<!-- ─────────────────────────── FEATURES SECTION ─────────────────────────── -->
-<section class="section" id="features">
+<!-- FEATURES SECTION -->
+<section class="features-section" id="features">
   <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">Enterprise-Grade Intelligence</div>
-      <h2 class="section-title">Built for founders and operators who don't have time for SQL.</h2>
-      <p class="section-subtitle">Metriva automates data prep, cleans corrupt cells, forecasts revenue, and answers ad-hoc questions in plain English.</p>
-    </div>
+    <div class="section-tag">Built for Decision Makers</div>
+    <h2 class="section-title">Everything You Need to Run Your Business</h2>
+    <p class="section-subtitle">
+      Stop wasting hours fighting pivot tables or waiting for analysts. Metriva does the heavy lifting instantly.
+    </p>
 
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon-wrap">💬</div>
-        <h4>"Ask Metriva" Assistant</h4>
-        <p>Type natural language queries like <em>"Who are our top 5 clients by margin?"</em> or <em>"Show monthly growth"</em> to get instant, computed business answers.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon-wrap">📥</div>
-        <h4>1-Click Cleaned Data Export</h4>
-        <p>Repairs messy spreadsheets in seconds. Automatically fills nulls, trims whitespace, standardizes date formats, and downloads a clean, ready-to-use CSV.</p>
+        <div class="feature-icon-wrap">📋</div>
+        <h4>CFO Action &amp; Risk Memo</h4>
+        <p>McKinsey-grade summary detailing your primary growth driver, concentration risk, and prioritized action plan with timelines.</p>
       </div>
 
       <div class="feature-card">
         <div class="feature-icon-wrap">📈</div>
-        <h4>3-Month Trend Forecasting</h4>
-        <p>Statistical trend projection visualizes forward run-rates, expected quarterly revenue, and trajectory bounds right alongside historical records.</p>
+        <h4>3-Month Trend Run-Rate</h4>
+        <p>Statistical linear trend forecasting projected on time-series charts with confidence intervals and quarterly run-rate ARR.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon-wrap">🎯</div>
-        <h4>C-Level Executive Action Memo</h4>
-        <p>Auto-generates a structured CFO briefing with your Key Growth Win, Critical Risk Identified, and Recommended Strategic Next Action.</p>
+        <div class="feature-icon-wrap">💬</div>
+        <h4>Conversational "Ask Metriva"</h4>
+        <p>Ask natural questions like "Who are my top 5 clients?" or "Where are my profit leaks?" and get instant answers with numbers.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon-wrap">🏬</div>
-        <h4>Multi-Industry Presets</h4>
-        <p>Pre-configured business intelligence models for B2B SaaS (MRR &amp; Churn), E-commerce (Shopify, COGS &amp; Ad Spend), and Professional Services retainers.</p>
+        <div class="feature-icon-wrap">⚖️</div>
+        <h4>Pareto 80/20 &amp; Concentration</h4>
+        <p>Instantly verifies how many customers or products drive 80% of revenue and warns you if top accounts create churn risks.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon-wrap">🔒</div>
-        <h4>Zero Data Retention Privacy</h4>
-        <p>Files are processed purely in ephemeral server memory. Your confidential numbers, proprietary margins, and client rosters are never stored.</p>
+        <div class="feature-icon-wrap">🛡️</div>
+        <h4>Anomaly &amp; Outlier Audit</h4>
+        <p>Interquartile range (IQR) detection identifies abnormal transactions, data entry typos, or sudden spikes in real-time.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrap">🛠️</div>
+        <h4>1-Click Repaired CSV Export</h4>
+        <p>Deduplicates rows, strips whitespace, imputes missing cells with medians, and exports a clean dataset ready for presentation.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─────────────────────────── HOW IT WORKS ─────────────────────────── -->
-<section class="section how-it-works-bg" id="how-it-works">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">Simple 3-Step Workflow</div>
-      <h2 class="section-title">From raw file to strategic clarity in 10 seconds.</h2>
-      <p class="section-subtitle">No data engineers, no Python scripting, and no steep learning curves required.</p>
-    </div>
-
-    <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <h4>Drop Your Raw Export</h4>
-        <p>Drag in exports from Stripe, QuickBooks, Shopify, Salesforce, or your custom CRM in CSV or Excel format.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <h4>Automated Heuristic Audit</h4>
-        <p>Metriva immediately scans for null values, formats datetimes, calculates KPI totals, and maps key business dimensions.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <h4>Act on Executive Clarity</h4>
-        <p>Chat with your data, review trend forecasts, download your cleaned spreadsheet, and export board-ready PDF slides.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─────────────────────────── PRICING SECTION (MONTHLY ONLY) ─────────────────────────── -->
+<!-- PRICING SECTION -->
 <section class="pricing-section" id="pricing">
   <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">Transparent Pricing</div>
-      <h2 class="section-title">Predictable plans for teams of any size.</h2>
-      <p class="section-subtitle">Simple, straightforward monthly billing. Start 100% free with no credit card required.</p>
-    </div>
+    <div class="section-tag">Transparent Pricing</div>
+    <h2 class="section-title">Simple Monthly Plans. No Surprises.</h2>
+    <p class="section-subtitle">
+      Cancel anytime. Pure monthly billing with zero long-term commitments.
+    </p>
 
     <div class="pricing-grid">
-      
-      <!-- Free Starter Plan -->
-      <div class="price-card">
-        <h3 class="plan-name">Free Starter</h3>
-        <p class="plan-desc">Perfect for founders and solo operators auditing monthly spreadsheets.</p>
-        <div class="plan-price-wrap">
-          <span class="plan-price">$0</span>
-          <span class="plan-period">/ month</span>
-        </div>
+      <!-- Free -->
+      <div class="pricing-card">
+        <div class="plan-name">Free Starter</div>
+        <div class="plan-desc">For testing small datasets and viewing executive metrics.</div>
+        <div class="plan-price">$0 <span>/ month</span></div>
         <ul class="plan-features">
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            Files up to 10MB per dataset
-          </li>
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            Core automated cleaning &amp; audit
-          </li>
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            Interactive Plotly charts &amp; KPIs
-          </li>
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            Statistical column profiling
-          </li>
+          <li>✓ Up to 5MB file uploads</li>
+          <li>✓ Basic KPI Scorecard</li>
+          <li>✓ Core Time-Series Charts</li>
+          <li>✓ 1-Click Cleaned CSV Export</li>
         </ul>
-        <a href="/app" class="btn btn-secondary btn-full">Start Free &rarr;</a>
+        <a href="/app" class="btn btn-secondary" style="width:100%;">Get Started Free</a>
       </div>
 
-      <!-- Pro Operator Plan (Featured) -->
-      <div class="price-card featured">
+      <!-- Pro -->
+      <div class="pricing-card featured">
         <div class="featured-badge">Most Popular</div>
-        <h3 class="plan-name">Pro Operator</h3>
-        <p class="plan-desc">For growing businesses, CFOs, and consultants who need board-ready presentations.</p>
-        <div class="plan-price-wrap">
-          <span class="plan-price">$29</span>
-          <span class="plan-period">/ month</span>
-        </div>
+        <div class="plan-name">Professional</div>
+        <div class="plan-desc">For founders, finance leaders &amp; growth teams.</div>
+        <div class="plan-price">$29 <span>/ month</span></div>
         <ul class="plan-features">
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            <strong>Unlimited datasets</strong> up to 100MB
-          </li>
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            "Ask Metriva" conversational Q&amp;A
-          </li>
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            1-Click Cleaned CSV dataset download
-          </li>
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            3-Month automated trend forecasting
-          </li>
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            Executive Action Memo &amp; PDF slide export
-          </li>
+          <li>✓ Up to 50MB file uploads</li>
+          <li>✓ Automated CFO Action &amp; Risk Memo</li>
+          <li>✓ 3-Month Trend Forecasting Line</li>
+          <li>✓ Unlimited "Ask Metriva" Queries</li>
+          <li>✓ Pareto 80/20 Concentration Risk</li>
+          <li>✓ Statistical Outlier &amp; Anomaly Audit</li>
+          <li>✓ 4-Slide Executive Board Deck Mode</li>
         </ul>
-        <button class="btn btn-primary btn-full" onclick="openCheckoutModal('Pro Operator')">Start 14-Day Free Trial</button>
+        <a href="/app" class="btn btn-primary" style="width:100%;">Start Pro Workspace</a>
       </div>
 
-      <!-- Enterprise Plan -->
-      <div class="price-card">
-        <h3 class="plan-name">Scale / Enterprise</h3>
-        <p class="plan-desc">For large teams requiring custom data pipelines, cloud deployments, and SSO.</p>
-        <div class="plan-price-wrap">
-          <span class="plan-price">$99</span>
-          <span class="plan-period">/ month</span>
-        </div>
+      <!-- Enterprise -->
+      <div class="pricing-card">
+        <div class="plan-name">Agency &amp; Enterprise</div>
+        <div class="plan-desc">For advisory firms managing multiple client accounts.</div>
+        <div class="plan-price">$99 <span>/ month</span></div>
         <ul class="plan-features">
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            Unlimited file sizes &amp; SQL database sync
-          </li>
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            Custom LLM integration (Bring Your API Key)
-          </li>
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            Self-hosted on AWS / Azure / Vercel
-          </li>
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            SOC-2 Type II Compliance &amp; Audit Logs
-          </li>
-          <li>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            Dedicated technical account manager
-          </li>
+          <li>✓ Unlimited file size &amp; rows</li>
+          <li>✓ Multi-client portfolio dashboards</li>
+          <li>✓ Custom branded board decks</li>
+          <li>✓ Priority email &amp; Slack advisory</li>
+          <li>✓ Dedicated account manager</li>
         </ul>
-        <button class="btn btn-secondary btn-full" onclick="openEnterpriseModal()">Contact Enterprise</button>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ─────────────────────────── TESTIMONIALS ─────────────────────────── -->
-<section class="testimonials-section" id="testimonials">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">Customer Stories</div>
-      <h2 class="section-title">Trusted by operators who demand fast answers.</h2>
-      <p class="section-subtitle">See how businesses use Metriva to eliminate spreadsheet gridlock.</p>
-    </div>
-
-    <div class="testimonials-grid">
-      <div class="testimonial-card">
-        <div>
-          <div class="test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="test-quote">"Metriva cut our weekly financial review prep from 4 hours down to 2 minutes. The revenue concentration warning alone saved us from an over-reliance on a single client."</p>
-        </div>
-        <div class="test-author">
-          <div class="test-avatar">MR</div>
-          <div class="test-meta">
-            <h5>Marcus Reynolds</h5>
-            <p>Managing Director, Reynolds Capital</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="testimonial-card">
-        <div>
-          <div class="test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="test-quote">"We cancelled our $1,400/month PowerBI enterprise licenses. Our non-technical department leads can now just drag in their CSVs and immediately get clear visuals without waiting on our data engineer."</p>
-        </div>
-        <div class="test-author">
-          <div class="test-avatar">SC</div>
-          <div class="test-meta">
-            <h5>Sarah Chen</h5>
-            <p>VP of Operations, NexaGrowth</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="testimonial-card">
-        <div>
-          <div class="test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="test-quote">"The automated anomaly detection is unmatched. It instantly caught 140 corrupted date rows in our Shopify year-end audit that would have messed up our entire tax filing."</p>
-        </div>
-        <div class="test-author">
-          <div class="test-avatar">DK</div>
-          <div class="test-meta">
-            <h5>Devon Kowalski</h5>
-            <p>Founder &amp; CEO, NorthBay Goods</p>
-          </div>
-        </div>
+        <a href="/app" class="btn btn-secondary" style="width:100%;">Contact Sales</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─────────────────────────── FAQ SECTION ─────────────────────────── -->
-<section class="faq-section" id="faq">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">Frequently Asked Questions</div>
-      <h2 class="section-title">Everything you need to know.</h2>
-      <p class="section-subtitle">Have questions before trying? We're here to help.</p>
-    </div>
-
-    <div class="faq-wrap">
-      <div class="faq-item open">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          <h4>Is my financial and client data secure?</h4>
-          <div class="faq-chevron">&darr;</div>
-        </div>
-        <div class="faq-answer">
-          Yes, 100%. Metriva processes your uploaded spreadsheets ephemerally in server memory during your active session. We do not store your files on persistent disks, and we never use your proprietary numbers for model training.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          <h4>What formats are supported?</h4>
-          <div class="faq-chevron">&darr;</div>
-        </div>
-        <div class="faq-answer">
-          Metriva natively handles .CSV, .XLSX, and .XLS files. It automatically handles varied delimiter types, uncleaned headers, date formatting differences, and currency symbols.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          <h4>How does the "Ask Metriva" feature work?</h4>
-          <div class="faq-chevron">&darr;</div>
-        </div>
-        <div class="faq-answer">
-          You can type plain-English questions like "Who generated the most revenue in Q2?" or "What is our gross margin?" The built-in heuristic AI parses your question and computes the exact numbers, ranking, or margin leaks instantly.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          <h4>Can I download the cleaned spreadsheet?</h4>
-          <div class="faq-chevron">&darr;</div>
-        </div>
-        <div class="faq-answer">
-          Yes! With 1 click, Metriva cleans duplicate rows, fills missing values, standardizes date formats, and exports a pristine .CSV file ready for your ERP or accountant.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          <h4>Can I deploy this to my own cloud infrastructure?</h4>
-          <div class="faq-chevron">&darr;</div>
-        </div>
-        <div class="faq-answer">
-          Yes, the codebase is completely independent and includes standard configurations for Vercel, Render, Railway, AWS ECS, and Docker.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─────────────────────────── CTA BANNER ─────────────────────────── -->
-<section class="cta-banner">
-  <div class="container">
-    <h2>Ready to transform your spreadsheets?</h2>
-    <p>Join 2,400+ operators getting instant clarity on their financial, sales, and operational metrics.</p>
-    <div class="cta-banner-actions">
-      <a href="/app" class="btn btn-primary btn-lg">Start Free Now (No Card Required)</a>
-      <a href="/app#demo" class="btn btn-outline-white btn-lg">Open Interactive Demo</a>
-    </div>
-  </div>
-</section>
-
-<!-- ─────────────────────────── FOOTER ─────────────────────────── -->
+<!-- FOOTER -->
 <footer class="footer">
   <div class="container">
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="brand">
-          <div class="brand-icon">M</div>
-          <div>Metriva</div>
-        </div>
-        <p>Empowering business owners, finance teams, and operators with instant automated data intelligence and clean visual reports.</p>
+        <div class="brand-icon" style="width:32px; height:32px; font-size:0.95rem;">M</div>
+        <span>Metriva</span>
       </div>
-
-      <div class="footer-col">
-        <h5>Product</h5>
-        <ul>
-          <li><a href="/app">Launch Workspace</a></li>
-          <li><a href="/app#demo">Interactive Demo</a></li>
-          <li><a href="#features">Feature Suite</a></li>
-          <li><a href="#pricing">Pricing Plans</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h5>Resources</h5>
-        <ul>
-          <li><a href="#faq">Frequently Asked Questions</a></li>
-          <li><a href="/app#demo">Sample Dataset</a></li>
-          <li><a href="javascript:void(0)" onclick="showToast('Documentation is available in repo README.md')">API Documentation</a></li>
-          <li><a href="javascript:void(0)" onclick="showToast('SOC-2 Type II certified reports available on request')">Security &amp; Privacy</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h5>Company</h5>
-        <ul>
-          <li><a href="javascript:void(0)" onclick="openEnterpriseModal()">Contact Sales</a></li>
-          <li><a href="javascript:void(0)" onclick="showToast('Metriva v2.4.0 — All Systems Operational')">Status: 🟢 Operational</a></li>
-          <li><a href="javascript:void(0)" onclick="showToast('Privacy First: Zero persistent data retention')">Privacy Policy</a></li>
-          <li><a href="javascript:void(0)" onclick="showToast('Standard SaaS Terms Apply')">Terms of Service</a></li>
-        </ul>
+      <div style="display:flex; gap:24px;">
+        <a href="/app">Workspace</a>
+        <a href="#comparison">Compare</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
       </div>
     </div>
-
-    <div class="footer-bottom">
-      <div>&copy; 2026 Metriva Technologies Inc. All rights reserved.</div>
-      <div>Engineered for high-performing operators and data teams.</div>
+    <div class="footer-copy">
+      &copy; 2026 Metriva Inc. Built for founders, operators, and finance teams. All rights reserved.
     </div>
   </div>
 </footer>
 
-<!-- ─────────────────────────── MODALS ─────────────────────────── -->
-
-<!-- Pro Checkout Modal -->
-<div class="modal-overlay" id="checkout-modal">
-  <div class="modal-card">
-    <button class="modal-close" onclick="closeModals()">&times;</button>
-    <div style="display:inline-block; padding:4px 10px; background:#eff2fe; color:var(--primary); font-size:0.75rem; font-weight:700; border-radius:999px; margin-bottom:12px;">14-Day Free Trial</div>
-    <h3 class="modal-title">Pro Operator Plan</h3>
-    <p class="modal-desc">Instant access to unlimited datasets, executive PDF exports, AI natural language assistant, and forecasting.</p>
-    
-    <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 20px;">
-      <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 4px;">
-        <span>Pro Operator (Monthly)</span>
-        <span>$29.00 / mo</span>
-      </div>
-      <div style="font-size: 0.8rem; color: var(--text-muted);">Billed after 14-day trial. Cancel anytime in 1 click.</div>
-    </div>
-
-    <form onsubmit="handleCheckoutSubmit(event)">
-      <div class="form-group">
-        <label class="form-label">Work Email</label>
-        <input type="email" class="form-input" required placeholder="alex@company.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Full Name</label>
-        <input type="text" class="form-input" required placeholder="Alex Morgan">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Company Name</label>
-        <input type="text" class="form-input" required placeholder="Morgan Industries">
-      </div>
-      <button type="submit" class="btn btn-primary btn-full btn-lg">Activate Trial &amp; Open Workspace &rarr;</button>
-      <div style="text-align: center; font-size: 0.75rem; color: var(--text-light); margin-top: 12px;">
-        🔒 256-bit encrypted &bull; No charge today &bull; Instant unlock
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Enterprise Sales Modal -->
-<div class="modal-overlay" id="enterprise-modal">
-  <div class="modal-card">
-    <button class="modal-close" onclick="closeModals()">&times;</button>
-    <div style="display:inline-block; padding:4px 10px; background:#eff2fe; color:var(--primary); font-size:0.75rem; font-weight:700; border-radius:999px; margin-bottom:12px;">Enterprise Tier</div>
-    <h3 class="modal-title">Metriva Enterprise</h3>
-    <p class="modal-desc">Deploy in your VPC, configure custom LLMs, and connect direct database sync.</p>
-
-    <form onsubmit="handleEnterpriseSubmit(event)">
-      <div class="form-group">
-        <label class="form-label">Work Email</label>
-        <input type="email" class="form-input" required placeholder="vp-eng@enterprise.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Estimated Team Size</label>
-        <select class="form-input">
-          <option>10 - 50 employees</option>
-          <option>50 - 250 employees</option>
-          <option>250+ employees</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Hosting Preference</label>
-        <select class="form-input">
-          <option>Metriva Cloud (Dedicated SOC-2 Tenant)</option>
-          <option>Self-Hosted (AWS / Azure / GCP)</option>
-          <option>Hybrid On-Premises</option>
-        </select>
-      </div>
-      <button type="submit" class="btn btn-primary btn-full btn-lg">Request Custom Demo &amp; Quote</button>
-    </form>
-  </div>
-</div>
-
-<!-- Simple Sign-In Modal -->
-<div class="modal-overlay" id="login-modal">
-  <div class="modal-card">
-    <button class="modal-close" onclick="closeModals()">&times;</button>
-    <h3 class="modal-title">Welcome back to Metriva</h3>
-    <p class="modal-desc">Sign in to access your saved workspace reports.</p>
-    
-    <button class="btn btn-secondary btn-full" style="margin-bottom: 12px;" onclick="simulateSocialLogin('Google')">
-      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.15z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.36 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.19 0 10.04 0 12s.45 3.81 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.36 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
-      Continue with Google
-    </button>
-    <div style="text-align: center; margin: 16px 0; color: var(--text-light); font-size: 0.8rem;">OR WITH EMAIL</div>
-    <form onsubmit="handleLoginSubmit(event)">
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-input" required placeholder="you@company.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input type="password" class="form-input" required placeholder="••••••••">
-      </div>
-      <button type="submit" class="btn btn-primary btn-full">Sign In to Workspace &rarr;</button>
-    </form>
-  </div>
-</div>
-
-<div class="toast" id="toast">
-  <span id="toast-icon">✓</span>
-  <span id="toast-msg">Action completed</span>
-</div>
-
-<script>
-function showToast(msg, icon = '✓') {
-  const toast = document.getElementById('toast');
-  document.getElementById('toast-msg').innerText = msg;
-  document.getElementById('toast-icon').innerText = icon;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 3500);
-}
-
-function openCheckoutModal(plan) {
-  document.getElementById('checkout-modal').classList.add('active');
-}
-
-function openEnterpriseModal() {
-  document.getElementById('enterprise-modal').classList.add('active');
-}
-
-function openLoginModal() {
-  document.getElementById('login-modal').classList.add('active');
-}
-
-function closeModals() {
-  document.querySelectorAll('.modal-overlay').forEach(el => el.classList.remove('active'));
-}
-
-function handleCheckoutSubmit(e) {
-  e.preventDefault();
-  closeModals();
-  showToast('🎉 14-Day Trial Activated! Redirecting to workspace...');
-  setTimeout(() => { window.location.href = '/app?plan=pro'; }, 800);
-}
-
-function handleEnterpriseSubmit(e) {
-  e.preventDefault();
-  closeModals();
-  showToast('Enterprise inquiry received! Our solutions team will email you shortly.');
-}
-
-function handleLoginSubmit(e) {
-  e.preventDefault();
-  closeModals();
-  showToast('Signed in successfully! Opening workspace...');
-  setTimeout(() => { window.location.href = '/app'; }, 800);
-}
-
-function simulateSocialLogin(provider) {
-  closeModals();
-  showToast('Signed in with ' + provider + '! Opening workspace...');
-  setTimeout(() => { window.location.href = '/app'; }, 800);
-}
-
-function toggleFaq(el) {
-  const item = el.parentElement;
-  item.classList.toggle('open');
-}
-</script>
 </body>
 </html>
