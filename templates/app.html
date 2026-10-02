@@ -3,13 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Metriva AI Workspace — Upload your spreadsheet and get instant executive charts, forecasts, anomaly detection, Pareto analysis, and board-ready presentations. No code required.">
 <title>Metriva Workspace — Your AI Business Analyst</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234361ee'/><text x='50' y='68' font-size='55' font-weight='800' fill='white' text-anchor='middle' font-family='system-ui'>M</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script>
 window.__plotlyReady = false;
-function onPlotlyLoad() { window.__plotlyReady = true; console.log('[Metriva] Plotly loaded successfully'); }
+function onPlotlyLoad() { window.__plotlyReady = true; }
 function loadPlotlyFallback(urls, idx) {
   idx = idx || 0;
   if (idx >= urls.length) { console.error('[Metriva] All Plotly CDNs failed'); return; }
@@ -17,7 +19,7 @@ function loadPlotlyFallback(urls, idx) {
   var s = document.createElement('script');
   s.src = urls[idx];
   s.onload = function() { if (typeof Plotly !== 'undefined') onPlotlyLoad(); else loadPlotlyFallback(urls, idx+1); };
-  s.onerror = function() { console.warn('[Metriva] CDN failed:', urls[idx]); loadPlotlyFallback(urls, idx+1); };
+  s.onerror = function() { loadPlotlyFallback(urls, idx+1); };
   document.head.appendChild(s);
 }
 loadPlotlyFallback([
@@ -1510,7 +1512,7 @@ window.__tryRenderCharts = function(attempt) {
   attempt = attempt || 0;
   if (typeof Plotly === 'undefined') {
     if (attempt < 50) { // retry for up to 10 seconds (50 * 200ms)
-      console.log('[Metriva] Waiting for Plotly... attempt', attempt);
+      // waiting for Plotly...
       setTimeout(function() { window.__tryRenderCharts(attempt + 1); }, 200);
     } else {
       console.error('[Metriva] Plotly never loaded after 10s');
@@ -1521,7 +1523,7 @@ window.__tryRenderCharts = function(attempt) {
     }
     return;
   }
-  console.log('[Metriva] Plotly ready! Rendering', (window.__pendingCharts || []).length, 'charts');
+
   (window.__pendingCharts || []).forEach(function(item) {
     var el = document.getElementById(item.id);
     if (!el) { console.warn('[Metriva] Missing element:', item.id); return; }
@@ -1532,7 +1534,7 @@ window.__tryRenderCharts = function(attempt) {
         responsive: true,
         displayModeBar: false
       }).then(function() {
-        console.log('[Metriva] Chart rendered:', item.id);
+
         // Remove loading placeholder
         var hint = el.querySelector('.chart-loading-hint');
         if (hint) hint.remove();
@@ -1589,7 +1591,7 @@ function renderAll(d) {
   window.__pendingCharts = [];
 
   const validCharts = (d.charts || []).filter(c => c && c.data && c.data.length > 0);
-  console.log('[Metriva] Charts to render:', validCharts.length, '| Plotly loaded:', typeof Plotly !== 'undefined');
+
 
   if (validCharts.length === 0) {
     chartBox.innerHTML = '<div style="grid-column:1/-1; padding:36px; text-align:center; color:var(--text-muted); background:#ffffff; border:1px dashed var(--border-light); border-radius:var(--radius-md);">No chart data available. Select dimensions from the mapping bar above.</div>';
