@@ -816,6 +816,8 @@ body {
     align-items: center !important;
     justify-content: space-between !important;
     width: 100% !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
   }
   .topbar-left .back-link {
     width: 32px !important;
@@ -836,11 +838,16 @@ body {
   }
   .dataset-tag {
     font-size: 0.72rem !important;
-    padding: 3px 8px !important;
-    max-width: 130px !important;
+    padding: 4px 10px !important;
+    max-width: 100% !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
+    order: 3 !important;
+    width: 100% !important;
+    text-align: center !important;
+    background: rgba(67,97,238,0.06) !important;
+    border-radius: 6px !important;
   }
   .topbar-right {
     display: grid !important;
