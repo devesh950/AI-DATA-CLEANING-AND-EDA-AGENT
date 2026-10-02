@@ -702,37 +702,7 @@ a { color: inherit; text-decoration: none; }
 
 /* MOBILE RESPONSIVE ENHANCEMENTS */
 
-.navbar-left-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.mobile-menu-btn {
-  display: none;
-  background: none;
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-sm);
-  padding: 7px 9px;
-  cursor: pointer;
-  color: var(--secondary);
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-}
-.mobile-menu-btn:hover, .mobile-menu-btn:active {
-  background: var(--bg-subtle);
-  border-color: #cbd5e1;
-}
 
-.mobile-menu-btn_old {
-  display: none;
-  background: none;
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-sm);
-  padding: 8px 10px;
-  cursor: pointer;
-  color: var(--secondary);
-}
 .mobile-swipe-hint {
   display: none;
   font-size: 0.78rem;
@@ -748,29 +718,7 @@ a { color: inherit; text-decoration: none; }
 
 @media (max-width: 860px) {
   
-.navbar-left-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.mobile-menu-btn {
-  display: none;
-  background: none;
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-sm);
-  padding: 7px 9px;
-  cursor: pointer;
-  color: var(--secondary);
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-}
-.mobile-menu-btn:hover, .mobile-menu-btn:active {
-  background: var(--bg-subtle);
-  border-color: #cbd5e1;
-}
 
-.mobile-menu-btn_old { display: flex; align-items: center; justify-content: center; }
   .navbar-inner { position: relative; }
   .nav-menu {
     display: none;
@@ -871,32 +819,7 @@ html, body {
     border-radius: var(--radius-sm) !important;
   }
   
-.navbar-left-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.mobile-menu-btn {
-  display: none;
-  background: none;
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-sm);
-  padding: 7px 9px;
-  cursor: pointer;
-  color: var(--secondary);
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-}
-.mobile-menu-btn:hover, .mobile-menu-btn:active {
-  background: var(--bg-subtle);
-  border-color: #cbd5e1;
-}
 
-.mobile-menu-btn_old {
-    display: inline-flex !important;
-    padding: 6px 8px !important;
-  }
   .navbar-actions {
     gap: 8px !important;
   }
@@ -935,6 +858,75 @@ html, body {
     font-size: 0.92rem !important;
     padding: 12px 18px !important;
     justify-content: center !important;
+  }
+}
+
+
+/* WINDOW / MENU TOGGLE BUTTON (MOBILE ONLY) */
+.navbar-left-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mobile-menu-btn {
+  display: none;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  color: #0f172a;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.mobile-menu-btn svg {
+  stroke: #0f172a !important;
+  stroke-width: 2.2 !important;
+}
+.mobile-menu-btn:hover, .mobile-menu-btn:active {
+  background: #eff2fe;
+  border-color: #4361ee;
+}
+.mobile-menu-btn:hover svg, .mobile-menu-btn:active svg {
+  stroke: #4361ee !important;
+}
+.mobile-menu-brand { display: none; }
+
+@media (max-width: 860px) {
+  /* HIDE METRIVA LOGO IN HEADER ON PHONES - ONLY WINDOW BUTTON SHOWS ON LEFT */
+  .brand-group {
+    display: none !important;
+  }
+  /* MAKE WINDOW BUTTON EXPLICITLY VISIBLE ON LEFT */
+  .mobile-menu-btn {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  .navbar-inner {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    height: 64px !important;
+    padding: 0 16px !important;
+    position: relative !important;
+  }
+  .navbar-left-group {
+    display: flex !important;
+    align-items: center !important;
+  }
+  .mobile-menu-brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding-bottom: 12px !important;
+    border-bottom: 1px solid var(--border-light) !important;
+    margin-bottom: 6px !important;
   }
 }
 
