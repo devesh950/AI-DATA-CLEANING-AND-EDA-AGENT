@@ -7,7 +7,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.29.1.min.js">
+window.addEventListener('resize', () => {
+  if (currentData && currentData.charts) {
+    currentData.charts.forEach((_, idx) => {
+      const el = document.getElementById('chart-plot-' + idx);
+      if (el) Plotly.Plots.resize(el);
+    });
+  }
+});
+
+</script>
 <style>
 :root {
   --primary: #4361ee;
@@ -34,6 +44,14 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
 body {
   font-family: var(--font-sans);
   background: var(--bg-main);
@@ -661,154 +679,313 @@ body {
   .chart-card { break-inside: avoid; border: 1px solid #ccc !important; }
 }
 
-/* MOBILE WORKSPACE RESPONSIVENESS */
+
+/* PLOTLY RESPONSIVE FIXES */
+.chart-card {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.js-plotly-plot, .plot-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+.plotly svg {
+  max-width: 100% !important;
+}
+
+/* COMPREHENSIVE MOBILE PHONE RESPONSIVENESS */
 @media (max-width: 768px) {
   .topbar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    padding: 12px 16px;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 10px 14px !important;
+    position: relative !important;
   }
   .topbar-left {
-    justify-content: space-between;
-    width: 100%;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+  .topbar-left .back-link {
+    font-size: 0.78rem !important;
+    padding: 4px 8px !important;
+  }
+  .topbar-left .brand {
+    font-size: 1rem !important;
+    gap: 6px !important;
+  }
+  .topbar-left .brand-icon {
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 0.85rem !important;
+  }
+  .topbar-left .brand span {
+    display: none !important; /* Hide "Workspace" label to save horizontal room */
+  }
+  .dataset-tag {
+    font-size: 0.72rem !important;
+    padding: 3px 8px !important;
+    max-width: 130px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
   }
   .topbar-right {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    width: 100%;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 6px !important;
+    width: 100% !important;
   }
   .topbar-right .btn {
-    justify-content: center;
-    font-size: 0.78rem;
-    padding: 8px 6px;
+    font-size: 0.72rem !important;
+    padding: 7px 4px !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    border-radius: 6px !important;
   }
+  .topbar-right .btn svg {
+    width: 13px !important;
+    height: 13px !important;
+  }
+  .btn-text-export { display: none !important; } /* Make text concise on mobile */
+
   .presets-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px 16px;
-    gap: 10px;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 10px 14px !important;
+    gap: 8px !important;
   }
   .presets-group {
-    flex-wrap: wrap;
-    width: 100%;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    width: 100% !important;
   }
-  .presets-group .preset-btn {
-    flex: 1 1 auto;
-    text-align: center;
+  .presets-label {
+    width: 100% !important;
+    margin-bottom: 2px !important;
   }
+  .preset-btn {
+    flex: 1 1 auto !important;
+    font-size: 0.75rem !important;
+    padding: 5px 8px !important;
+    text-align: center !important;
+  }
+  .presets-bar > div:last-child {
+    display: none !important; /* Hide the subtitle to prevent mobile crowding */
+  }
+
   .workspace-container {
-    padding: 16px 12px;
+    padding: 14px 10px !important;
+    width: 100% !important;
+    max-width: 100vw !important;
   }
+
   .dropzone-box {
-    padding: 24px 16px;
+    padding: 22px 14px !important;
+    margin-bottom: 18px !important;
+  }
+  .dropzone-icon {
+    width: 42px !important;
+    height: 42px !important;
+    margin-bottom: 8px !important;
   }
   .dropzone-title {
-    font-size: 1.05rem;
+    font-size: 1.05rem !important;
   }
   .dropzone-desc {
-    font-size: 0.8rem;
+    font-size: 0.8rem !important;
+    margin-bottom: 10px !important;
+  }
+  .dropzone-box .btn {
+    width: 100% !important;
+  }
+
+  .executive-memo-card {
+    padding: 16px 14px !important;
+    margin-bottom: 18px !important;
   }
   .memo-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    margin-bottom: 14px !important;
+    padding-bottom: 10px !important;
   }
   .memo-header .btn {
-    width: 100%;
-    justify-content: center;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .memo-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
   }
   .memo-col {
-    padding: 14px;
+    padding: 14px !important;
   }
+  .memo-col-text {
+    font-size: 0.85rem !important;
+  }
+
   .ai-assistant-card {
-    padding: 16px;
+    padding: 16px 14px !important;
+    margin-bottom: 18px !important;
   }
   .ai-input-wrap {
-    flex-direction: column;
+    flex-direction: column !important;
   }
   .ai-input-wrap .btn {
-    width: 100%;
+    width: 100% !important;
   }
+  .ai-chips {
+    gap: 6px !important;
+  }
+  .ai-chip {
+    font-size: 0.72rem !important;
+    padding: 4px 10px !important;
+  }
+
   .mapper-bar {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 12px 14px !important;
   }
   .mapper-inputs {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  .mapper-field select {
+    width: 100% !important;
+    font-size: 0.78rem !important;
+    padding: 5px 6px !important;
   }
   .mapper-bar > .btn {
-    width: 100%;
-    justify-content: center;
+    width: 100% !important;
+    justify-content: center !important;
+    margin-top: 6px !important;
   }
-  .tabs-nav {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    white-space: nowrap;
-    padding: 6px 8px 0;
-  }
-  .tabs-nav::-webkit-scrollbar { display: none; }
-  .tab-btn {
-    padding: 10px 14px;
-    font-size: 0.82rem;
-  }
+
   .kpi-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    margin-bottom: 16px !important;
   }
   .kpi-card {
-    padding: 16px;
+    padding: 14px 10px !important;
+  }
+  .kpi-label {
+    font-size: 0.68rem !important;
+    margin-bottom: 4px !important;
   }
   .kpi-val {
-    font-size: 1.45rem;
+    font-size: 1.3rem !important;
+    margin-bottom: 2px !important;
   }
+  .kpi-sub {
+    font-size: 0.7rem !important;
+  }
+
+  .tabs-nav {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    gap: 6px !important;
+    padding: 6px 6px 0 !important;
+    margin-bottom: 16px !important;
+  }
+  .tabs-nav::-webkit-scrollbar { display: none !important; }
+  .tab-btn {
+    padding: 10px 12px !important;
+    font-size: 0.8rem !important;
+    flex-shrink: 0 !important;
+    gap: 6px !important;
+  }
+
   .charts-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    margin-bottom: 20px !important;
   }
   .chart-card {
-    padding: 12px;
-    min-height: 320px;
+    padding: 10px !important;
+    min-height: 280px !important;
   }
+
+  .insights-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .insight-item {
+    padding: 14px !important;
+    gap: 10px !important;
+  }
+  .insight-content h5 {
+    font-size: 0.9rem !important;
+  }
+  .insight-content p {
+    font-size: 0.82rem !important;
+  }
+
   .slide-presentation-card {
-    padding: 20px 16px;
-    min-height: 420px;
+    padding: 20px 14px !important;
+    min-height: 380px !important;
   }
   .slide-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    padding-bottom: 12px !important;
+    margin-bottom: 16px !important;
   }
   .slide-header .btn {
-    width: 100%;
-    justify-content: center;
+    width: 100% !important;
+    justify-content: center !important;
   }
   .slide-title {
-    font-size: 1.35rem;
+    font-size: 1.25rem !important;
   }
   .slide-subtitle {
-    font-size: 0.88rem;
+    font-size: 0.85rem !important;
   }
   .slide-bullet {
-    font-size: 0.92rem;
-    line-height: 1.5;
+    font-size: 0.88rem !important;
+    line-height: 1.5 !important;
   }
   .slide-nav-controls {
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding-top: 14px !important;
   }
   .slide-nav-controls .btn {
-    flex: 1;
-    justify-content: center;
+    flex: 1 !important;
+    justify-content: center !important;
+  }
+
+  .data-table-container {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .clean-table th, .clean-table td {
+    padding: 8px 10px !important;
+    font-size: 0.78rem !important;
   }
 }
+
 @media (max-width: 440px) {
+  .mapper-inputs {
+    grid-template-columns: 1fr !important;
+  }
   .kpi-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr !important;
   }
 }
 
@@ -831,21 +1008,21 @@ body {
   </div>
 
   <div class="topbar-right">
-    <button class="btn btn-secondary btn-sm" onclick="triggerFileInput()">
+    <button class="btn btn-secondary btn-sm" onclick="triggerFileInput()" title="Upload Spreadsheet">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-      Upload File
+      <span>Upload</span>
     </button>
-    <button class="btn btn-success btn-sm" onclick="downloadCleanedData()">
+    <button class="btn btn-success btn-sm" onclick="downloadCleanedData()" title="Download Cleaned CSV">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-      Download Cleaned CSV
+      <span>Clean CSV</span>
     </button>
-    <button class="btn btn-dark btn-sm" onclick="openSlideDeck()">
+    <button class="btn btn-dark btn-sm" onclick="openSlideDeck()" title="Board Deck Presentation Mode">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      Board Deck Mode
+      <span>Slides</span>
     </button>
-    <button class="btn btn-primary btn-sm" onclick="window.print()">
+    <button class="btn btn-primary btn-sm" onclick="window.print()" title="Export PDF Report">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
-      Export PDF
+      <span>PDF</span>
     </button>
   </div>
 </header>
@@ -1192,6 +1369,8 @@ function renderAll(d) {
     wrap.className = 'chart-card';
     wrap.id = 'chart-plot-' + idx;
     chartBox.appendChild(wrap);
+    c.layout.autosize = true;
+    c.layout.margin = { l: 30, r: 15, t: 40, b: 35 };
     Plotly.newPlot(wrap.id, c.data, c.layout, { responsive: true, displayModeBar: false });
   });
 
@@ -1426,6 +1605,16 @@ function reAnalyze() {
 window.addEventListener('DOMContentLoaded', () => {
   loadIndustry('saas');
 });
+
+window.addEventListener('resize', () => {
+  if (currentData && currentData.charts) {
+    currentData.charts.forEach((_, idx) => {
+      const el = document.getElementById('chart-plot-' + idx);
+      if (el) Plotly.Plots.resize(el);
+    });
+  }
+});
+
 </script>
 
 
