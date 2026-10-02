@@ -1421,11 +1421,37 @@ function renderAll(d) {
   const chartBox = document.getElementById('charts-container');
   chartBox.innerHTML = '';
   
-  function renderSinglePlot(wrapId, chartObj) {
-    if (typeof Plotly !== 'undefined') {
-      Plotly.newPlot(wrapId, chartObj.data, chartObj.layout, { responsive: true, displayModeBar: false });
-    } else {
-      setTimeout(() => renderSinglePlot(wrapId, chartObj), 150);
+  function renderSinglePlot(wrapId, chartObj, retryCount) {
+    retryCount = retryCount || 0;
+    var el = document.getElementById(wrapId);
+    if (!el) {
+      console.warn('[Metriva] Chart container not found:', wrapId);
+      return;
+    }
+    if (typeof Plotly === 'undefined') {
+      if (retryCount < 20) {
+        setTimeout(function() { renderSinglePlot(wrapId, chartObj, retryCount + 1); }, 200);
+      } else {
+        console.error('[Metriva] Plotly failed to load after retries');
+        el.innerHTML = '<div style="padding:40px;text-align:center;color:#94a3b8;">Chart library failed to load. Please refresh the page.</div>';
+      }
+      return;
+    }
+    try {
+      Plotly.newPlot(el, chartObj.data, chartObj.layout, { responsive: true, displayModeBar: false })
+        .then(function() {
+          // Force resize after render to fix dimension issues
+          setTimeout(function() {
+            try { Plotly.Plots.resize(el); } catch(e) {}
+          }, 100);
+        })
+        .catch(function(err) {
+          console.error('[Metriva] Plotly render error for', wrapId, ':', err);
+          el.innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444;">Chart rendering failed. Try refreshing.</div>';
+        });
+    } catch(err) {
+      console.error('[Metriva] Plotly.newPlot threw:', err);
+      el.innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444;">Chart error: ' + err.message + '</div>';
     }
   }
 
@@ -1440,12 +1466,21 @@ function renderAll(d) {
       chartBox.appendChild(wrap);
       c.layout = c.layout || {};
       c.layout.autosize = true;
+      c.layout.height = 340;
       c.layout.margin = { l: 45, r: 25, t: 45, b: 40 };
       c.layout.paper_bgcolor = '#ffffff';
       c.layout.plot_bgcolor = '#ffffff';
-      renderSinglePlot(wrap.id, c);
+    });
+    // Render charts AFTER DOM reflow so containers have computed dimensions
+    requestAnimationFrame(function() {
+      setTimeout(function() {
+        validCharts.forEach((c, idx) => {
+          renderSinglePlot('chart-plot-' + idx, c);
+        });
+      }, 50);
     });
   }
+
 
   // 4. Render Insights
   const insBox = document.getElementById('insights-container');
@@ -1600,14 +1635,19 @@ function switchTab(name, btn) {
   });
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  window.dispatchEvent(new Event('resize'));
   if (name === 'visuals' && currentData && currentData.charts) {
-    setTimeout(() => {
-      currentData.charts.forEach((_, idx) => {
-        const el = document.getElementById('chart-plot-' + idx);
-        if (el && typeof Plotly !== 'undefined') Plotly.Plots.resize(el);
-      });
-    }, 60);
+    // Delay resize until after display:block takes effect
+    requestAnimationFrame(function() {
+      setTimeout(function() {
+        window.dispatchEvent(new Event('resize'));
+        currentData.charts.forEach((_, idx) => {
+          const el = document.getElementById('chart-plot-' + idx);
+          if (el && typeof Plotly !== 'undefined') {
+            try { Plotly.Plots.resize(el); } catch(e) {}
+          }
+        });
+      }, 80);
+    });
   }
 }
 
