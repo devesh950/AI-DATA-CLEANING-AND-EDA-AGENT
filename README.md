@@ -1,4 +1,4 @@
-# DataScope — Executive Data Cleaning & EDA Platform
+# Metriva — Executive Data Cleaning & EDA Platform
 
 > **Turn messy business spreadsheets into executive intelligence in seconds.**  
 > Zero SQL, zero complex BI setups, 100% cloud-ready (Vercel, Render, Railway, AWS).
@@ -12,7 +12,7 @@
 
 ## 🌟 Overview
 
-**DataScope** is a lightweight, standalone web application that replaces bloated BI tools and sleep-prone notebook interfaces. Business owners, finance teams, and operators can drag-and-drop CSV or Excel exports to immediately uncover revenue drivers, detect integrity anomalies, calculate margin profiles, and generate board-ready reports.
+**Metriva** is a lightweight, standalone web application that replaces bloated BI tools and sleep-prone notebook interfaces. Business owners, finance teams, and operators can drag-and-drop CSV or Excel exports to immediately uncover revenue drivers, detect integrity anomalies, calculate margin profiles, and generate board-ready reports.
 
 ---
 

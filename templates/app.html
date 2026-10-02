@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DataScope Workspace — Executive Data Intelligence</title>
+<title>Metriva Workspace — Executive Data Intelligence</title>
 <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -550,8 +550,8 @@ button { font-family: inherit; }
       Landing Page
     </a>
     <div class="brand">
-      <div class="brand-icon">D</div>
-      <div>DataScope <span style="font-weight:500; font-size:0.85rem; color:var(--text-light); margin-left:6px;">Workspace</span></div>
+      <div class="brand-icon">M</div>
+      <div>Metriva <span style="font-weight:500; font-size:0.85rem; color:var(--text-light); margin-left:6px;">Workspace</span></div>
     </div>
     <span class="dataset-tag" id="status-tag">No dataset loaded</span>
   </div>
@@ -631,11 +631,11 @@ button { font-family: inherit; }
     </div>
   </div>
 
-  <!-- 2. Ask DataScope Natural Language Query Bar -->
+  <!-- 2. Ask Metriva Natural Language Query Bar -->
   <div class="ai-assistant-card" id="ai-assistant-card">
     <div class="ai-bar-title">
       <span>✨</span>
-      <span>Ask DataScope</span>
+      <span>Ask Metriva</span>
       <span style="font-size:0.75rem; font-weight:600; color:var(--text-light); margin-left:4px;">(Instant conversational Q&amp;A on your dataset)</span>
     </div>
     <div class="ai-input-wrap">
@@ -856,7 +856,7 @@ function downloadCleanedData() {
     formData.append('file', currentUploadedFile);
     fetch('/api/clean_export', { method: 'POST', body: formData })
       .then(res => res.blob())
-      .then(blob => triggerDownload(blob, 'datascope_cleaned_' + currentUploadedFile.name))
+      .then(blob => triggerDownload(blob, 'metriva_cleaned_' + currentUploadedFile.name))
       .catch(err => alert('Export error: ' + err.message));
   } else {
     window.location.href = '/api/clean_export?industry=' + currentIndustry;
@@ -1030,7 +1030,7 @@ function copyExecutiveMemo() {
   const win = document.getElementById('memo-win').innerText;
   const risk = document.getElementById('memo-risk').innerText;
   const action = document.getElementById('memo-action').innerText;
-  const text = `📋 DATASCOPE CFO EXECUTIVE BRIEFING\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎯 KEY WIN:\n${win}\n\n⚠️ CRITICAL RISK:\n${risk}\n\n🛠️ RECOMMENDED ACTION:\n${action}\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+  const text = `📋 METRIVA CFO EXECUTIVE BRIEFING\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎯 KEY WIN:\n${win}\n\n⚠️ CRITICAL RISK:\n${risk}\n\n🛠️ RECOMMENDED ACTION:\n${action}\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
   navigator.clipboard.writeText(text).then(() => {
     showToast('Executive Briefing copied to clipboard!');
   });

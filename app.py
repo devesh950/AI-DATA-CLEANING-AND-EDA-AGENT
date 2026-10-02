@@ -522,7 +522,7 @@ def clean_export():
     return Response(
         out_csv,
         mimetype="text/csv",
-        headers={"Content-Disposition": "attachment; filename=datascope_cleaned_dataset.csv"}
+        headers={"Content-Disposition": "attachment; filename=metriva_cleaned_dataset.csv"}
     )
 
 @app.route("/api/chat_query", methods=["POST"])
