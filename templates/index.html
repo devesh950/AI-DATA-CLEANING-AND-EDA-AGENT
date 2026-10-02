@@ -615,8 +615,8 @@ a { color: inherit; text-decoration: none; }
 }
 .agency-content {
   display: grid;
-  grid-template-columns: 1.1fr 1.3fr;
-  gap: 48px;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 36px;
   align-items: center;
 }
 @media (max-width: 900px) { .agency-content { grid-template-columns: 1fr; } }
@@ -624,31 +624,43 @@ a { color: inherit; text-decoration: none; }
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-xl);
-  padding: 32px;
+  padding: 24px 20px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 .pipeline-step {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-bottom: 12px;
 }
 .pipeline-pill {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 8px 14px;
+  padding: 6px 12px;
   border-radius: 8px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
+  white-space: normal;
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  line-height: 1.35;
 }
 .pipeline-pill.highlight {
   background: var(--primary);
   border-color: var(--primary);
   color: #fff;
+  box-shadow: 0 2px 10px rgba(67, 97, 238, 0.35);
 }
 .pipeline-arrow {
   color: #64748b;
   font-weight: 700;
-  margin: 0 4px;
+  font-size: 0.85rem;
+  flex-shrink: 0;
 }
 
 /* 7. PRODUCT ROADMAP */
@@ -828,26 +840,78 @@ a { color: inherit; text-decoration: none; }
 .faq-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+  gap: 18px;
   max-width: 1080px;
   margin: 0 auto;
+  align-items: start;
 }
 @media (max-width: 860px) { .faq-grid { grid-template-columns: 1fr; } }
 .faq-item {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  padding: 24px;
+  padding: 18px 22px;
   background: #f8fafc;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+.faq-item:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow-sm);
+}
+.faq-item.active {
+  background: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 4px 14px rgba(67, 97, 238, 0.08);
+}
+.faq-question-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
 }
 .faq-item h4 {
-  font-size: 1.05rem;
-  margin-bottom: 8px;
+  font-size: 1.02rem;
+  font-weight: 700;
   color: var(--secondary);
+  margin: 0;
+  line-height: 1.4;
 }
-.faq-item p {
-  font-size: 0.9rem;
-  line-height: 1.6;
+.faq-icon-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.25s ease, background 0.2s ease, color 0.2s ease;
+  font-size: 0.78rem;
+  font-weight: 800;
   color: var(--text-muted);
+}
+.faq-item.active .faq-icon-btn {
+  transform: rotate(180deg);
+  background: var(--primary);
+  color: #ffffff;
+}
+.faq-answer {
+  display: none;
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px solid var(--border-subtle);
+}
+.faq-item.active .faq-answer {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+.faq-answer p {
+  font-size: 0.9rem;
+  line-height: 1.62;
+  color: #475569;
+  margin: 0;
 }
 
 /* FOOTER */
@@ -1689,29 +1753,64 @@ a { color: inherit; text-decoration: none; }
     </p>
 
     <div class="faq-grid">
-      <div class="faq-item">
-        <h4>What data formats can I upload?</h4>
-        <p>Metriva supports CSV and Excel (XLSX, XLS) files up to 500MB on Pro plans (20MB on Free). The engine handles numeric, timestamp, and categorical records automatically.</p>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question-row">
+          <h4>What data formats can I upload?</h4>
+          <span class="faq-icon-btn">▾</span>
+        </div>
+        <div class="faq-answer">
+          <p>Metriva supports CSV and Excel (XLSX, XLS) files up to 500MB on Pro plans (20MB on Free). The engine handles numeric, timestamp, and categorical records automatically.</p>
+        </div>
       </div>
-      <div class="faq-item">
-        <h4>Does Metriva store my business data?</h4>
-        <p>No. Metriva operates on a zero-retention in-memory architecture. Your records are loaded into volatile RAM for profiling and are destroyed when your session ends.</p>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question-row">
+          <h4>Does Metriva store my business data?</h4>
+          <span class="faq-icon-btn">▾</span>
+        </div>
+        <div class="faq-answer">
+          <p>No. Metriva operates on a zero-retention in-memory architecture. Your records are loaded into volatile RAM for profiling and are destroyed when your session ends.</p>
+        </div>
       </div>
-      <div class="faq-item">
-        <h4>Is my data used to train AI models?</h4>
-        <p>No. We strictly never use customer files, transaction amounts, or business records to train public or proprietary machine learning models.</p>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question-row">
+          <h4>Is my data used to train AI models?</h4>
+          <span class="faq-icon-btn">▾</span>
+        </div>
+        <div class="faq-answer">
+          <p>No. We strictly never use customer files, transaction amounts, or business records to train public or proprietary machine learning models.</p>
+        </div>
       </div>
-      <div class="faq-item">
-        <h4>Can I connect Google Ads or Meta Ads?</h4>
-        <p>Direct API connectors for Google Ads, Meta Ads, GA4, and Shopify are actively in development on our roadmap. Today, you can export and upload your CSV reports in seconds.</p>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question-row">
+          <h4>Can I connect Google Ads or Meta Ads?</h4>
+          <span class="faq-icon-btn">▾</span>
+        </div>
+        <div class="faq-answer">
+          <p>Direct API connectors for Google Ads, Meta Ads, GA4, and Shopify are actively in development on our roadmap. Today, you can export and upload your CSV reports in seconds.</p>
+        </div>
       </div>
-      <div class="faq-item">
-        <h4>Do I need technical or SQL knowledge?</h4>
-        <p>None at all. Metriva is designed for operators and business leaders. Dimension mapping, KPI calculations, and anomaly audits happen automatically.</p>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question-row">
+          <h4>Do I need technical or SQL knowledge?</h4>
+          <span class="faq-icon-btn">▾</span>
+        </div>
+        <div class="faq-answer">
+          <p>None at all. Metriva is designed for operators and business leaders. Dimension mapping, KPI calculations, and anomaly audits happen automatically.</p>
+        </div>
       </div>
-      <div class="faq-item">
-        <h4>How accurate are the insights?</h4>
-        <p>Quantitative calculations (KPIs, margins, growth percentages, IQR outliers) use deterministic Python code that maps directly to your source data, while AI generates clear explanations.</p>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question-row">
+          <h4>How accurate are the insights?</h4>
+          <span class="faq-icon-btn">▾</span>
+        </div>
+        <div class="faq-answer">
+          <p>Quantitative calculations (KPIs, margins, growth percentages, IQR outliers) use deterministic Python code that maps directly to your source data, while AI generates clear explanations.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -1879,6 +1978,10 @@ function closeLegalModal(e) {
     return;
   }
   document.getElementById('legal-modal').classList.remove('show');
+}
+
+function toggleFaq(el) {
+  el.classList.toggle('active');
 }
 
 function toggleNavMenu() {
