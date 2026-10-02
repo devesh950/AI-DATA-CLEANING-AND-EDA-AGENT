@@ -522,8 +522,10 @@ def run_analysis(df, rc, dc, cc, coc):
             preview_df[col] = preview_df[col].astype(str).replace({"nan": "—", "None": "—"})
 
     table_preview = {
-        "columns": df.columns.tolist()[:15],
-        "rows": preview_df.to_dict(orient="records")
+        "columns": [str(c) for c in df.columns.tolist()[:15]],
+        "rows": preview_df.to_dict(orient="records"),
+        "total_rows": int(len(df)),
+        "total_cols": int(len(df.columns))
     }
 
     return {
@@ -656,12 +658,36 @@ def sample():
 
 @app.route("/api/upload", methods=["POST"])
 def upload():
-    if "file" not in request.files: return jsonify({"error": "No file uploaded"}), 400
+    if "file" not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
     file = request.files["file"]
+    if not file or not file.filename:
+        return jsonify({"error": "No file selected"}), 400
+
     fname = file.filename.lower()
+    file_bytes = file.read()
+    if len(file_bytes) == 0:
+        return jsonify({"error": "Uploaded file is empty"}), 400
+
     try:
-        df = pd.read_csv(file) if fname.endswith(".csv") else pd.read_excel(file)
-        if len(df) == 0: return jsonify({"error": "File contains zero rows"}), 400
+        if fname.endswith(".csv"):
+            try:
+                df = pd.read_csv(io.BytesIO(file_bytes))
+            except UnicodeDecodeError:
+                df = pd.read_csv(io.BytesIO(file_bytes), encoding="latin-1")
+            except Exception:
+                df = pd.read_csv(io.BytesIO(file_bytes), sep=None, engine="python")
+        elif fname.endswith(".xlsx") or fname.endswith(".xls"):
+            df = pd.read_excel(io.BytesIO(file_bytes))
+        else:
+            try:
+                df = pd.read_csv(io.BytesIO(file_bytes))
+            except Exception:
+                df = pd.read_excel(io.BytesIO(file_bytes))
+
+        df = df.dropna(how="all")
+        if len(df) == 0:
+            return jsonify({"error": "File contains zero data rows"}), 400
     except Exception as e:
         return jsonify({"error": f"Failed to parse file: {str(e)}"}), 400
 

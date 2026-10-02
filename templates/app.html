@@ -1340,6 +1340,11 @@ function triggerFileInput() {
   document.getElementById('file-input').click();
 }
 
+function safeNum(val) {
+  if (val === null || val === undefined || isNaN(val)) return '—';
+  return Number(val).toLocaleString();
+}
+
 function showToast(msg) {
   const t = document.getElementById('toast-msg');
   t.innerText = msg;
@@ -1385,7 +1390,8 @@ function loadIndustry(ind) {
 }
 
 function renderAll(d) {
-  document.getElementById('status-tag').innerText = d.filename + ' (' + (d.rows || d.quality.rows).toLocaleString() + ' rows)';
+  const totalRecs = (d.rows != null ? d.rows : (d.quality && d.quality.rows != null ? d.quality.rows : 0));
+  document.getElementById('status-tag').innerText = (d.filename || 'Dataset') + ' (' + totalRecs.toLocaleString() + ' rows)';
   const demoBadge = document.getElementById('demo-indicator-badge');
   if (demoBadge) {
     demoBadge.style.display = isDemoMode ? 'inline-block' : 'none';
@@ -1507,11 +1513,11 @@ function renderAll(d) {
     const r = document.createElement('tr');
     r.innerHTML = `
       <td><strong>${st.column}</strong></td>
-      <td>${st.count.toLocaleString()}</td>
-      <td>${st.mean.toLocaleString()}</td>
-      <td>${st.std.toLocaleString()}</td>
-      <td>${st.min.toLocaleString()}</td>
-      <td>${st.max.toLocaleString()}</td>
+      <td>${safeNum(st.count)}</td>
+      <td>${safeNum(st.mean)}</td>
+      <td>${safeNum(st.std)}</td>
+      <td>${safeNum(st.min)}</td>
+      <td>${safeNum(st.max)}</td>
     `;
     sbody.appendChild(r);
   });
@@ -1520,7 +1526,9 @@ function renderAll(d) {
   if (d.table_preview) {
     const info = document.getElementById('table-inspector-info');
     if (info) {
-      info.innerText = `Displaying sample rows of ${d.filename} (${d.table_preview.total_rows.toLocaleString()} total rows, ${d.table_preview.total_cols} columns)`;
+      const totalR = (d.table_preview.total_rows != null ? d.table_preview.total_rows : (d.rows != null ? d.rows : (d.quality && d.quality.rows != null ? d.quality.rows : (d.table_preview.rows ? d.table_preview.rows.length : 0))));
+      const totalC = (d.table_preview.total_cols != null ? d.table_preview.total_cols : (d.columns ? d.columns.length : 0));
+      info.innerText = `Displaying sample rows of ${d.filename || 'dataset'} (${Number(totalR).toLocaleString()} total rows, ${totalC} columns)`;
     }
     const thead = document.getElementById('preview-thead');
     const tbody = document.getElementById('preview-tbody');
