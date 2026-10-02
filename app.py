@@ -222,7 +222,7 @@ def scatterchart(x, y, xl, yl, title):
     }
 
 def generate_executive_memo(df, rc, dc, cc, coc, outliers):
-    """Generates an insightful, McKinsey-grade CFO Briefing Memo with Pareto analysis and prioritized actions."""
+    """Generates an AI Executive Business Brief with Pareto concentration analysis, risk detection, and prioritized recommendations."""
     win = "Steady operational volume recorded across current periods."
     risk = "Ensure periodic audit of missing values and record formats."
     action = "Maintain monitoring on highest category distribution."

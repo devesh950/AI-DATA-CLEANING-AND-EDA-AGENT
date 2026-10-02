@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Metriva Workspace - Executive Intelligence &amp; Data Repair</title>
+<title>Metriva Workspace — Your AI Business Analyst</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -1079,29 +1079,32 @@ body {
     </div>
   </div>
 
-  <!-- 1. Executive CFO Action Memo (Briefing Card) -->
+  <!-- 1. AI Executive Business Brief (Hero Intelligence Feature) -->
   <div class="executive-memo-card" id="executive-memo-card">
     <div class="memo-header">
       <div class="memo-title-group">
-        <span class="memo-badge">CFO Briefing</span>
-        <h4 class="memo-title">Executive Action &amp; Risk Memo</h4>
+        <span class="memo-badge">Executive Brief</span>
+        <h4 class="memo-title">AI Executive Business Brief</h4>
       </div>
-      <button class="btn btn-secondary btn-sm" onclick="copyExecutiveMemo()" style="background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.25);">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Copy Memo to Clipboard
-      </button>
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <span id="demo-indicator-badge" style="display:none; font-size:0.75rem; font-weight:700; color:#e0e7ff; background:rgba(67,97,238,0.35); border:1px solid rgba(255,255,255,0.2); padding:3px 10px; border-radius:6px;">Interactive Demo — Sample Data</span>
+        <button class="btn btn-secondary btn-sm" onclick="copyExecutiveMemo()" style="background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.25);">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Brief
+        </button>
+      </div>
     </div>
     <div class="memo-grid">
       <div class="memo-col win">
-        <div class="memo-col-label">🚀 Key Win &amp; Growth Driver</div>
+        <div class="memo-col-label">🚀 Growth Drivers</div>
         <p class="memo-col-text" id="memo-win">Loading operational analysis...</p>
       </div>
       <div class="memo-col risk">
-        <div class="memo-col-label">⚠️ Critical Risk / Leak Identified</div>
+        <div class="memo-col-label">⚠️ Risks &amp; Anomalies</div>
         <p class="memo-col-text" id="memo-risk">Evaluating portfolio concentration...</p>
       </div>
       <div class="memo-col action">
-        <div class="memo-col-label">🎯 Strategic Action Recommendation</div>
+        <div class="memo-col-label">🎯 Recommended Investigation &amp; Actions</div>
         <p class="memo-col-text" id="memo-action">Formulating next steps...</p>
       </div>
     </div>
@@ -1316,6 +1319,7 @@ body {
 <script>
 let currentData = null;
 let currentIndustry = 'saas';
+let isDemoMode = true;
 let currentSlideIndex = 0;
 let slidesData = [];
 
@@ -1344,6 +1348,7 @@ function showToast(msg) {
 }
 
 function handleFileUpload(file) {
+  isDemoMode = false;
   if (!file) return;
   const formData = new FormData();
   formData.append('file', file);
@@ -1363,6 +1368,7 @@ function handleFileUpload(file) {
 }
 
 function loadIndustry(ind) {
+  isDemoMode = true;
   currentIndustry = ind;
   document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
   const btn = document.getElementById('btn-' + ind);
@@ -1380,6 +1386,10 @@ function loadIndustry(ind) {
 
 function renderAll(d) {
   document.getElementById('status-tag').innerText = d.filename + ' (' + (d.rows || d.quality.rows).toLocaleString() + ' rows)';
+  const demoBadge = document.getElementById('demo-indicator-badge');
+  if (demoBadge) {
+    demoBadge.style.display = isDemoMode ? 'inline-block' : 'none';
+  }
   document.getElementById('dashboard-wrap').classList.add('active');
   document.getElementById('executive-memo-card').style.display = 'block';
   document.getElementById('ai-assistant-card').style.display = 'block';
@@ -1627,9 +1637,9 @@ function copyCurrentSlide() {
 function copyExecutiveMemo() {
   if (!currentData || !currentData.executive_memo) return;
   const m = currentData.executive_memo;
-  const text = `METRIVA CFO ACTION & RISK MEMO\n\n1. KEY WIN & GROWTH DRIVER:\n${m.win}\n\n2. CRITICAL RISK / LEAK IDENTIFIED:\n${m.risk}\n\n3. STRATEGIC ACTION RECOMMENDATION:\n${m.action}\n\nAnnualized Run-Rate: ${m.runrate_annual || 'N/A'}`;
+  const text = `METRIVA AI EXECUTIVE BUSINESS BRIEF\n\n1. GROWTH DRIVERS:\n${m.win}\n\n2. RISKS & ANOMALIES:\n${m.risk}\n\n3. RECOMMENDED INVESTIGATION & ACTION:\n${m.action}\n\nAnnualized Run-Rate: ${m.runrate_annual || 'N/A'}`;
   navigator.clipboard.writeText(text);
-  showToast('CFO Memo copied to clipboard!');
+  showToast('Executive Business Brief copied to clipboard!');
 }
 
 function downloadCleanedData() {
@@ -1716,13 +1726,13 @@ window.addEventListener('resize', () => {
 
 <footer style="margin-top:60px; padding:24px 0; border-top:1px solid var(--border-light); background:#ffffff; text-align:center; font-size:0.82rem; color:var(--text-muted);">
   <div style="display:flex; justify-content:center; align-items:center; gap:20px; flex-wrap:wrap; margin-bottom:8px;">
-    <span>🔒 100% In-Memory Processing</span>
+    <span>🔒 In-Memory Volatile Processing</span>
     <span>•</span>
-    <span>⚡ High-Volume 500MB Uploads</span>
+    <span>⚡ Built for reliable, secure data processing</span>
     <span>•</span>
-    <span style="color:var(--success); font-weight:700;">🟢 Operational • 99.99% Uptime</span>
+    <span>💎 Traceable Deterministic Math Pipelines</span>
   </div>
-  <div>&copy; 2026 Metriva Inc. All rights reserved. Deterministic business intelligence engine.</div>
+  <div>&copy; 2026 Metriva Inc. Your business analyst, without hiring one. All rights reserved.</div>
 </footer>
 
 </body>
