@@ -691,6 +691,98 @@ a { color: inherit; text-decoration: none; }
   background: #f8fafc;
 }
 
+
+/* MOBILE RESPONSIVE ENHANCEMENTS */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  cursor: pointer;
+  color: var(--secondary);
+}
+.mobile-swipe-hint {
+  display: none;
+  font-size: 0.78rem;
+  color: var(--primary);
+  background: var(--primary-light);
+  border-radius: 999px;
+  padding: 4px 14px;
+  text-align: center;
+  margin: 0 auto 12px;
+  font-weight: 700;
+  width: fit-content;
+}
+
+@media (max-width: 860px) {
+  .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+  .navbar-inner { position: relative; }
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-light);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px 24px;
+    gap: 16px;
+    box-shadow: var(--shadow-xl);
+    z-index: 1200;
+  }
+  .nav-menu.open { display: flex; animation: fadeIn 0.2s ease; }
+  .nav-item-dropdown .mega-menu {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+    border: 1px solid var(--border-subtle);
+    background: #f8fafc;
+    grid-template-columns: 1fr;
+    display: none;
+    margin-top: 8px;
+  }
+  .nav-item-dropdown.active .mega-menu { display: grid; }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 16px; }
+  .hero-section { padding: 44px 0 32px; }
+  .hero-title { font-size: 2.1rem; line-height: 1.18; }
+  .hero-desc { font-size: 0.98rem; line-height: 1.55; margin-bottom: 24px; }
+  .hero-actions { flex-direction: column; width: 100%; gap: 12px; }
+  .hero-actions .btn { width: 100%; }
+  .hero-footnote { flex-direction: column; gap: 6px; }
+  .hero-footnote span:nth-child(2), .hero-footnote span:nth-child(4) { display: none; }
+  .app-preview-wrap { margin: 24px auto 44px; border-radius: var(--radius-lg); }
+  .preview-content { padding: 14px; }
+  .preview-content [style*="grid-template-columns:repeat(3,1fr)"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .comparison-section { padding: 50px 0; }
+  .section-title { font-size: 1.85rem; }
+  .section-subtitle { font-size: 0.95rem; margin-bottom: 28px; }
+  .mobile-swipe-hint { display: block; }
+  .comparison-table { min-width: 640px; }
+  .features-section { padding: 50px 0; }
+  .pricing-section { padding: 50px 0; }
+  .pricing-card.featured { transform: none; }
+  .pricing-card { padding: 26px 20px; }
+  .site-footer { padding: 48px 0 24px; }
+  .footer-cta-banner { padding: 24px 20px; flex-direction: column; align-items: stretch; }
+  .footer-cta-banner .btn { width: 100%; }
+  .footer-main-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .footer-legal-links { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .legal-modal-card { width: 95%; max-height: 85vh; }
+  .legal-modal-header { padding: 16px; }
+  .legal-modal-body { padding: 16px; }
+}
+
 </style>
 </head>
 <body>
@@ -761,6 +853,10 @@ a { color: inherit; text-decoration: none; }
       <li class="nav-item"><a href="#features">Features</a></li>
       <li class="nav-item"><a href="#pricing">Pricing</a></li>
     </ul>
+
+    <button class="mobile-menu-btn" onclick="toggleNavMenu()" aria-label="Open Navigation">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
 
     <div style="display:flex; align-items:center; gap:12px;">
       <a href="/app" class="btn btn-secondary">Sign In</a>
@@ -848,6 +944,7 @@ a { color: inherit; text-decoration: none; }
       Alternative tools and legacy platforms are either token-gated, slow on larger datasets, or require complex engineering. Metriva delivers instant C-level clarity with 500MB upload capacity and zero usage caps.
     </p>
 
+    <div class="mobile-swipe-hint">👈 Swipe table horizontally to compare 👉</div>
     <div class="comparison-table-wrap">
       <table class="comparison-table">
         <thead>
@@ -1260,6 +1357,20 @@ function saveCookiePrefs() {
   alert('Cookie preferences updated successfully.');
   closeLegalModal();
 }
+
+function toggleNavMenu() {
+  const m = document.querySelector('.nav-menu');
+  if (m) m.classList.toggle('open');
+}
+document.querySelectorAll('.nav-link-dropdown').forEach(item => {
+  item.addEventListener('click', (e) => {
+    if (window.innerWidth <= 860) {
+      e.preventDefault();
+      item.parentElement.classList.toggle('active');
+    }
+  });
+});
+
 </script>
 
 </body>
