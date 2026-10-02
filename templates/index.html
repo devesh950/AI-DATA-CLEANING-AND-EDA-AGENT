@@ -479,7 +479,7 @@ a { color: inherit; text-decoration: none; }
 }
 .footer-main-grid {
   display: grid;
-  grid-template-columns: 2.2fr 1fr 1fr 1.2fr;
+  grid-template-columns: 2fr 1fr 1fr;
   gap: 48px;
   margin-bottom: 60px;
 }
@@ -853,6 +853,22 @@ html, body {
   }
 }
 
+
+.footer-cta-btn {
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .footer-cta-btn {
+    width: 100% !important;
+    font-size: 0.92rem !important;
+    padding: 12px 18px !important;
+    justify-content: center !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1214,7 +1230,7 @@ html, body {
         <p>Ingest up to 500MB spreadsheets. Zero SQL. Pure in-memory confidentiality.</p>
       </div>
       <div>
-        <a href="/app" class="btn btn-primary btn-lg">Launch Metriva Workspace Free &rarr;</a>
+        <a href="/app" class="btn btn-primary btn-lg footer-cta-btn">Launch Metriva Free &rarr;</a>
       </div>
     </div>
 
@@ -1263,18 +1279,7 @@ html, body {
         </ul>
       </div>
 
-      <!-- Col 3: Competitor Comparison & Trust -->
-      <div>
-        <h4 class="footer-col-title">Comparisons</h4>
-        <ul class="footer-links">
-          <li><a href="#comparison">Metriva vs. Company 1</a></li>
-          <li><a href="#comparison">Metriva vs. Company 2</a></li>
-          <li><a href="#comparison">Metriva vs. Company 3</a></li>
-          <li><a href="#comparison">Metriva vs. Legacy BI</a></li>
-          <li><a href="/app">Interactive Workspace</a></li>
-          <li><a href="/app">Live Interactive Demo</a></li>
-        </ul>
-      </div>
+      
 
     </div>
 
