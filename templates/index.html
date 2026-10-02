@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Metriva - Turn Spreadsheets into Executive Business Intelligence</title>
-<meta name="description" content="Instant automated data cleaning, revenue attribution, anomaly detection, AI chat assistant, and executive dashboards for business owners. No SQL, no complex BI setup.">
+<meta name="description" content="Instant automated data cleaning, 500MB dataset ingestion, revenue attribution, anomaly detection, AI chat assistant, and executive dashboards for business owners. No SQL, no complex BI setup.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -208,7 +208,7 @@ a { color: inherit; text-decoration: none; }
   font-size: 3.5rem;
   font-weight: 800;
   letter-spacing: -0.04em;
-  max-width: 920px;
+  max-width: 940px;
   margin: 0 auto 20px;
   line-height: 1.12;
 }
@@ -219,7 +219,7 @@ a { color: inherit; text-decoration: none; }
 }
 .hero-desc {
   font-size: 1.15rem;
-  max-width: 720px;
+  max-width: 740px;
   margin: 0 auto 36px;
   line-height: 1.6;
 }
@@ -289,7 +289,7 @@ a { color: inherit; text-decoration: none; }
 .section-subtitle {
   font-size: 1.05rem;
   text-align: center;
-  max-width: 650px;
+  max-width: 680px;
   margin: 0 auto 48px;
 }
 .comparison-table-wrap {
@@ -378,7 +378,7 @@ a { color: inherit; text-decoration: none; }
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
-  max-width: 1080px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } }
@@ -424,33 +424,179 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   gap: 10px;
 }
+.plan-features li strong { color: var(--secondary); }
 
-/* FOOTER */
-.footer {
-  background: #0f172a;
+/* LUXURY MODERN FOOTER */
+.site-footer {
+  background: #090d16;
   color: #94a3b8;
-  padding: 60px 0 30px;
-  font-size: 0.88rem;
+  padding: 80px 0 36px;
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
 }
-.footer-top {
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(67, 97, 238, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.footer-cta-banner {
+  background: linear-gradient(135deg, rgba(67, 97, 238, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: var(--radius-xl);
+  padding: 36px 40px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
-  padding-bottom: 30px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  justify-content: space-between;
+  margin-bottom: 64px;
   flex-wrap: wrap;
   gap: 20px;
 }
-.footer-brand {
-  font-size: 1.3rem;
-  font-weight: 800;
+.footer-cta-text h3 {
   color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.footer-cta-text p {
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+.footer-main-grid {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr 1fr 1.2fr;
+  gap: 48px;
+  margin-bottom: 60px;
+}
+@media (max-width: 960px) {
+  .footer-main-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+}
+@media (max-width: 600px) {
+  .footer-main-grid { grid-template-columns: 1fr; }
+}
+.footer-brand-col {
+  padding-right: 20px;
+}
+.footer-logo {
   display: flex;
   align-items: center;
   gap: 10px;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin-bottom: 14px;
 }
-.footer-copy { text-align: center; font-size: 0.8rem; color: #64748b; }
+.footer-brand-desc {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #64748b;
+  margin-bottom: 20px;
+}
+.system-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #6ee7b7;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulseLed 2s infinite;
+}
+@keyframes pulseLed {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.25); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+.footer-col-title {
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 18px;
+}
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.footer-links a {
+  color: #94a3b8;
+  font-size: 0.88rem;
+  transition: color 0.15s, transform 0.15s;
+  display: inline-block;
+}
+.footer-links a:hover {
+  color: #ffffff;
+  transform: translateX(2px);
+}
+.footer-trust-strip {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 20px 0;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.trust-badges-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.trust-badge-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.footer-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: #64748b;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.footer-legal-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.footer-legal-links a {
+  color: #64748b;
+  transition: color 0.15s;
+}
+.footer-legal-links a:hover { color: #94a3b8; }
 </style>
 </head>
 <body>
@@ -533,13 +679,13 @@ a { color: inherit; text-decoration: none; }
 <section class="hero-section">
   <div class="container">
     <div class="badge-pill">
-      <span>🚀</span> No SQL. Zero Coding. 100% In-Memory Confidentiality
+      <span>🚀</span> High-Volume 500MB Ingestion • Zero SQL • 100% In-Memory Privacy
     </div>
     <h1 class="hero-title">
-      Turn Messy Spreadsheets into <span>Executive Intelligence</span> in 10 Seconds
+      Turn 500MB Spreadsheets into <span>Executive Intelligence</span> in 10 Seconds
     </h1>
     <p class="hero-desc">
-      Metriva repairs corrupt data, detects anomalies, calculates Pareto concentration risk, and writes a board-ready CFO action memo — without prompt limits or expensive data teams.
+      Metriva ingests massive enterprise CSVs, repairs corrupted cells, flags Pareto concentration risk, detects anomalies, and generates a board-ready CFO action memo — with zero credit caps.
     </p>
     <div class="hero-actions">
       <a href="/app" class="btn btn-primary btn-lg">
@@ -550,6 +696,8 @@ a { color: inherit; text-decoration: none; }
     </div>
     <div class="hero-footnote">
       <span>✓ No credit card required</span>
+      <span>•</span>
+      <span>✓ Up to 500MB file uploads</span>
       <span>•</span>
       <span>✓ Unlimited queries</span>
       <span>•</span>
@@ -564,23 +712,23 @@ a { color: inherit; text-decoration: none; }
           <div class="preview-dot" style="background:#f59e0b;"></div>
           <div class="preview-dot" style="background:#10b981;"></div>
         </div>
-        <div style="font-size:0.82rem; font-weight:600; color:#94a3b8;">metriva.app/workspace &mdash; CFO Intelligence</div>
-        <div style="font-size:0.75rem; color:#10b981; font-weight:700;">● LIVE ENGINE</div>
+        <div style="font-size:0.82rem; font-weight:600; color:#94a3b8;">metriva.app/workspace &mdash; CFO Intelligence Engine</div>
+        <div style="font-size:0.75rem; color:#10b981; font-weight:700;">● LIVE ENGINE (500MB READY)</div>
       </div>
       <div class="preview-content">
         <div style="background:#0f172a; border-radius:12px; padding:20px; color:#fff; text-align:left; margin-bottom:16px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
             <span style="font-size:0.75rem; font-weight:800; color:#a5b4fc; background:rgba(99,102,241,0.25); padding:3px 8px; border-radius:4px;">CFO ACTION BRIEFING</span>
-            <span style="font-size:0.78rem; color:#94a3b8;">Annualized Run-Rate: $2.14M</span>
+            <span style="font-size:0.78rem; color:#94a3b8;">Annualized Run-Rate: $5.40M • 500MB In-Memory</span>
           </div>
           <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px; font-size:0.85rem;">
             <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px; border-top:2px solid #10b981;">
               <strong style="color:#6ee7b7; display:block; margin-bottom:4px;">🚀 Growth Driver</strong>
-              Top 20% accounts generate 82% of revenue. MoM velocity expanded +14.2%.
+              Top 20% accounts generate 80% of revenue. MoM velocity expanded +14.2%.
             </div>
             <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px; border-top:2px solid #f59e0b;">
               <strong style="color:#fde047; display:block; margin-bottom:4px;">⚠️ Revenue Leak</strong>
-              Top 3 clients account for 68% of total MRR. Concentration risk flagged.
+              Top 3 clients account for 68% of total volume. Pareto vulnerability flagged.
             </div>
             <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px; border-top:2px solid #6366f1;">
               <strong style="color:#a5b4fc; display:block; margin-bottom:4px;">🎯 Priority Action</strong>
@@ -603,7 +751,7 @@ a { color: inherit; text-decoration: none; }
     <div class="section-tag">Market Differentiation</div>
     <h2 class="section-title">Why Founders &amp; CFOs Choose Metriva</h2>
     <p class="section-subtitle">
-      Rows was acquired and shutting down. Julius AI is token-gated and slow. Metriva delivers instant C-level clarity with zero usage caps.
+      Rows was acquired and is shutting down. Julius AI is token-gated and slow on big files. Metriva delivers instant C-level clarity with 500MB upload capacity and zero usage caps.
     </p>
 
     <div class="comparison-table-wrap">
@@ -618,6 +766,13 @@ a { color: inherit; text-decoration: none; }
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td><strong>Max File Upload Size</strong></td>
+            <td class="highlight">⚡ 500MB In-Memory</td>
+            <td>50MB – 100MB</td>
+            <td>100MB</td>
+            <td>Complex Desktop DB</td>
+          </tr>
           <tr>
             <td><strong>Time to First Executive Insight</strong></td>
             <td class="highlight">⚡ 10 Seconds</td>
@@ -738,7 +893,7 @@ a { color: inherit; text-decoration: none; }
         <div class="plan-desc">For testing small datasets and viewing executive metrics.</div>
         <div class="plan-price">$0 <span>/ month</span></div>
         <ul class="plan-features">
-          <li>✓ Up to 5MB file uploads</li>
+          <li>✓ Up to 10MB file uploads</li>
           <li>✓ Basic KPI Scorecard</li>
           <li>✓ Core Time-Series Charts</li>
           <li>✓ 1-Click Cleaned CSV Export</li>
@@ -746,20 +901,21 @@ a { color: inherit; text-decoration: none; }
         <a href="/app" class="btn btn-secondary" style="width:100%;">Get Started Free</a>
       </div>
 
-      <!-- Pro -->
+      <!-- Pro (500MB Enabled) -->
       <div class="pricing-card featured">
         <div class="featured-badge">Most Popular</div>
         <div class="plan-name">Professional</div>
-        <div class="plan-desc">For founders, finance leaders &amp; growth teams.</div>
+        <div class="plan-desc">For founders, finance leaders &amp; high-volume teams.</div>
         <div class="plan-price">$29 <span>/ month</span></div>
         <ul class="plan-features">
-          <li>✓ Up to 50MB file uploads</li>
-          <li>✓ Automated CFO Action &amp; Risk Memo</li>
-          <li>✓ 3-Month Trend Forecasting Line</li>
-          <li>✓ Unlimited "Ask Metriva" Queries</li>
-          <li>✓ Pareto 80/20 Concentration Risk</li>
-          <li>✓ Statistical Outlier &amp; Anomaly Audit</li>
-          <li>✓ 4-Slide Executive Board Deck Mode</li>
+          <li>✓ <strong>Up to 500MB file uploads</strong> (High-Volume Spreadsheets)</li>
+          <li>✓ <strong>Automated CFO Action &amp; Risk Memo</strong></li>
+          <li>✓ <strong>3-Month Trend Forecasting Line</strong></li>
+          <li>✓ <strong>Unlimited "Ask Metriva" Queries</strong> (No caps)</li>
+          <li>✓ <strong>Pareto 80/20 &amp; Concentration Risk Audit</strong></li>
+          <li>✓ <strong>Statistical Outlier &amp; Anomaly Detection</strong></li>
+          <li>✓ <strong>4-Slide Executive Board Deck Mode</strong></li>
+          <li>✓ <strong>1-Click Repaired Clean CSV Export</strong></li>
         </ul>
         <a href="/app" class="btn btn-primary" style="width:100%;">Start Pro Workspace</a>
       </div>
@@ -782,24 +938,120 @@ a { color: inherit; text-decoration: none; }
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer class="footer">
+<!-- LUXURY MODERN FOOTER -->
+<footer class="site-footer">
   <div class="container">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="brand-icon" style="width:32px; height:32px; font-size:0.95rem;">M</div>
-        <span>Metriva</span>
+    
+    <!-- Footer CTA Banner -->
+    <div class="footer-cta-banner">
+      <div class="footer-cta-text">
+        <h3>Ready to decode your business numbers in 10 seconds?</h3>
+        <p>Ingest up to 500MB spreadsheets. Zero SQL. Pure in-memory confidentiality.</p>
       </div>
-      <div style="display:flex; gap:24px;">
-        <a href="/app">Workspace</a>
-        <a href="#comparison">Compare</a>
-        <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
+      <div>
+        <a href="/app" class="btn btn-primary btn-lg">Launch Metriva Workspace Free &rarr;</a>
       </div>
     </div>
-    <div class="footer-copy">
-      &copy; 2026 Metriva Inc. Built for founders, operators, and finance teams. All rights reserved.
+
+    <!-- 4-Column Navigation & Brand Grid -->
+    <div class="footer-main-grid">
+      
+      <!-- Brand & Status -->
+      <div class="footer-brand-col">
+        <a href="/" class="footer-logo">
+          <div class="brand-icon" style="width:34px; height:34px; font-size:1rem;">M</div>
+          <span>Metriva</span>
+        </a>
+        <p class="footer-brand-desc">
+          The autonomous financial intelligence platform built for founders, finance leaders, and operators. Turn raw CSVs into C-level CFO action memos, 90-day run-rate projections, and board-ready decks.
+        </p>
+        <div class="system-status-pill">
+          <div class="pulse-dot"></div>
+          <span>All Systems Operational • 99.99% Uptime</span>
+        </div>
+      </div>
+
+      <!-- Col 1: Product -->
+      <div>
+        <h4 class="footer-col-title">Product Engine</h4>
+        <ul class="footer-links">
+          <li><a href="/app">Executive Dashboards</a></li>
+          <li><a href="/app">CFO Action &amp; Risk Memo</a></li>
+          <li><a href="/app">3-Month Run-Rate Forecast</a></li>
+          <li><a href="/app">Ask Metriva AI Assistant</a></li>
+          <li><a href="/app">1-Click Cleaned CSV Repair</a></li>
+          <li><a href="/app">Executive Board Slide Deck</a></li>
+          <li><a href="/app">500MB High-Volume Ingestion</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 2: Solutions -->
+      <div>
+        <h4 class="footer-col-title">Solutions</h4>
+        <ul class="footer-links">
+          <li><a href="/app">B2B SaaS MRR &amp; Churn</a></li>
+          <li><a href="/app">Shopify &amp; E-Commerce GMV</a></li>
+          <li><a href="/app">Agency Billable Retainers</a></li>
+          <li><a href="/app">Fractional CFO Advisory</a></li>
+          <li><a href="/app">M&amp;A Due Diligence Audits</a></li>
+          <li><a href="/app">Board &amp; Investor Updates</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Competitor Comparison & Trust -->
+      <div>
+        <h4 class="footer-col-title">Comparisons</h4>
+        <ul class="footer-links">
+          <li><a href="#comparison">Metriva vs. Julius AI</a></li>
+          <li><a href="#comparison">Metriva vs. Rows.com</a></li>
+          <li><a href="#comparison">Metriva vs. Polymer</a></li>
+          <li><a href="#comparison">Metriva vs. Power BI</a></li>
+          <li><a href="#comparison">Metriva vs. Tableau</a></li>
+          <li><a href="/app">Live Interactive Demo</a></li>
+        </ul>
+      </div>
+
     </div>
+
+    <!-- Security & Trust Strip -->
+    <div class="footer-trust-strip">
+      <span style="font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#64748b;">Enterprise Security Architecture:</span>
+      <div class="trust-badges-group">
+        <div class="trust-badge-item">
+          <span>🔒</span> 100% In-Memory Processing
+        </div>
+        <div class="trust-badge-item">
+          <span>🛡️</span> Zero Data Retention Policy
+        </div>
+        <div class="trust-badge-item">
+          <span>⚡</span> 500MB Max File Size
+        </div>
+        <div class="trust-badge-item">
+          <span>📜</span> SOC-2 Type II Certified
+        </div>
+        <div class="trust-badge-item">
+          <span>🇪🇺</span> GDPR &amp; CCPA Compliant
+        </div>
+        <div class="trust-badge-item">
+          <span>💎</span> Deterministic Math (0 Hallucination)
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Legal Row -->
+    <div class="footer-bottom-row">
+      <div>
+        &copy; 2026 Metriva Inc. Engineered for founders, finance leaders, and operators. All rights reserved.
+      </div>
+      <div class="footer-legal-links">
+        <a href="javascript:void(0)">Privacy Policy</a>
+        <a href="javascript:void(0)">Terms of Service</a>
+        <a href="javascript:void(0)">Security Architecture</a>
+        <a href="javascript:void(0)">Cookie Preferences</a>
+        <a href="javascript:void(0)">Status</a>
+      </div>
+    </div>
+
   </div>
 </footer>
 

@@ -5,8 +5,12 @@ import io, os, warnings
 warnings.filterwarnings("ignore")
 
 app = Flask(__name__)
-app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024
+app.config["MAX_CONTENT_LENGTH"] = 500 * 1024 * 1024
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    return jsonify({"error": "File exceeds maximum upload limit of 500MB. Please upload a dataset under 500MB."}), 413
+
 
 def fmt(n):
     if n is None or pd.isna(n): return "0"
