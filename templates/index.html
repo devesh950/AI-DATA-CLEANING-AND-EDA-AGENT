@@ -113,7 +113,7 @@ a { color: inherit; text-decoration: none; }
 .navbar {
   position: sticky;
   top: 0;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-light);
@@ -124,7 +124,7 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
+  height: 70px;
 }
 .brand-group {
   display: flex;
@@ -154,7 +154,7 @@ a { color: inherit; text-decoration: none; }
   gap: 28px;
   list-style: none;
 }
-.nav-item { font-size: 0.92rem; font-weight: 600; color: var(--text-muted); cursor: pointer; position: relative; }
+.nav-item { font-size: 0.92rem; font-weight: 600; color: var(--text-muted); cursor: pointer; }
 .nav-item a:hover { color: var(--primary); }
 
 .navbar-actions {
@@ -198,7 +198,7 @@ a { color: inherit; text-decoration: none; }
 
 /* HERO SECTION */
 .hero-section {
-  padding: 84px 0 60px;
+  padding: 68px 0 52px;
   text-align: center;
   position: relative;
 }
@@ -213,14 +213,14 @@ a { color: inherit; text-decoration: none; }
   color: var(--primary);
   font-size: 0.85rem;
   font-weight: 700;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 .hero-title {
-  font-size: 3.6rem;
+  font-size: 3.5rem;
   font-weight: 800;
   letter-spacing: -0.04em;
-  max-width: 980px;
-  margin: 0 auto 22px;
+  max-width: 960px;
+  margin: 0 auto 20px;
   line-height: 1.12;
 }
 .hero-title span {
@@ -229,9 +229,9 @@ a { color: inherit; text-decoration: none; }
   -webkit-text-fill-color: transparent;
 }
 .hero-desc {
-  font-size: 1.18rem;
-  max-width: 760px;
-  margin: 0 auto 36px;
+  font-size: 1.16rem;
+  max-width: 740px;
+  margin: 0 auto 32px;
   line-height: 1.62;
   color: var(--text-muted);
 }
@@ -240,7 +240,7 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   justify-content: center;
   gap: 16px;
-  margin-bottom: 30px;
+  margin-bottom: 26px;
 }
 .hero-footnote {
   font-size: 0.84rem;
@@ -251,10 +251,10 @@ a { color: inherit; text-decoration: none; }
   gap: 16px;
 }
 
-/* HERO BUSINESS BRIEF PRODUCT PREVIEW */
+/* REAL METRIVA BUSINESS BRIEF PREVIEW */
 .hero-preview-wrap {
-  margin: 44px auto 70px;
-  max-width: 1080px;
+  margin: 38px auto 30px;
+  max-width: 1060px;
   border-radius: var(--radius-xl);
   border: 1px solid var(--border-light);
   background: #ffffff;
@@ -264,7 +264,7 @@ a { color: inherit; text-decoration: none; }
 }
 .preview-topbar {
   background: #0f172a;
-  padding: 14px 22px;
+  padding: 13px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -273,19 +273,19 @@ a { color: inherit; text-decoration: none; }
 .preview-dots { display: flex; gap: 6px; }
 .preview-dot { width: 10px; height: 10px; border-radius: 50%; }
 .preview-body {
-  padding: 28px;
+  padding: 24px;
   background: #f8fafc;
 }
 .brief-header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
 }
 .brief-title-badge {
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -297,8 +297,8 @@ a { color: inherit; text-decoration: none; }
 .brief-metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 14px;
+  margin-bottom: 20px;
 }
 @media (max-width: 860px) {
   .brief-metrics-grid { grid-template-columns: repeat(2, 1fr); }
@@ -307,17 +307,17 @@ a { color: inherit; text-decoration: none; }
   background: #ffffff;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  padding: 16px;
+  padding: 14px;
   box-shadow: var(--shadow-sm);
 }
 .brief-metric-label {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-muted);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 .brief-metric-val {
-  font-size: 1.45rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: var(--secondary);
   display: flex;
@@ -325,7 +325,7 @@ a { color: inherit; text-decoration: none; }
   gap: 8px;
 }
 .brief-metric-badge {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 4px;
@@ -337,38 +337,38 @@ a { color: inherit; text-decoration: none; }
   background: #ffffff;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  padding: 22px;
+  padding: 20px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 18px;
   box-shadow: var(--shadow-sm);
 }
 @media (max-width: 860px) {
   .brief-narrative-box { grid-template-columns: 1fr; }
 }
 .narrative-col {
-  padding-left: 14px;
+  padding-left: 12px;
   border-left: 3px solid var(--primary);
 }
 .narrative-col.danger { border-left-color: var(--danger); }
 .narrative-col.action { border-left-color: var(--warning); }
 .narrative-title {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   color: var(--secondary);
 }
 .narrative-text {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   line-height: 1.55;
   color: #475569;
 }
 
 /* SECTION UTILITIES */
 .section-tag {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -377,65 +377,30 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
 }
 .section-title {
-  font-size: 2.4rem;
+  font-size: 2.3rem;
   font-weight: 800;
   text-align: center;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   letter-spacing: -0.03em;
 }
 .section-subtitle {
-  font-size: 1.08rem;
+  font-size: 1.05rem;
   text-align: center;
-  max-width: 720px;
-  margin: 0 auto 52px;
+  max-width: 700px;
+  margin: 0 auto 44px;
   color: var(--text-muted);
 }
 
-/* 1. CORE STORY / PROBLEM SECTION */
-.problem-section {
-  padding: 90px 0;
-  background: #ffffff;
-  border-top: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
-}
-.problem-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-@media (max-width: 900px) { .problem-grid { grid-template-columns: 1fr; } }
-.problem-card {
-  background: #f8fafc;
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-}
-.problem-icon {
-  font-size: 1.5rem;
-  margin-bottom: 14px;
-  display: inline-block;
-}
-.problem-card h4 {
-  font-size: 1.15rem;
-  margin-bottom: 10px;
-  color: var(--secondary);
-}
-.problem-card p {
-  font-size: 0.92rem;
-  line-height: 1.6;
-  color: var(--text-muted);
-}
-
-/* 2. HOW METRIVA WORKS (4 STEPS) */
+/* SECTION 2: 4-STEP WORKFLOW */
 .steps-section {
-  padding: 96px 0;
+  padding: 80px 0;
   background: var(--bg-subtle);
+  border-top: 1px solid var(--border-light);
 }
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  position: relative;
+  gap: 20px;
 }
 @media (max-width: 960px) {
   .steps-grid { grid-template-columns: repeat(2, 1fr); }
@@ -447,7 +412,7 @@ a { color: inherit; text-decoration: none; }
   background: #ffffff;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
-  padding: 30px 24px;
+  padding: 26px 20px;
   position: relative;
   box-shadow: var(--shadow-sm);
   display: flex;
@@ -462,329 +427,84 @@ a { color: inherit; text-decoration: none; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 .step-card h4 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
+  font-size: 1.15rem;
+  margin-bottom: 8px;
   color: var(--secondary);
 }
 .step-card p {
-  font-size: 0.9rem;
-  line-height: 1.6;
+  font-size: 0.88rem;
+  line-height: 1.58;
   color: var(--text-muted);
 }
 
-/* 3. BUSINESS BRIEF HERO FEATURE */
-.brief-feature-section {
-  padding: 96px 0;
-  background: #ffffff;
-}
-.brief-feature-card {
-  background: #0f172a;
-  border-radius: var(--radius-xl);
-  color: #ffffff;
-  padding: 44px;
-  box-shadow: var(--shadow-xl);
-  position: relative;
-  overflow: hidden;
-}
-.brief-feature-card::before {
-  content: '';
-  position: absolute;
-  top: -80px;
-  right: -80px;
-  width: 360px;
-  height: 360px;
-  background: radial-gradient(circle, rgba(67, 97, 238, 0.25) 0%, transparent 70%);
-}
-.brief-feat-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  padding-bottom: 24px;
-  margin-bottom: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-.brief-feat-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-bottom: 32px;
-}
-@media (max-width: 900px) { .brief-feat-grid { grid-template-columns: 1fr; } }
-.brief-feat-col {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-md);
-  padding: 22px;
-}
-.brief-feat-col h5 {
-  color: #ffffff;
-  font-size: 0.96rem;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.brief-feat-col p {
-  color: #94a3b8;
-  font-size: 0.88rem;
-  line-height: 1.6;
-}
-
-/* 4. FEATURES GRID */
+/* SECTION 3: FEATURES GRID (PUNCHY OUTCOMES) */
 .features-section {
-  padding: 96px 0;
-  background: var(--bg-subtle);
+  padding: 80px 0;
+  background: #ffffff;
   border-top: 1px solid var(--border-light);
 }
 .features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 22px;
 }
 @media (max-width: 900px) { .features-grid { grid-template-columns: 1fr; } }
 .feature-card {
-  background: #ffffff;
+  background: #f8fafc;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
-  padding: 30px 26px;
-  box-shadow: var(--shadow-sm);
+  padding: 26px 22px;
   transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
 }
 .feature-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-}
-.feature-icon-wrap {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: var(--primary-light);
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  margin-bottom: 18px;
-}
-.feature-card h4 { font-size: 1.18rem; margin-bottom: 8px; color: var(--secondary); }
-.feature-card p { font-size: 0.9rem; line-height: 1.6; color: var(--text-muted); }
-
-/* 5. TARGET CUSTOMERS */
-.customers-section {
-  padding: 96px 0;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
   background: #ffffff;
 }
-.customers-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-}
-@media (max-width: 960px) { .customers-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 600px) { .customers-grid { grid-template-columns: 1fr; } }
-.customer-card {
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  padding: 28px 22px;
-  background: #f8fafc;
-}
-.customer-badge {
-  font-size: 0.76rem;
+.feature-persona-badge {
+  font-size: 0.72rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--primary);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   display: inline-block;
 }
-.customer-card h4 { font-size: 1.15rem; margin-bottom: 8px; color: var(--secondary); }
-.customer-card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.55; }
-
-/* 6. AGENCY USE CASE & PIPELINE */
-.agency-section {
-  padding: 96px 0;
-  background: linear-gradient(135deg, #090d16 0%, #0f172a 100%);
-  color: #ffffff;
-}
-.agency-content {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  gap: 36px;
-  align-items: center;
-}
-@media (max-width: 900px) { .agency-content { grid-template-columns: 1fr; } }
-.pipeline-flow {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-xl);
-  padding: 24px 20px;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-.pipeline-step {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px 10px;
-  margin-bottom: 12px;
-}
-.pipeline-pill {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  white-space: normal;
-  display: inline-flex;
-  align-items: center;
-  text-align: center;
-  line-height: 1.35;
-}
-.pipeline-pill.highlight {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #fff;
-  box-shadow: 0 2px 10px rgba(67, 97, 238, 0.35);
-}
-.pipeline-arrow {
-  color: #64748b;
-  font-weight: 700;
-  font-size: 0.85rem;
-  flex-shrink: 0;
-}
-
-/* 7. PRODUCT ROADMAP */
-.roadmap-section {
-  padding: 90px 0;
+.feature-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
   background: #ffffff;
-  border-top: 1px solid var(--border-light);
-}
-.roadmap-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-@media (max-width: 900px) { .roadmap-grid { grid-template-columns: 1fr; } }
-.roadmap-col {
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  background: #ffffff;
-}
-.roadmap-phase {
-  font-size: 0.78rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 4px 10px;
-  border-radius: 999px;
-  margin-bottom: 16px;
-  display: inline-block;
-}
-.phase-today { background: #ecfdf5; color: #10b981; }
-.phase-next { background: #eff2fe; color: #4361ee; }
-.phase-future { background: #f1f5f9; color: #64748b; }
-.roadmap-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.roadmap-list li {
-  font-size: 0.9rem;
-  color: #334155;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* 8. COMPARISON SECTION */
-.comparison-section {
-  padding: 96px 0;
-  background: var(--bg-subtle);
-  border-top: 1px solid var(--border-light);
-}
-.comparison-table-wrap {
-  overflow-x: auto;
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  background: #ffffff;
-}
-.comparison-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-  font-size: 0.92rem;
-}
-.comparison-table th {
-  padding: 18px 20px;
-  background: #f8fafc;
-  color: var(--secondary);
-  font-weight: 800;
-  border-bottom: 2px solid var(--border-light);
-}
-.comparison-table th.highlight {
-  background: var(--primary-light);
   color: var(--primary);
-  font-size: 1.05rem;
-  border-bottom-color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 14px;
 }
-.comparison-table td {
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border-subtle);
-  color: var(--text-muted);
-}
-.comparison-table td.highlight {
-  background: rgba(67, 97, 238, 0.03);
-  color: var(--secondary);
-  font-weight: 700;
-}
-.check-icon { color: var(--success); font-weight: 800; }
-.cross-icon { color: #94a3b8; }
+.feature-card h4 { font-size: 1.12rem; margin-bottom: 6px; color: var(--secondary); }
+.feature-card p { font-size: 0.88rem; line-height: 1.55; color: var(--text-muted); }
 
-/* 9. SECURITY & PRIVACY SECTION */
-.security-section {
-  padding: 96px 0;
-  background: #ffffff;
-}
-.security-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-@media (max-width: 900px) { .security-grid { grid-template-columns: 1fr; } }
-.security-card {
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  background: #f8fafc;
-}
-.security-icon { font-size: 1.6rem; margin-bottom: 12px; }
-.security-card h4 { font-size: 1.12rem; margin-bottom: 8px; color: var(--secondary); }
-.security-card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
-
-/* 10. PRICING SECTION */
+/* SECTION 4: PRICING */
 .pricing-section {
-  padding: 96px 0;
+  padding: 80px 0;
   background: var(--bg-subtle);
   border-top: 1px solid var(--border-light);
 }
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
-  max-width: 1120px;
+  gap: 24px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } }
@@ -792,7 +512,7 @@ a { color: inherit; text-decoration: none; }
   background: #ffffff;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-xl);
-  padding: 36px 30px;
+  padding: 32px 26px;
   box-shadow: var(--shadow-sm);
   position: relative;
   display: flex;
@@ -801,7 +521,7 @@ a { color: inherit; text-decoration: none; }
 .pricing-card.featured {
   border-color: var(--primary);
   box-shadow: 0 10px 30px rgba(67, 97, 238, 0.15);
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 .featured-badge {
   position: absolute;
@@ -817,25 +537,26 @@ a { color: inherit; text-decoration: none; }
   border-radius: 999px;
   letter-spacing: 0.05em;
 }
-.plan-name { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; }
-.plan-desc { font-size: 0.86rem; color: var(--text-muted); margin-bottom: 20px; }
-.plan-price { font-size: 2.8rem; font-weight: 800; color: var(--secondary); margin-bottom: 24px; }
-.plan-price span { font-size: 0.95rem; font-weight: 600; color: var(--text-muted); }
-.plan-features { list-style: none; margin-bottom: 30px; flex: 1; }
+.plan-name { font-size: 1.18rem; font-weight: 800; margin-bottom: 4px; }
+.plan-desc { font-size: 0.84rem; color: var(--text-muted); margin-bottom: 18px; }
+.plan-price { font-size: 2.6rem; font-weight: 800; color: var(--secondary); margin-bottom: 20px; }
+.plan-price span { font-size: 0.92rem; font-weight: 600; color: var(--text-muted); }
+.plan-features { list-style: none; margin-bottom: 26px; flex: 1; }
 .plan-features li {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text-muted);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 .plan-features li strong { color: var(--secondary); }
 
-/* 11. FAQ SECTION */
+/* SECTION 5: FAQ ACCORDION */
 .faq-section {
-  padding: 96px 0;
+  padding: 80px 0;
   background: #ffffff;
+  border-top: 1px solid var(--border-light);
 }
 .faq-grid {
   display: grid;
@@ -914,33 +635,33 @@ a { color: inherit; text-decoration: none; }
   margin: 0;
 }
 
-/* FOOTER */
+/* SECTION 6: FOOTER */
 .site-footer {
   background: #090d16;
   color: #94a3b8;
-  padding: 80px 0 36px;
-  font-size: 0.9rem;
+  padding: 64px 0 32px;
+  font-size: 0.88rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 .footer-cta-banner {
   background: linear-gradient(135deg, rgba(67, 97, 238, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%);
   border: 1px solid rgba(99, 102, 241, 0.25);
   border-radius: var(--radius-xl);
-  padding: 36px 40px;
+  padding: 32px 36px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 64px;
+  margin-bottom: 50px;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 18px;
 }
-.footer-cta-text h3 { color: #ffffff; font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
-.footer-cta-text p { color: #94a3b8; font-size: 0.95rem; }
+.footer-cta-text h3 { color: #ffffff; font-size: 1.45rem; font-weight: 800; margin-bottom: 4px; }
+.footer-cta-text p { color: #94a3b8; font-size: 0.92rem; }
 .footer-main-grid {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr 1fr;
-  gap: 40px;
-  margin-bottom: 60px;
+  gap: 36px;
+  margin-bottom: 48px;
 }
 @media (max-width: 960px) { .footer-main-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 600px) { .footer-main-grid { grid-template-columns: 1fr; } }
@@ -949,43 +670,39 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   gap: 10px;
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   color: #ffffff;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
-.footer-brand-desc { font-size: 0.88rem; line-height: 1.65; color: #64748b; margin-bottom: 20px; }
+.footer-brand-desc { font-size: 0.86rem; line-height: 1.6; color: #64748b; margin-bottom: 16px; }
 .footer-col-title {
   color: #ffffff;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 .footer-links {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 11px;
+  gap: 10px;
 }
-.footer-links a {
-  color: #94a3b8;
-  font-size: 0.88rem;
-  transition: color 0.15s;
-}
+.footer-links a { color: #94a3b8; font-size: 0.86rem; transition: color 0.15s; }
 .footer-links a:hover { color: #ffffff; }
 .footer-bottom-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: #64748b;
   flex-wrap: wrap;
   gap: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 24px;
+  padding-top: 22px;
 }
-.footer-legal-links { display: flex; align-items: center; gap: 20px; }
+.footer-legal-links { display: flex; align-items: center; gap: 18px; }
 .footer-legal-links a { color: #64748b; transition: color 0.15s; }
 .footer-legal-links a:hover { color: #94a3b8; }
 
@@ -1061,7 +778,7 @@ a { color: inherit; text-decoration: none; }
   .nav-menu {
     display: none;
     position: absolute;
-    top: 72px; left: 0; right: 0;
+    top: 70px; left: 0; right: 0;
     background: #ffffff;
     border-bottom: 1px solid var(--border-light);
     flex-direction: column;
@@ -1083,19 +800,18 @@ a { color: inherit; text-decoration: none; }
 }
 @media (max-width: 768px) {
   .container { padding: 0 16px; }
-  .hero-section { padding: 44px 0 32px; }
+  .hero-section { padding: 40px 0 28px; }
   .hero-title { font-size: 2.15rem; line-height: 1.18; }
-  .hero-desc { font-size: 0.98rem; line-height: 1.55; margin-bottom: 24px; }
+  .hero-desc { font-size: 0.96rem; line-height: 1.55; margin-bottom: 22px; }
   .hero-actions { flex-direction: column; width: 100%; gap: 12px; }
   .hero-actions .btn { width: 100%; }
   .hero-footnote { flex-direction: column; gap: 6px; }
-  .hero-preview-wrap { margin: 24px auto 44px; border-radius: var(--radius-lg); }
+  .hero-preview-wrap { margin: 24px auto 32px; border-radius: var(--radius-lg); }
   .preview-body { padding: 14px; }
   .section-title { font-size: 1.85rem; }
   .section-subtitle { font-size: 0.95rem; margin-bottom: 28px; }
   .pricing-card.featured { transform: none; }
-  .pricing-card { padding: 26px 20px; }
-  .brief-feature-card { padding: 24px 20px; }
+  .pricing-card { padding: 24px 20px; }
 }
 </style>
 </head>
@@ -1116,11 +832,10 @@ a { color: inherit; text-decoration: none; }
 
     <ul class="nav-menu" id="nav-menu">
       <li class="nav-item"><a href="#how-it-works">How It Works</a></li>
-      <li class="nav-item"><a href="#brief">Business Brief</a></li>
       <li class="nav-item"><a href="#features">Features</a></li>
-      <li class="nav-item"><a href="#solutions">Solutions</a></li>
       <li class="nav-item"><a href="#pricing">Pricing</a></li>
-      <li class="nav-item"><a href="#security">Security</a></li>
+      <li class="nav-item"><a href="#faq">FAQ</a></li>
+      <li class="nav-item"><a href="javascript:void(0)" onclick="openLegalModal('security')">Security</a></li>
       <li class="mobile-menu-actions">
         <a href="/app" class="btn btn-primary" style="width:100%; justify-content:center;">Analyze Free</a>
       </li>
@@ -1134,7 +849,7 @@ a { color: inherit; text-decoration: none; }
   </div>
 </header>
 
-<!-- HERO SECTION -->
+<!-- 1. HERO SECTION WITH REAL BUSINESS BRIEF PREVIEW -->
 <section class="hero-section">
   <div class="container">
     <div class="badge-pill">
@@ -1248,64 +963,20 @@ a { color: inherit; text-decoration: none; }
   </div>
 </section>
 
-<!-- 1. CORE STORY: THE PROBLEM -->
-<section class="problem-section">
-  <div class="container">
-    <div class="section-tag">The Core Problem</div>
-    <h2 class="section-title">Your data isn't the problem.<br>Knowing what to do with it is.</h2>
-    <p class="section-subtitle">
-      Businesses already have plenty of numbers. The challenge is spending hours deciphering spreadsheets instead of making critical decisions.
-    </p>
-
-    <div class="problem-grid">
-      <div class="problem-card">
-        <div class="problem-icon">📊</div>
-        <h4>Data is scattered and uncleaned</h4>
-        <p>CSV exports from billing, payment gateways, and ad channels come riddled with missing values, duplicate rows, and inconsistent date formats.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-icon">⏳</div>
-        <h4>Reports take hours to assemble</h4>
-        <p>Finance teams and operators spend entire days manually building pivot tables, writing VLOOKUPs, and assembling charts for weekly meetings.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-icon">🚨</div>
-        <h4>Important changes are discovered late</h4>
-        <p>Margin erosion, churn concentration, and abnormal expense spikes often go unnoticed until monthly or quarterly financials are closed.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-icon">📉</div>
-        <h4>Spreadsheets don't explain why</h4>
-        <p>Raw charts show that a number dropped, but they don't explain what caused the shift or which customer cohort drove the variance.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-icon">👥</div>
-        <h4>No dedicated data analyst</h4>
-        <p>Hiring a full-time business analyst costs $100k+/year and requires complex data warehousing. Growing teams need immediate answers today.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-icon">🎯</div>
-        <h4>Action ambiguity</h4>
-        <p>Executives don't need 50 charts. They need a concise brief stating what changed, what needs attention, and what action to prioritize next.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 2. HOW METRIVA WORKS (4-STEP WORKFLOW) -->
+<!-- 2. 4-STEP WORKFLOW SECTION -->
 <section class="steps-section" id="how-it-works">
   <div class="container">
     <div class="section-tag">How It Works</div>
     <h2 class="section-title">From Raw File to Executive Action in 4 Steps</h2>
     <p class="section-subtitle">
-      Connect business data &rarr; Clean &rarr; Monitor KPIs &rarr; Generate an Executive Brief.
+      Your data isn't the problem. Knowing what to do with it is. Metriva automates the full analyst workflow in seconds.
     </p>
 
     <div class="steps-grid">
       <div class="step-card">
         <div class="step-number">01</div>
         <h4>Connect</h4>
-        <p>Upload CSV or Excel spreadsheets up to 500MB, or connect business data. In-memory processing ensures complete data isolation.</p>
+        <p>Upload CSV or Excel spreadsheets up to 500MB. In-memory processing ensures complete confidentiality with zero database retention.</p>
       </div>
       <div class="step-card">
         <div class="step-number">02</div>
@@ -1326,361 +997,62 @@ a { color: inherit; text-decoration: none; }
   </div>
 </section>
 
-<!-- 3. BUSINESS BRIEF HERO FEATURE -->
-<section class="brief-feature-section" id="brief">
-  <div class="container">
-    <div class="brief-feature-card">
-      <div class="brief-feat-header">
-        <div>
-          <span style="font-size:0.75rem; font-weight:800; color:#a5b4fc; background:rgba(99,102,241,0.25); padding:4px 10px; border-radius:6px;">FLAGSHIP FEATURE</span>
-          <h2 style="color:#ffffff; font-size:2rem; font-weight:800; margin-top:8px;">Stop Reading Spreadsheets. Read Your Business.</h2>
-          <p style="color:#94a3b8; font-size:0.95rem; margin-top:4px;">A concise executive summary of your most important business changes.</p>
-        </div>
-        <a href="/app" class="btn btn-primary">Generate Brief Now &rarr;</a>
-      </div>
-
-      <div class="brief-feat-grid">
-        <div class="brief-feat-col">
-          <h5>🚀 Growth Drivers</h5>
-          <p>Identifies which customers, products, or marketing channels drove the largest percentage of top-line revenue expansion.</p>
-        </div>
-        <div class="brief-feat-col">
-          <h5>⚠️ Risks &amp; Leaks</h5>
-          <p>Flags Pareto customer concentration vulnerabilities, margin compression, or contraction cohorts before they compound.</p>
-        </div>
-        <div class="brief-feat-col">
-          <h5>🛡️ Anomalies</h5>
-          <p>Detects statistical outliers, irregular transactions, and unexpected data spikes using 1.5 &times; IQR boundary audits.</p>
-        </div>
-        <div class="brief-feat-col">
-          <h5>📈 Trend &amp; Run-Rate</h5>
-          <p>Projects 3-month forward trajectory with annualized run-rate calculations to help plan cash flow and hiring.</p>
-        </div>
-        <div class="brief-feat-col">
-          <h5>🎯 Recommended Investigation</h5>
-          <p>Highlights exactly which metric drops or channel anomalies your leadership team should review this week.</p>
-        </div>
-        <div class="brief-feat-col">
-          <h5>📊 Board-Ready Slides</h5>
-          <p>Instantly packages findings into an interactive 4-slide presentation mode ready for executive board reviews.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 4. FEATURES GROUPED BY OUTCOMES -->
+<!-- 3. CORE FEATURES & OUTCOMES (MERGED WITH TARGET AUDIENCES) -->
 <section class="features-section" id="features">
   <div class="container">
-    <div class="section-tag">Complete Capability</div>
+    <div class="section-tag">Core Capabilities</div>
     <h2 class="section-title">Built Around Business Outcomes</h2>
     <p class="section-subtitle">
-      Every tool inside Metriva is engineered to save hours of manual reporting and help teams make confident decisions.
+      Stop spending hours in spreadsheets. Everything you need to monitor performance and guide team decisions.
     </p>
 
     <div class="features-grid">
       <div class="feature-card">
+        <span class="feature-persona-badge">For Founders &amp; Operators</span>
         <div class="feature-icon-wrap">📊</div>
         <h4>Automated KPI Monitoring</h4>
-        <p>Instantly track total revenue, active customers, average order value, gross margin, and period-over-period velocity without building formulas.</p>
+        <p>Instantly track revenue, gross margin, customer count, and period-over-period growth without building manual formulas or pivot tables.</p>
       </div>
 
       <div class="feature-card">
+        <span class="feature-persona-badge">For Finance &amp; E-Commerce</span>
         <div class="feature-icon-wrap">🛡️</div>
-        <h4>Anomaly Detection</h4>
-        <p>Pinpoint unusual transactions, billing errors, and statistical outliers using IQR distribution bounds before they impact financial reports.</p>
+        <h4>Statistical Anomaly Detection</h4>
+        <p>Pinpoint irregular transactions, billing errors, and volume spikes using 1.5 &times; IQR statistical distribution bounds in real time.</p>
       </div>
 
       <div class="feature-card">
+        <span class="feature-persona-badge">For Leadership &amp; Boards</span>
         <div class="feature-icon-wrap">📋</div>
         <h4>AI Executive Business Briefs</h4>
-        <p>Receive an automated briefing explaining what happened, what changed unexpectedly, and which areas demand leadership attention.</p>
+        <p>Get a concise summary explaining what changed, what needs attention, and which areas demand investigation before your next executive meeting.</p>
       </div>
 
       <div class="feature-card">
+        <span class="feature-persona-badge">For Data Integrity</span>
         <div class="feature-icon-wrap">🛠️</div>
-        <h4>Automated Data Cleaning</h4>
-        <p>Identifies missing values, inconsistent data types, whitespace discrepancies, and duplicates, generating a clean dataset ready for audit.</p>
+        <h4>Automated Cleaning &amp; Live Inspector</h4>
+        <p>Identifies missing values, inconsistent formats, and duplicates. Inspect the first 15 records and export a repaired CSV ready for presentation.</p>
       </div>
 
       <div class="feature-card">
+        <span class="feature-persona-badge">For Planning &amp; Cash Flow</span>
         <div class="feature-icon-wrap">📈</div>
-        <h4>Forecasting &amp; Run-Rate</h4>
-        <p>Understand forward trajectory with automated linear trend forecasting and annualized run-rate projections based on historical data.</p>
+        <h4>3-Month Trend Forecasting</h4>
+        <p>Understand your trajectory with automated linear trend forecasting, annualized run-rates, and Pareto 80/20 customer concentration audits.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon-wrap">💬</div>
-        <h4>Ask Metriva Assistant</h4>
-        <p>Ask natural questions like "Who are our top 5 clients?" or "Where are our profit leaks?" and get deterministic answers with numbers.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon-wrap">⚖️</div>
-        <h4>Pareto 80/20 Concentration</h4>
-        <p>Verifies whether 20% of your accounts generate 80% of revenue and alerts you if top accounts introduce single-point churn vulnerability.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon-wrap">📋</div>
-        <h4>Live Spreadsheet Inspector</h4>
-        <p>Inspect the first 15 records of your active dataset, verify mapped column headers, and view null badges in a responsive table viewer.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon-wrap">📦</div>
-        <h4>1-Click Cleaned CSV Export</h4>
-        <p>Export repaired, deduplicated, and formatted datasets with one click to share with accountants, investors, or internal tools.</p>
+        <span class="feature-persona-badge">For Marketing Agencies</span>
+        <div class="feature-icon-wrap">💼</div>
+        <h4>Automated Client Reporting</h4>
+        <p>Turn raw client data into unified performance summaries and 4-slide board presentation mode in seconds, saving 15+ hours per client.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 5. TARGET CUSTOMERS -->
-<section class="customers-section" id="solutions">
-  <div class="container">
-    <div class="section-tag">Target Audience</div>
-    <h2 class="section-title">Built For Teams Without a Data Analyst</h2>
-    <p class="section-subtitle">
-      Tailored for leaders who need continuous business intelligence without the overhead of a dedicated data engineering team.
-    </p>
-
-    <div class="customers-grid">
-      <div class="customer-card">
-        <span class="customer-badge">For Founders</span>
-        <h4>Company Founders</h4>
-        <p>Know what is happening in the business without spending hours in spreadsheets. Get immediate visibility into margins, run-rate, and risks.</p>
-      </div>
-      <div class="customer-card">
-        <span class="customer-badge">For Agencies</span>
-        <h4>Marketing &amp; Media Agencies</h4>
-        <p>Stop spending nights manually compiling client reports. Automatically transform client data into clean dashboards and executive summaries.</p>
-      </div>
-      <div class="customer-card">
-        <span class="customer-badge">For E-Commerce</span>
-        <h4>E-Commerce Teams</h4>
-        <p>Monitor revenue, orders, conversion trends, CAC expansion, and customer churn across product lines to optimize inventory and spend.</p>
-      </div>
-      <div class="customer-card">
-        <span class="customer-badge">For SMBs</span>
-        <h4>Small &amp; Medium Businesses</h4>
-        <p>Turn raw operational and billing spreadsheets into actionable business intelligence with deterministic mathematical calculations.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 6. AGENCY POSITIONING & PIPELINE -->
-<section class="agency-section">
-  <div class="container">
-    <div class="agency-content">
-      <div>
-        <span style="font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; background:rgba(67,97,238,0.25); color:#a5b4fc; padding:4px 10px; border-radius:6px;">AGENCY WORKFLOW</span>
-        <h2 style="font-size:2.2rem; font-weight:800; color:#fff; margin-top:12px; margin-bottom:16px;">
-          For Marketing Agencies:<br>Stop spending hours manually preparing client reports.
-        </h2>
-        <p style="color:#94a3b8; font-size:0.95rem; line-height:1.65; margin-bottom:24px;">
-          Agencies waste 15+ hours per client every month formatting spreadsheets, copying numbers into slide decks, and explaining variance. Metriva automates data cleaning, KPI tracking, and executive commentary.
-        </p>
-        <a href="/app" class="btn btn-primary">Try Agency Workflow &rarr;</a>
-      </div>
-
-      <div class="pipeline-flow">
-        <div style="font-size:0.8rem; font-weight:700; color:#94a3b8; margin-bottom:14px; text-transform:uppercase;">Unified Data Pipeline (Roadmap)</div>
-        <div class="pipeline-step">
-          <span class="pipeline-pill">Google Ads</span>
-          <span class="pipeline-arrow">+</span>
-          <span class="pipeline-pill">Meta Ads</span>
-          <span class="pipeline-arrow">+</span>
-          <span class="pipeline-pill">GA4</span>
-          <span class="pipeline-arrow">+</span>
-          <span class="pipeline-pill">CRM</span>
-        </div>
-        <div style="color:#64748b; font-size:1.1rem; margin:8px 0 8px 24px;">↓</div>
-        <div class="pipeline-step">
-          <span class="pipeline-pill highlight">Metriva Analytics Engine</span>
-        </div>
-        <div style="color:#64748b; font-size:1.1rem; margin:8px 0 8px 24px;">↓</div>
-        <div class="pipeline-step">
-          <span class="pipeline-pill">Clean &amp; Unified Data</span>
-          <span class="pipeline-arrow">&rarr;</span>
-          <span class="pipeline-pill">Client Dashboard</span>
-          <span class="pipeline-arrow">&rarr;</span>
-          <span class="pipeline-pill">Automated Business Brief</span>
-        </div>
-        <div style="font-size:0.75rem; color:#64748b; margin-top:16px;">
-          * Native direct API integrations labeled Coming Soon in product roadmap.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 7. PRODUCT ROADMAP -->
-<section class="roadmap-section">
-  <div class="container">
-    <div class="section-tag">Product Roadmap</div>
-    <h2 class="section-title">Transparent Development Trajectory</h2>
-    <p class="section-subtitle">
-      We build deliberately. Here is what is active today, what is next, and our long-term vision.
-    </p>
-
-    <div class="roadmap-grid">
-      <div class="roadmap-col">
-        <span class="roadmap-phase phase-today">● Available Today</span>
-        <h4 style="margin-bottom:14px;">Core Analyst Engine</h4>
-        <ul class="roadmap-list">
-          <li>✓ CSV &amp; Excel (XLSX) Ingestion up to 500MB</li>
-          <li>✓ Automated Missing Value &amp; Data Cleaning</li>
-          <li>✓ Deterministic KPI Engine &amp; Margins</li>
-          <li>✓ AI Executive Business Briefs</li>
-          <li>✓ Outlier &amp; Anomaly Detection (IQR)</li>
-          <li>✓ 3-Month Linear Trend Forecasting</li>
-          <li>✓ 1-Click Clean CSV Export</li>
-        </ul>
-      </div>
-
-      <div class="roadmap-col">
-        <span class="roadmap-phase phase-next">⚡ In Development (Next)</span>
-        <h4 style="margin-bottom:14px;">Direct Marketing Connectors</h4>
-        <ul class="roadmap-list">
-          <li>⏳ Google Ads Native Connector</li>
-          <li>⏳ Meta Ads Native Connector</li>
-          <li>⏳ Google Analytics 4 (GA4)</li>
-          <li>⏳ Shopify Store Sync</li>
-          <li>⏳ HubSpot CRM Integration</li>
-        </ul>
-      </div>
-
-      <div class="roadmap-col">
-        <span class="roadmap-phase phase-future">🔮 Future Vision</span>
-        <h4 style="margin-bottom:14px;">Continuous Business Monitoring</h4>
-        <ul class="roadmap-list">
-          <li>📌 Automatic Weekly Recurring Monitoring</li>
-          <li>📌 Automated Email &amp; Slack Variance Alerts</li>
-          <li>📌 Real-Time KPI Telemetry</li>
-          <li>📌 Anonymized Industry Benchmarks</li>
-          <li>📌 Multi-Channel Attribution Modeling</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 8. COMPARISON SECTION -->
-<section class="comparison-section" id="comparison">
-  <div class="container">
-    <div class="section-tag">Objective Comparison</div>
-    <h2 class="section-title">How Metriva Compares</h2>
-    <p class="section-subtitle">
-      Finding the right balance between simplicity, automation, and executive clarity.
-    </p>
-
-    <div class="comparison-table-wrap">
-      <table class="comparison-table">
-        <thead>
-          <tr>
-            <th>Approach</th>
-            <th class="highlight">Metriva</th>
-            <th>Manual Spreadsheets</th>
-            <th>Generic AI Chat Tools</th>
-            <th>Traditional BI (Tableau/PowerBI)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Primary Experience</strong></td>
-            <td class="highlight">Automated Analyst Brief</td>
-            <td>Manual formulas &amp; pivots</td>
-            <td>Ad-hoc prompt and chat</td>
-            <td>Complex data warehousing</td>
-          </tr>
-          <tr>
-            <td><strong>Data Cleaning</strong></td>
-            <td class="highlight"><span class="check-icon">✓</span> Automatic validation &amp; repair</td>
-            <td><span class="cross-icon">✕</span> Manual editing</td>
-            <td>Varies by prompt</td>
-            <td>Requires ETL setup (SQL/dbt)</td>
-          </tr>
-          <tr>
-            <td><strong>Math Accuracy</strong></td>
-            <td class="highlight"><span class="check-icon">✓</span> 100% Deterministic (Traceable)</td>
-            <td>Human formula error risk</td>
-            <td>Potential calculation hallucinations</td>
-            <td>Deterministic (requires DAX/SQL)</td>
-          </tr>
-          <tr>
-            <td><strong>Executive Summary</strong></td>
-            <td class="highlight"><span class="check-icon">✓</span> Automatic Business Brief</td>
-            <td><span class="cross-icon">✕</span> Manual slide creation</td>
-            <td>Requires iterative prompting</td>
-            <td><span class="cross-icon">✕</span> Dashboards still need interpretation</td>
-          </tr>
-          <tr>
-            <td><strong>Anomaly &amp; Concentration Risk</strong></td>
-            <td class="highlight"><span class="check-icon">✓</span> Built-in IQR &amp; Pareto</td>
-            <td><span class="cross-icon">✕</span> Manual formula build</td>
-            <td>Prompt required</td>
-            <td>Custom calculated fields</td>
-          </tr>
-          <tr>
-            <td><strong>Setup Time</strong></td>
-            <td class="highlight">⚡ 10 Seconds</td>
-            <td>Ongoing manual hours</td>
-            <td>Immediate (ad-hoc)</td>
-            <td>Weeks of implementation</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- 9. SECURITY & PRIVACY SECTION -->
-<section class="security-section" id="security">
-  <div class="container">
-    <div class="section-tag">Security &amp; Confidentiality</div>
-    <h2 class="section-title">Built for Sensitive Business Data</h2>
-    <p class="section-subtitle">
-      We know business numbers are strictly confidential. Here is exactly how Metriva safeguards your data.
-    </p>
-
-    <div class="security-grid">
-      <div class="security-card">
-        <div class="security-icon">🔒</div>
-        <h4>In-Memory Processing</h4>
-        <p>Your uploaded datasets are parsed and evaluated in temporary volatile memory during your active session. Raw records are never permanently persisted to disk or databases.</p>
-      </div>
-      <div class="security-card">
-        <div class="security-icon">🛡️</div>
-        <h4>Zero Model Training</h4>
-        <p>Customer transaction rows, billable rates, and margin metrics are never used to train public or proprietary machine learning models.</p>
-      </div>
-      <div class="security-card">
-        <div class="security-icon">⚡</div>
-        <h4>Deterministic Pipelines</h4>
-        <p>All quantitative calculations (KPIs, margins, Pareto cuts, IQR anomalies) are executed with deterministic Python algorithms, guaranteeing full traceability to source data.</p>
-      </div>
-      <div class="security-card">
-        <div class="security-icon">🔐</div>
-        <h4>TLS 1.3 Transport Encryption</h4>
-        <p>All data transmitted between your browser and our servers is secured using modern TLS 1.3 encryption with strict HTTPS enforcement.</p>
-      </div>
-      <div class="security-card">
-        <div class="security-icon">🗑️</div>
-        <h4>Instant Session Purging</h4>
-        <p>When you close your workspace tab or complete your export, session memory is cleared. Users maintain 100% control over their files.</p>
-      </div>
-      <div class="security-card">
-        <div class="security-icon">📜</div>
-        <h4>Reliable Architecture</h4>
-        <p>Designed for secure, reliable enterprise data operations with automated dependency scanning and strict access barriers.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 10. PRICING SECTION -->
+<!-- 4. EARLY ACCESS PRICING -->
 <section class="pricing-section" id="pricing">
   <div class="container">
     <div class="section-tag">Early Access Pricing</div>
@@ -1743,13 +1115,13 @@ a { color: inherit; text-decoration: none; }
   </div>
 </section>
 
-<!-- 11. FAQ SECTION -->
-<section class="faq-section">
+<!-- 5. FAQ SECTION (CLICK TO EXPAND ACCORDION) -->
+<section class="faq-section" id="faq">
   <div class="container">
     <div class="section-tag">Frequently Asked Questions</div>
     <h2 class="section-title">Everything You Need to Know</h2>
     <p class="section-subtitle">
-      Clear, straightforward answers about data privacy, calculations, and integrations.
+      Click on any question to view straightforward details about privacy, calculations, and formats.
     </p>
 
     <div class="faq-grid">
@@ -1816,7 +1188,7 @@ a { color: inherit; text-decoration: none; }
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- 6. FOOTER -->
 <footer class="site-footer">
   <div class="container">
     
@@ -1854,7 +1226,6 @@ a { color: inherit; text-decoration: none; }
           <li><a href="/app">Anomaly Detection</a></li>
           <li><a href="/app">Run-Rate Forecasting</a></li>
           <li><a href="/app">Data Cleaning &amp; Repair</a></li>
-          <li><a href="#roadmap">Product Roadmap</a></li>
         </ul>
       </div>
 
