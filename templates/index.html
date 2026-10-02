@@ -251,6 +251,39 @@ a { color: inherit; text-decoration: none; }
   gap: 16px;
 }
 
+
+/* BRIEF PREVIEW RESPONSIVE HELPERS */
+.preview-url-mobile, .preview-badge-mobile, .metric-label-short {
+  display: none;
+}
+.preview-url-desktop, .preview-badge-desktop, .metric-label-full {
+  display: inline;
+}
+.preview-address-bar {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+.preview-live-badge {
+  font-size: 0.75rem;
+  color: #10b981;
+  font-weight: 700;
+}
+.brief-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.brief-period-text {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.brief-trace-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
 /* REAL METRIVA BUSINESS BRIEF PREVIEW */
 .hero-preview-wrap {
   margin: 38px auto 30px;
@@ -812,6 +845,108 @@ a { color: inherit; text-decoration: none; }
   .section-subtitle { font-size: 0.95rem; margin-bottom: 28px; }
   .pricing-card.featured { transform: none; }
   .pricing-card { padding: 24px 20px; }
+
+  /* METRIVA BRIEF MOBILE TUNING */
+  .hero-preview-wrap {
+    margin: 20px auto 26px !important;
+    border-radius: var(--radius-md) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .preview-topbar {
+    padding: 10px 14px !important;
+    gap: 8px !important;
+  }
+  .preview-url-desktop, .preview-badge-desktop {
+    display: none !important;
+  }
+  .preview-url-mobile, .preview-badge-mobile {
+    display: inline !important;
+  }
+  .preview-address-bar {
+    font-size: 0.72rem !important;
+    max-width: 58% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .preview-live-badge {
+    font-size: 0.7rem !important;
+    white-space: nowrap !important;
+  }
+  .preview-body {
+    padding: 14px 12px !important;
+  }
+  .brief-header-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+    margin-bottom: 12px !important;
+  }
+  .brief-title-wrap {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+  .brief-period-text, .brief-trace-text {
+    font-size: 0.74rem !important;
+  }
+  .brief-metrics-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    margin-bottom: 14px !important;
+  }
+  .brief-metric-card {
+    padding: 10px 10px !important;
+  }
+  .brief-metric-label {
+    font-size: 0.74rem !important;
+    margin-bottom: 3px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .metric-label-full {
+    display: none !important;
+  }
+  .metric-label-short {
+    display: inline !important;
+  }
+  .brief-metric-val {
+    font-size: 1.15rem !important;
+    flex-wrap: wrap !important;
+    gap: 3px 6px !important;
+    align-items: center !important;
+  }
+  .brief-metric-badge {
+    font-size: 0.68rem !important;
+    padding: 1px 5px !important;
+    border-radius: 4px !important;
+  }
+  .brief-narrative-box {
+    grid-template-columns: 1fr !important;
+    padding: 12px 12px !important;
+    gap: 12px !important;
+  }
+  .narrative-col {
+    padding-left: 10px !important;
+    border-left-width: 3px !important;
+  }
+  .narrative-title {
+    font-size: 0.76rem !important;
+    margin-bottom: 3px !important;
+  }
+  .narrative-text {
+    font-size: 0.82rem !important;
+    line-height: 1.48 !important;
+  }
+  .preview-body .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 11px 16px !important;
+    font-size: 0.88rem !important;
+    margin-top: 14px !important;
+  }
+
 }
 </style>
 </head>
@@ -886,17 +1021,23 @@ a { color: inherit; text-decoration: none; }
           <div class="preview-dot" style="background:#f59e0b;"></div>
           <div class="preview-dot" style="background:#10b981;"></div>
         </div>
-        <div style="font-size:0.82rem; font-weight:600; color:#94a3b8;">metriva.app/workspace &mdash; Metriva Weekly Business Brief</div>
-        <div style="font-size:0.75rem; color:#10b981; font-weight:700;">● LIVE ANALYST ENGINE</div>
+        <div class="preview-address-bar">
+          <span class="preview-url-desktop">metriva.app/workspace &mdash; Metriva Weekly Business Brief</span>
+          <span class="preview-url-mobile">metriva.app/workspace</span>
+        </div>
+        <div class="preview-live-badge">
+          <span class="preview-badge-desktop">● LIVE ANALYST ENGINE</span>
+          <span class="preview-badge-mobile">● LIVE</span>
+        </div>
       </div>
       <div class="preview-body">
         
         <div class="brief-header-row">
-          <div>
+          <div class="brief-title-wrap">
             <span class="brief-title-badge">AUTOMATED EXECUTIVE BRIEF</span>
-            <span style="font-size:0.82rem; color:var(--text-muted); margin-left:8px;">Portfolio Period: Last 30 Days</span>
+            <span class="brief-period-text">Portfolio Period: Last 30 Days</span>
           </div>
-          <span style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">Updated Today • Traceable to Source Dataset</span>
+          <span class="brief-trace-text">Updated Today &bull; Traceable to Source Dataset</span>
         </div>
 
         <!-- 4 KPI Cards -->
@@ -904,28 +1045,31 @@ a { color: inherit; text-decoration: none; }
           <div class="brief-metric-card">
             <div class="brief-metric-label">Revenue</div>
             <div class="brief-metric-val">
-              $148,200
+              <span>$148,200</span>
               <span class="brief-metric-badge badge-up">↑ 14.2%</span>
             </div>
           </div>
           <div class="brief-metric-card">
             <div class="brief-metric-label">Gross Margin</div>
             <div class="brief-metric-val">
-              68.4%
+              <span>68.4%</span>
               <span class="brief-metric-badge badge-up">↑ 3.8%</span>
             </div>
           </div>
           <div class="brief-metric-card">
-            <div class="brief-metric-label">Customer Acquisition Cost</div>
+            <div class="brief-metric-label">
+              <span class="metric-label-full">Customer Acquisition Cost</span>
+              <span class="metric-label-short">CAC (Acquisition)</span>
+            </div>
             <div class="brief-metric-val">
-              $412
+              <span>$412</span>
               <span class="brief-metric-badge badge-down">↑ 8.4%</span>
             </div>
           </div>
           <div class="brief-metric-card">
             <div class="brief-metric-label">Orders</div>
             <div class="brief-metric-val">
-              1,842
+              <span>1,842</span>
               <span class="brief-metric-badge badge-down">↓ 5.1%</span>
             </div>
           </div>
