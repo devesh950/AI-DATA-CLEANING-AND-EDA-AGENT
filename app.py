@@ -37,11 +37,37 @@ def detect_cols(df):
         return None
     is_num = lambda s: pd.api.types.is_numeric_dtype(s)
     is_str = lambda s: s.dtype == object or pd.api.types.is_string_dtype(s)
+
+    num_cols = df.select_dtypes(include=np.number).columns.tolist()
+    str_cols = df.select_dtypes(include=[object, "string", "category"]).columns.tolist()
+
+    rc = find(["revenue","sales","amount","mrr","value","income","total","price","gmv","billing","arr","balance","volume","count","rate","cost","units"], is_num)
+    if not rc and len(num_cols) > 0:
+        rc = num_cols[0]
+
+    cc = find(["client","customer","category","product","service","type","segment","region","name","item","channel","tier","sku","country","city"], is_str)
+    if not cc and len(str_cols) > 0:
+        cc = str_cols[0]
+
+    dc = find(["date","month","week","period","time","day","year","timestamp"])
+    if not dc:
+        for col in df.columns:
+            if pd.api.types.is_datetime64_any_dtype(df[col]):
+                dc = col
+                break
+
+    coc = find(["cost","expense","spend","cogs","purchase","ad_spend","budget","delivery"], is_num)
+    if not coc and len(num_cols) > 1:
+        for col in num_cols:
+            if col != rc:
+                coc = col
+                break
+
     return {
-        "revenue_col": find(["revenue","sales","amount","mrr","value","income","total","price","gmv","billing","arr"], is_num),
-        "date_col": find(["date","month","week","period","time","day","year"]),
-        "category_col": find(["client","customer","category","product","service","type","segment","region","name","item","channel","tier","sku"], is_str),
-        "cost_col": find(["cost","expense","spend","cogs","purchase","ad_spend","budget","delivery"], is_num)
+        "revenue_col": rc,
+        "date_col": dc,
+        "category_col": cc,
+        "cost_col": coc
     }
 
 def detect_outliers(df, rc):
@@ -437,44 +463,72 @@ def run_analysis(df, rc, dc, cc, coc):
         kpis.append({"label": "Numeric Fields", "value": str(len(df.select_dtypes(include=np.number).columns)), "sub": "Analyzed features"})
 
     charts = []
-    # 1. Bar Chart
+    # 1. Primary Breakdown / Bar Chart
     if cc and rc and cc in df.columns and rc in df.columns:
         g = df.groupby(cc)[rc].sum().sort_values(ascending=False).head(10)
-        charts.append(barchart(g.index.tolist(), g.values.tolist(), f"{rc} by {cc}"))
+        charts.append(barchart([str(x) for x in g.index.tolist()], g.values.tolist(), f"{rc} by {cc}"))
+    elif cc and cc in df.columns:
+        vc = df[cc].value_counts().head(10)
+        charts.append(barchart([str(x) for x in vc.index.tolist()], vc.values.tolist(), f"Record Count by {cc}"))
+    elif rc and rc in df.columns:
+        g = df[rc].dropna().head(15)
+        charts.append(barchart([f"Row {i+1}" for i in range(len(g))], g.tolist(), f"Top {rc} Sample Distribution"))
     else:
-        nc = df.select_dtypes(include=np.number).columns[:8]
-        s = df[nc].sum().sort_values(ascending=False)
-        charts.append(barchart(s.index.tolist(), s.values.tolist(), "Top Metric Totals"))
+        non_nulls = df.notnull().sum().head(10)
+        charts.append(barchart([str(c) for c in non_nulls.index.tolist()], non_nulls.values.tolist(), "Field Populated Record Volume"))
 
-    # 2. Line Chart with 3-Month Forecasting Line
+    # 2. Time-Series Trend or Frequency Distribution
     forecast_kpi = None
     if dc and rc and dc in df.columns and rc in df.columns:
         try:
             df2 = df.copy(); df2["_d"] = pd.to_datetime(df2[dc], errors="coerce")
-            mo = df2.groupby(df2["_d"].dt.to_period("M"))[rc].sum().reset_index()
-            mo["_d"] = mo["_d"].astype(str)
-            fc = linechart_with_forecast(mo["_d"].tolist(), mo[rc].tolist(), f"{rc} Trend & 3-Month Forward Run-Rate", dc, rc)
-            charts.append(fc["chart"])
-            forecast_kpi = fc["forecast_kpi"]
+            valid_dates = df2.dropna(subset=["_d"])
+            if len(valid_dates) > 0:
+                mo = valid_dates.groupby(valid_dates["_d"].dt.to_period("M"))[rc].sum().reset_index()
+                mo["_d"] = mo["_d"].astype(str)
+                fc = linechart_with_forecast(mo["_d"].tolist(), mo[rc].tolist(), f"{rc} Trend & 3-Month Forward Run-Rate", dc, rc)
+                charts.append(fc["chart"])
+                forecast_kpi = fc["forecast_kpi"]
+            else:
+                raise ValueError("No valid parsed dates")
         except:
-            charts.append({"data":[], "layout":{"title":{"text":"Trend unavailable"}}})
+            vs = df[rc].dropna().tolist()
+            if len(vs) > 0:
+                counts, edges = np.histogram(vs, bins=min(12, max(3, len(vs))))
+                centers = [(edges[i] + edges[i+1])/2 for i in range(len(counts))]
+                charts.append(barchart([f"{c:,.0f}" for c in centers], counts.tolist(), f"{rc} Distribution Frequency"))
+            else:
+                charts.append(barchart(df.columns.tolist()[:8], [len(df)] * min(8, len(df.columns)), "Attribute Volume Profile"))
     elif rc and rc in df.columns:
         vs = df[rc].dropna().tolist()
-        counts, edges = np.histogram(vs, bins=15)
-        centers = [(edges[i] + edges[i+1])/2 for i in range(len(counts))]
-        charts.append({
-            "data":[{"type":"bar","x":[f"{c:,.0f}" for c in centers],"y":counts.tolist(),"marker":{"color":"#4361ee"}}],
-            "layout":{"title":{"text":f"{rc} Distribution Frequency"},"paper_bgcolor":"white","plot_bgcolor":"white"}
-        })
+        if len(vs) > 0:
+            counts, edges = np.histogram(vs, bins=min(12, max(3, len(vs))))
+            centers = [(edges[i] + edges[i+1])/2 for i in range(len(counts))]
+            charts.append(barchart([f"{c:,.0f}" for c in centers], counts.tolist(), f"{rc} Distribution Frequency"))
+        else:
+            charts.append(barchart(df.columns.tolist()[:8], [len(df)] * min(8, len(df.columns)), "Attribute Volume Profile"))
+    elif cc and cc in df.columns:
+        vc = df[cc].value_counts()
+        cumsum = vc.cumsum() / vc.sum() * 100
+        charts.append(barchart([str(x) for x in vc.index[:10].tolist()], [round(v, 1) for v in cumsum[:10].tolist()], f"Cumulative Share by {cc} (%)"))
+    else:
+        null_counts = df.isnull().sum().head(10)
+        charts.append(barchart([str(c) for c in null_counts.index.tolist()], null_counts.values.tolist(), "Null Count by Column"))
 
-    # 3. Pie Chart
+    # 3. Share / Proportions Pie Chart
     if cc and rc and cc in df.columns and rc in df.columns:
         g2 = df.groupby(cc)[rc].sum().sort_values(ascending=False).head(8)
-        charts.append(piechart(g2.index.tolist(), g2.values.tolist(), f"{rc} Share by {cc}"))
+        charts.append(piechart([str(x) for x in g2.index.tolist()], g2.values.tolist(), f"{rc} Share by {cc}"))
+    elif cc and cc in df.columns:
+        vc = df[cc].value_counts().head(8)
+        charts.append(piechart([str(x) for x in vc.index.tolist()], vc.values.tolist(), f"Category Proportion by {cc}"))
+    elif rc and rc in df.columns:
+        top_cats = df.nlargest(min(6, len(df)), rc)
+        charts.append(piechart([f"Rank {i+1}" for i in range(len(top_cats))], top_cats[rc].tolist(), f"Top {rc} Concentration"))
     else:
-        charts.append({"data":[], "layout":{"title":{"text":"Category distribution"}}})
+        charts.append(piechart([str(c) for c in df.columns.tolist()[:6]], [1] * min(6, len(df.columns)), "Schema Structure Composition"))
 
-    # 4. Scatter Chart
+    # 4. Correlation / Comparison Chart
     nc2 = df.select_dtypes(include=np.number).columns.tolist()
     if rc and coc and rc in df.columns and coc in df.columns:
         valid_scatter = df[[rc, coc]].dropna()
@@ -482,14 +536,24 @@ def run_analysis(df, rc, dc, cc, coc):
             s2 = valid_scatter.sample(min(300, len(valid_scatter)))
             charts.append(scatterchart(s2[rc].tolist(), s2[coc].tolist(), rc, coc, f"{rc} vs {coc} Correlation"))
         else:
-            charts.append({"data":[], "layout":{"title":{"text":f"{rc} vs {coc} (No valid pairs)"}}})
+            charts.append(barchart([rc, coc], [df[rc].sum(), df[coc].sum()], f"{rc} vs {coc} Aggregate Comparison"))
     elif len(nc2) >= 2:
         valid_scatter = df[[nc2[0], nc2[1]]].dropna()
         if len(valid_scatter) > 0:
             s2 = valid_scatter.sample(min(300, len(valid_scatter)))
-            charts.append(scatterchart(s2[nc2[0]].tolist(), s2[nc2[1]].tolist(), nc2[0], nc2[1], f"{nc2[0]} vs {nc2[1]}"))
+            charts.append(scatterchart(s2[nc2[0]].tolist(), s2[nc2[1]].tolist(), nc2[0], nc2[1], f"{nc2[0]} vs {nc2[1]} Correlation"))
         else:
-            charts.append({"data":[], "layout":{"title":{"text":"Correlation unavailable"}}})
+            charts.append(barchart([nc2[0], nc2[1]], [df[nc2[0]].sum(), df[nc2[1]].sum()], f"{nc2[0]} vs {nc2[1]} Comparison"))
+    elif rc and rc in df.columns:
+        s_sorted = df[rc].dropna().sort_values(ascending=False)
+        charts.append(barchart([f"Rank {i+1}" for i in range(min(8, len(s_sorted)))], s_sorted.head(8).tolist(), f"Top {rc} Records"))
+    elif cc and cc in df.columns and len(df.columns) > 1:
+        c2 = [c for c in df.columns if c != cc][0]
+        vc2 = df[c2].value_counts().head(8)
+        charts.append(barchart([str(x) for x in vc2.index.tolist()], vc2.values.tolist(), f"Distribution by {c2}"))
+    else:
+        col_names = df.columns.tolist()[:8]
+        charts.append(barchart([str(c) for c in col_names], [int(df[c].notnull().sum()) for c in col_names], "Populated Records by Field"))
 
     num_df = df.select_dtypes(include=np.number)
     stats = []

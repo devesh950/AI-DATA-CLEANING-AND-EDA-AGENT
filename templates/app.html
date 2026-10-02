@@ -7,16 +7,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.plot.ly/plotly-2.29.1.min.js">
-window.addEventListener('resize', () => {
-  if (currentData && currentData.charts) {
-    currentData.charts.forEach((_, idx) => {
-      const el = document.getElementById('chart-plot-' + idx);
-      if (el) Plotly.Plots.resize(el);
-    });
-  }
-});
-
+<script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
+<script>
+if (typeof Plotly === 'undefined') {
+  document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.29.1/plotly.min.js"><\/script>');
+}
 </script>
 <style>
 :root {
@@ -1425,15 +1420,32 @@ function renderAll(d) {
   // 3. Render Charts
   const chartBox = document.getElementById('charts-container');
   chartBox.innerHTML = '';
-  (d.charts || []).forEach((c, idx) => {
-    const wrap = document.createElement('div');
-    wrap.className = 'chart-card';
-    wrap.id = 'chart-plot-' + idx;
-    chartBox.appendChild(wrap);
-    c.layout.autosize = true;
-    c.layout.margin = { l: 30, r: 15, t: 40, b: 35 };
-    Plotly.newPlot(wrap.id, c.data, c.layout, { responsive: true, displayModeBar: false });
-  });
+  
+  function renderSinglePlot(wrapId, chartObj) {
+    if (typeof Plotly !== 'undefined') {
+      Plotly.newPlot(wrapId, chartObj.data, chartObj.layout, { responsive: true, displayModeBar: false });
+    } else {
+      setTimeout(() => renderSinglePlot(wrapId, chartObj), 150);
+    }
+  }
+
+  const validCharts = (d.charts || []).filter(c => c && c.data && c.data.length > 0);
+  if (validCharts.length === 0) {
+    chartBox.innerHTML = '<div style="grid-column:1/-1; padding:36px; text-align:center; color:var(--text-muted); background:#ffffff; border:1px dashed var(--border-light); border-radius:var(--radius-md);">Visualizing distributions... Please select dimensions from the mapping bar above.</div>';
+  } else {
+    validCharts.forEach((c, idx) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'chart-card';
+      wrap.id = 'chart-plot-' + idx;
+      chartBox.appendChild(wrap);
+      c.layout = c.layout || {};
+      c.layout.autosize = true;
+      c.layout.margin = { l: 45, r: 25, t: 45, b: 40 };
+      c.layout.paper_bgcolor = '#ffffff';
+      c.layout.plot_bgcolor = '#ffffff';
+      renderSinglePlot(wrap.id, c);
+    });
+  }
 
   // 4. Render Insights
   const insBox = document.getElementById('insights-container');
@@ -1589,6 +1601,14 @@ function switchTab(name, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   window.dispatchEvent(new Event('resize'));
+  if (name === 'visuals' && currentData && currentData.charts) {
+    setTimeout(() => {
+      currentData.charts.forEach((_, idx) => {
+        const el = document.getElementById('chart-plot-' + idx);
+        if (el && typeof Plotly !== 'undefined') Plotly.Plots.resize(el);
+      });
+    }, 60);
+  }
 }
 
 function openSlideDeck() {
