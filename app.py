@@ -5,6 +5,14 @@ import io, os, warnings
 warnings.filterwarnings("ignore")
 
 app = Flask(__name__)
+# Active in-memory dataset cache for multi-turn conversational intelligence, recalculation & clean export
+CURRENT_DATASET = {
+    "df": None,
+    "detected": None,
+    "filename": "b2b_saas_metrics.csv",
+    "industry": "saas"
+}
+
 app.config["MAX_CONTENT_LENGTH"] = 500 * 1024 * 1024
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 @app.errorhandler(413)
@@ -469,11 +477,19 @@ def run_analysis(df, rc, dc, cc, coc):
     # 4. Scatter Chart
     nc2 = df.select_dtypes(include=np.number).columns.tolist()
     if rc and coc and rc in df.columns and coc in df.columns:
-        s2 = df[[rc, coc]].dropna().sample(min(300, len(df)))
-        charts.append(scatterchart(s2[rc].tolist(), s2[coc].tolist(), rc, coc, f"{rc} vs {coc} Correlation"))
+        valid_scatter = df[[rc, coc]].dropna()
+        if len(valid_scatter) > 0:
+            s2 = valid_scatter.sample(min(300, len(valid_scatter)))
+            charts.append(scatterchart(s2[rc].tolist(), s2[coc].tolist(), rc, coc, f"{rc} vs {coc} Correlation"))
+        else:
+            charts.append({"data":[], "layout":{"title":{"text":f"{rc} vs {coc} (No valid pairs)"}}})
     elif len(nc2) >= 2:
-        s2 = df[[nc2[0], nc2[1]]].dropna().sample(min(300, len(df)))
-        charts.append(scatterchart(s2[nc2[0]].tolist(), s2[nc2[1]].tolist(), nc2[0], nc2[1], f"{nc2[0]} vs {nc2[1]}"))
+        valid_scatter = df[[nc2[0], nc2[1]]].dropna()
+        if len(valid_scatter) > 0:
+            s2 = valid_scatter.sample(min(300, len(valid_scatter)))
+            charts.append(scatterchart(s2[nc2[0]].tolist(), s2[nc2[1]].tolist(), nc2[0], nc2[1], f"{nc2[0]} vs {nc2[1]}"))
+        else:
+            charts.append({"data":[], "layout":{"title":{"text":"Correlation unavailable"}}})
 
     num_df = df.select_dtypes(include=np.number)
     stats = []
@@ -497,6 +513,19 @@ def run_analysis(df, rc, dc, cc, coc):
     executive_memo = generate_executive_memo(df, rc, dc, cc, coc, outliers)
     board_slides = generate_board_slides(df, rc, dc, cc, coc, executive_memo, forecast_kpi, outliers)
 
+    # Extract first 15 preview rows safely
+    preview_df = df.head(15).copy()
+    for col in preview_df.columns:
+        if pd.api.types.is_numeric_dtype(preview_df[col]):
+            preview_df[col] = preview_df[col].apply(lambda v: f"{v:,.2f}" if pd.notnull(v) else "—")
+        else:
+            preview_df[col] = preview_df[col].astype(str).replace({"nan": "—", "None": "—"})
+
+    table_preview = {
+        "columns": df.columns.tolist()[:15],
+        "rows": preview_df.to_dict(orient="records")
+    }
+
     return {
         "kpis": kpis,
         "charts": charts,
@@ -505,6 +534,7 @@ def run_analysis(df, rc, dc, cc, coc):
         "forecast_kpi": forecast_kpi,
         "board_slides": board_slides,
         "outliers": outliers,
+        "table_preview": table_preview,
         "stats": stats,
         "quality": {
             "rows": len(df),
@@ -612,6 +642,11 @@ def generate_preset_df(industry):
 def sample():
     industry = request.args.get("industry", "saas").lower()
     df, detected, filename = generate_preset_df(industry)
+    CURRENT_DATASET["df"] = df
+    CURRENT_DATASET["detected"] = detected
+    CURRENT_DATASET["filename"] = filename
+    CURRENT_DATASET["industry"] = industry
+
     result = run_analysis(df, detected["revenue_col"], detected["date_col"], detected["category_col"], detected["cost_col"])
     result["filename"] = filename
     result["rows"] = len(df)
@@ -631,10 +666,39 @@ def upload():
         return jsonify({"error": f"Failed to parse file: {str(e)}"}), 400
 
     detected = detect_cols(df)
+    CURRENT_DATASET["df"] = df
+    CURRENT_DATASET["detected"] = detected
+    CURRENT_DATASET["filename"] = file.filename
+    CURRENT_DATASET["industry"] = "custom"
+
     result = run_analysis(df, detected.get("revenue_col"), detected.get("date_col"), detected.get("category_col"), detected.get("cost_col"))
     result["filename"] = file.filename
     result["rows"] = len(df)
     result["detected"] = detected
+    return jsonify(result)
+
+
+@app.route("/api/recalculate", methods=["POST"])
+def recalculate():
+    data = request.get_json(silent=True) or request.form.to_dict() or {}
+    rc = data.get("revenue_col") or None
+    dc = data.get("date_col") or None
+    cc = data.get("category_col") or None
+    coc = data.get("cost_col") or None
+
+    df = CURRENT_DATASET.get("df")
+    if df is None:
+        df, detected, fname = generate_preset_df("saas")
+        CURRENT_DATASET["df"] = df
+        CURRENT_DATASET["detected"] = detected
+        CURRENT_DATASET["filename"] = fname
+    
+    CURRENT_DATASET["detected"] = {"revenue_col": rc, "date_col": dc, "category_col": cc, "cost_col": coc}
+    result = run_analysis(df, rc, dc, cc, coc)
+    result["filename"] = CURRENT_DATASET.get("filename", "dataset.csv")
+    result["rows"] = len(df)
+    result["detected"] = CURRENT_DATASET["detected"]
+    result["industry"] = CURRENT_DATASET.get("industry", "saas")
     return jsonify(result)
 
 @app.route("/api/analyze", methods=["POST"])
@@ -658,12 +722,20 @@ def analyze():
 def clean_export():
     """Cleans null values, strips whitespace, standardizes dates, drops duplicates, and exports a CSV."""
     industry = request.args.get("industry")
+    export_fname = "cleaned_metriva_dataset.csv"
+    
     if "file" in request.files:
         file = request.files["file"]
         fname = file.filename.lower()
+        export_fname = f"cleaned_{fname}" if fname.endswith(".csv") else f"cleaned_{fname}.csv"
         df = pd.read_csv(file) if fname.endswith(".csv") else pd.read_excel(file)
+    elif CURRENT_DATASET.get("df") is not None:
+        df = CURRENT_DATASET["df"]
+        orig = CURRENT_DATASET.get("filename", "dataset.csv")
+        export_fname = f"cleaned_{orig}" if not orig.startswith("cleaned_") else orig
     else:
-        df, _, _ = generate_preset_df(industry or "saas")
+        df, _, export_fname = generate_preset_df(industry or "saas")
+        export_fname = f"cleaned_{export_fname}"
 
     df_clean = df.copy()
     df_clean = df_clean.drop_duplicates()
@@ -689,8 +761,13 @@ def chat_query():
     query = data.get("query", "").strip().lower()
     industry = data.get("industry", "saas")
 
-    df, detected, fname = generate_preset_df(industry)
-    rc, dc, cc, coc = detected["revenue_col"], detected["date_col"], detected["category_col"], detected["cost_col"]
+    if CURRENT_DATASET.get("df") is not None:
+        df = CURRENT_DATASET["df"]
+        detected = CURRENT_DATASET.get("detected") or detect_cols(df)
+        fname = CURRENT_DATASET.get("filename", "uploaded_dataset.csv")
+    else:
+        df, detected, fname = generate_preset_df(industry)
+    rc, dc, cc, coc = detected.get("revenue_col"), detected.get("date_col"), detected.get("category_col"), detected.get("cost_col")
 
     if not query:
         return jsonify({"answer": "Please ask a question about your revenue, clients, margins, or trends."})

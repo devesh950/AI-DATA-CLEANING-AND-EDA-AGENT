@@ -1183,6 +1183,10 @@ body {
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         📊 Executive Board Deck
       </button>
+      <button class="tab-btn" onclick="switchTab('table', this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+        Data Table Preview
+      </button>
       <button class="tab-btn" onclick="switchTab('stats', this)">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
         Statistical Profile
@@ -1261,6 +1265,26 @@ body {
             Next Slide &rarr;
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Tab 6: Raw Data Table Preview -->
+    <div id="tab-table" style="display:none;">
+      <div style="background:#ffffff; border:1px solid var(--border-light); border-radius:var(--radius-md); padding:16px 20px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h4 style="font-size:1.05rem; font-weight:700; color:var(--text-main);">📋 Live Dataset Spreadsheet Inspector</h4>
+          <p style="font-size:0.83rem; color:var(--text-muted);" id="table-inspector-info">Showing first 15 records of active dataset</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="downloadCleanedData()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export Cleaned CSV
+        </button>
+      </div>
+      <div class="data-table-container" style="max-height:550px; overflow:auto;">
+        <table class="clean-table" id="preview-table">
+          <thead id="preview-thead"></thead>
+          <tbody id="preview-tbody"></tbody>
+        </table>
       </div>
     </div>
 
@@ -1482,6 +1506,36 @@ function renderAll(d) {
     sbody.appendChild(r);
   });
 
+  // 10. Render Data Table Preview
+  if (d.table_preview) {
+    const info = document.getElementById('table-inspector-info');
+    if (info) {
+      info.innerText = `Displaying sample rows of ${d.filename} (${d.table_preview.total_rows.toLocaleString()} total rows, ${d.table_preview.total_cols} columns)`;
+    }
+    const thead = document.getElementById('preview-thead');
+    const tbody = document.getElementById('preview-tbody');
+    if (thead && tbody) {
+      thead.innerHTML = '<tr><th style="width:50px; text-align:center;">#</th>' + 
+        (d.table_preview.columns || []).map(col => `<th>${col}</th>`).join('') + '</tr>';
+      
+      tbody.innerHTML = '';
+      (d.table_preview.rows || []).forEach((row, rIdx) => {
+        const tr = document.createElement('tr');
+        let rowHtml = `<td style="text-align:center; font-weight:600; color:var(--text-muted); font-size:0.75rem;">${rIdx + 1}</td>`;
+        (d.table_preview.columns || []).forEach(col => {
+          let val = row[col];
+          if (val === null || val === undefined || val === '') {
+            rowHtml += `<td><span style="display:inline-block; padding:2px 6px; font-size:0.72rem; border-radius:4px; background:#fef2f2; color:#ef4444; font-weight:600;">null</span></td>`;
+          } else {
+            rowHtml += `<td>${val}</td>`;
+          }
+        });
+        tr.innerHTML = rowHtml;
+        tbody.appendChild(tr);
+      });
+    }
+  }
+
   // 9. Populate Mappers
   populateMappers(d);
 }
@@ -1510,7 +1564,7 @@ function fillSelect(id, list, selVal) {
 }
 
 function switchTab(name, btn) {
-  ['visuals', 'insights', 'quality', 'slides', 'stats'].forEach(t => {
+  ['visuals', 'insights', 'quality', 'slides', 'stats', 'table'].forEach(t => {
     const el = document.getElementById('tab-' + t);
     if (el) el.style.display = (t === name ? 'block' : 'none');
   });
@@ -1580,7 +1634,7 @@ function copyExecutiveMemo() {
 
 function downloadCleanedData() {
   showToast('Exporting repaired, deduplicated dataset...');
-  window.location.href = '/api/clean_export?industry=' + currentIndustry;
+  window.location.href = '/api/clean_export';
 }
 
 function askPrompt(q) {
@@ -1612,14 +1666,35 @@ function executeAiQuery() {
 }
 
 function reAnalyze() {
+  const rev = document.getElementById('sel-revenue').value;
+  const dt = document.getElementById('sel-date').value;
+  const cat = document.getElementById('sel-category').value;
+  const cst = document.getElementById('sel-cost').value;
   showToast('Re-calculating metrics with custom dimensions...');
-  fetch('/api/sample?industry=' + currentIndustry)
-    .then(r => r.json())
-    .then(data => {
-      currentData = data;
-      renderAll(data);
-      showToast('Visuals re-calculated successfully!');
-    });
+  
+  fetch('/api/recalculate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      revenue_col: rev,
+      date_col: dt,
+      category_col: cat,
+      cost_col: cst
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.error) {
+      alert('Recalculation error: ' + data.error);
+      return;
+    }
+    currentData = data;
+    renderAll(data);
+    showToast('Visuals re-calculated successfully with custom mapping!');
+  })
+  .catch(err => {
+    alert('Recalculation failed: ' + err);
+  });
 }
 
 // Auto-load B2B SaaS demo on initial boot
