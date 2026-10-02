@@ -1533,6 +1533,9 @@ window.__tryRenderCharts = function(attempt) {
         displayModeBar: false
       }).then(function() {
         console.log('[Metriva] Chart rendered:', item.id);
+        // Remove loading placeholder
+        var hint = el.querySelector('.chart-loading-hint');
+        if (hint) hint.remove();
         setTimeout(function() {
           try { Plotly.Plots.resize(el); } catch(e) {}
         }, 150);
