@@ -268,14 +268,50 @@ def generate_executive_memo(df, rc, dc, cc, coc, outliers):
             top_val = grp.iloc[0]
             top_pct = top_val / total_rev * 100
             
-            # Pareto 80/20 calculation
+            # Pareto 80/20 calculation with exact denominator and cohorts
             cumsum = grp.cumsum()
             cutoff = total_rev * 0.8
-            top_80_count = (cumsum <= cutoff).sum() + 1
+            top_80_count = int((cumsum <= cutoff).sum() + 1)
+            top_80_count = min(top_80_count, len(grp))
             pareto_pct = (top_80_count / len(grp)) * 100 if len(grp) > 0 else 0
-            pareto_text = f"Pareto Law Verified: {top_80_count} of {len(grp)} {cc}s ({pareto_pct:.0f}%) generate 80% of total volume."
+            core_rev = float(grp.iloc[:top_80_count].sum())
+            tail_count = int(len(grp) - top_80_count)
+            tail_rev = float(grp.iloc[top_80_count:].sum()) if tail_count > 0 else 0.0
 
-            win = f"Category Leader '{top_name}' generates {top_pct:.1f}% ({fmt(top_val)}) of total volume. {pareto_text}"
+            top_accounts = []
+            for idx, val in grp.iloc[:min(5, len(grp))].items():
+                top_accounts.append({
+                    "name": str(idx),
+                    "revenue": fmt(val),
+                    "pct": f"{(val / total_rev * 100):.1f}%"
+                })
+
+            pareto_audit = {
+                "denominator": fmt(total_rev),
+                "total_raw": float(total_rev),
+                "target_80": fmt(cutoff),
+                "dimension": str(cc),
+                "total_accounts": len(grp),
+                "core_count": top_80_count,
+                "core_pct": round(pareto_pct, 1),
+                "core_rev": fmt(core_rev),
+                "core_rev_pct": round(core_rev / total_rev * 100, 1) if total_rev > 0 else 0,
+                "core_avg": fmt(core_rev / top_80_count) if top_80_count > 0 else "0",
+                "tail_count": tail_count,
+                "tail_rev": fmt(tail_rev),
+                "tail_rev_pct": round(tail_rev / total_rev * 100, 1) if total_rev > 0 else 0,
+                "tail_avg": fmt(tail_rev / tail_count) if tail_count > 0 else "0",
+                "formula": f"Σ(Top {top_80_count} {cc}s) ÷ Total Base = {fmt(core_rev)} ÷ {fmt(total_rev)} = {(core_rev / total_rev * 100):.1f}%",
+                "top_accounts": top_accounts
+            }
+
+            pareto_text = (
+                f"Pareto Concentration Verified: {top_80_count} of {len(grp)} {cc}s ({pareto_pct:.0f}%) "
+                f"drive {fmt(core_rev)} ({(core_rev/total_rev*100):.1f}%) of {fmt(total_rev)} total base. "
+                f"Remaining {tail_count} accounts contribute {fmt(tail_rev)}."
+            )
+
+            win = f"Category Leader '{top_name}' generates {top_pct:.1f}% ({fmt(top_val)}) of total volume ({fmt(total_rev)} base). {pareto_text}"
 
             if len(grp) >= 3 and grp.iloc[:3].sum() / total_rev > 0.6:
                 p3 = grp.iloc[:3].sum() / total_rev * 100
@@ -327,6 +363,7 @@ def generate_executive_memo(df, rc, dc, cc, coc, outliers):
         "risk": risk,
         "action": action,
         "pareto_text": pareto_text,
+        "pareto_audit": pareto_audit if 'pareto_audit' in locals() else {},
         "runrate_annual": runrate_annual,
         "action_items": action_items
     }
@@ -911,9 +948,27 @@ def chat_query():
         if cc and rc and cc in df.columns and rc in df.columns:
             grp = df.groupby(cc)[rc].sum().sort_values(ascending=False)
             cumsum = grp.cumsum()
-            top_80 = (cumsum <= total_rev * 0.8).sum() + 1
+            cutoff = total_rev * 0.8
+            top_80 = int((cumsum <= cutoff).sum() + 1)
+            top_80 = min(top_80, len(grp))
             pareto_pct = (top_80 / len(grp)) * 100 if len(grp) > 0 else 0
-            ans = f"⚖️ <strong>Pareto Principle (80/20 Rule):</strong><br>• <strong>{top_80} of {len(grp)}</strong> {cc}s (<strong>{pareto_pct:.0f}%</strong>) generate 80% of total revenue.<br>• Top account: <strong>{grp.index[0]}</strong> with {fmt(grp.iloc[0])} ({grp.iloc[0]/total_rev*100:.1f}%).<br><br>💡 <em>Strategic Takeaway: Concentrate retention incentives on this top {pareto_pct:.0f}% cohort.</em>"
+            core_rev = float(grp.iloc[:top_80].sum())
+            tail_count = int(len(grp) - top_80)
+            tail_rev = float(grp.iloc[top_80:].sum()) if tail_count > 0 else 0.0
+
+            top_list = "".join([f"<li><strong>{idx}</strong>: {fmt(val)} ({(val/total_rev*100):.1f}% of total)</li>" for idx, val in grp.iloc[:min(5, len(grp))].items()])
+
+            ans = f"""⚖️ <strong>Pareto Principle (80/20 Concentration Audit):</strong><br>
+• <strong>Total Revenue Denominator:</strong> <strong>{fmt(total_rev)}</strong> across {len(grp)} {cc} accounts.<br>
+• <strong>80% Target Cutoff:</strong> <strong>{fmt(cutoff)}</strong> driven by <strong>{top_80} of {len(grp)}</strong> {cc}s (<strong>{pareto_pct:.0f}%</strong>).<br><br>
+👥 <strong>Customer Grouping Breakdown:</strong><br>
+• <strong>Core Tier (Top {top_80} accounts / {pareto_pct:.0f}% of base):</strong> {fmt(core_rev)} ({(core_rev/total_rev*100):.1f}%) — Avg: <strong>{fmt(core_rev/top_80)}</strong>/account<br>
+• <strong>Long Tail ({tail_count} accounts / {100-pareto_pct:.0f}% of base):</strong> {fmt(tail_rev)} ({(tail_rev/total_rev*100):.1f}%) — Avg: <strong>{fmt(tail_rev/tail_count) if tail_count > 0 else 0}</strong>/account<br><br>
+📐 <strong>Inspect Calculation &amp; Formula:</strong><br>
+<code style="background:rgba(255,255,255,0.08);padding:4px 8px;border-radius:4px;display:inline-block;margin:4px 0;">Σ(Top {top_80} {cc}s) ÷ Total Base = {fmt(core_rev)} ÷ {fmt(total_rev)} = {(core_rev/total_rev*100):.1f}%</code><br><br>
+🏆 <strong>Ranked Top Contributors:</strong><br>
+<ul style="margin:4px 0 6px 18px;padding:0;">{top_list}</ul>
+💡 <em>Strategic Takeaway: Loss of any single core account ({grp.index[0]} alone is {(grp.iloc[0]/total_rev*100):.1f}%) creates significant downside risk. Focus VIP retention incentives here.</em>"""
             return jsonify({"answer": ans, "type": "pareto"})
 
     # 6. Average & Skewness

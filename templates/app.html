@@ -3,30 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Metriva AI Workspace — Upload your spreadsheet and get instant executive charts, forecasts, anomaly detection, Pareto analysis, and board-ready presentations. No code required.">
 <title>Metriva Workspace — Your AI Business Analyst</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234361ee'/><text x='50' y='68' font-size='55' font-weight='800' fill='white' text-anchor='middle' font-family='system-ui'>M</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
 <script>
-window.__plotlyReady = false;
-function onPlotlyLoad() { window.__plotlyReady = true; }
-function loadPlotlyFallback(urls, idx) {
-  idx = idx || 0;
-  if (idx >= urls.length) { console.error('[Metriva] All Plotly CDNs failed'); return; }
-  if (typeof Plotly !== 'undefined') { onPlotlyLoad(); return; }
-  var s = document.createElement('script');
-  s.src = urls[idx];
-  s.onload = function() { if (typeof Plotly !== 'undefined') onPlotlyLoad(); else loadPlotlyFallback(urls, idx+1); };
-  s.onerror = function() { loadPlotlyFallback(urls, idx+1); };
-  document.head.appendChild(s);
+if (typeof Plotly === 'undefined') {
+  document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.29.1/plotly.min.js"><\/script>');
 }
-loadPlotlyFallback([
-  'https://cdn.plot.ly/plotly-2.29.1.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.29.1/plotly.min.js',
-  'https://unpkg.com/plotly.js@2.29.1/dist/plotly.min.js'
-]);
 </script>
 <style>
 :root {
@@ -409,92 +394,15 @@ body {
 }
 .ai-response-box {
   margin-top: 14px;
-  max-height: 400px;
-  overflow-y: auto;
-  display: none;
-  flex-direction: column;
-  gap: 10px;
-}
-.ai-msg {
-  padding: 12px 16px;
+  padding: 14px 18px;
+  background: #f8fafc;
   border-radius: var(--radius-md);
-  font-size: 0.88rem;
-  line-height: 1.6;
-  animation: fadeIn 0.3s ease;
-}
-.ai-msg.user {
-  background: var(--primary);
-  color: #fff;
-  align-self: flex-end;
-  max-width: 80%;
-  border-bottom-right-radius: 4px;
-  font-weight: 600;
-}
-.ai-msg.bot {
-  background: #f1f5f9;
-  color: var(--secondary);
   border-left: 4px solid var(--primary);
-  align-self: flex-start;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--secondary);
+  display: none;
 }
-
-/* CHART EXPORT BUTTON */
-.chart-card { position: relative; }
-.chart-export-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 10;
-  background: rgba(255,255,255,0.9);
-  border: 1px solid var(--border-light);
-  border-radius: 6px;
-  padding: 5px 8px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-.chart-card:hover .chart-export-btn { opacity: 1; }
-.chart-export-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
-
-/* LOADING SKELETONS */
-@keyframes shimmer {
-  0% { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
-}
-.skeleton {
-  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
-  background-size: 800px 100%;
-  animation: shimmer 1.5s infinite linear;
-  border-radius: var(--radius-md);
-}
-.skeleton-kpi { height: 90px; border-radius: var(--radius-md); }
-.skeleton-chart { height: 340px; border-radius: var(--radius-md); }
-.skeleton-memo { height: 160px; border-radius: var(--radius-lg); }
-
-/* SORTABLE TABLE HEADERS */
-.clean-table th.sortable {
-  cursor: pointer;
-  user-select: none;
-  position: relative;
-  padding-right: 22px !important;
-}
-.clean-table th.sortable:hover { background: #eef2ff; color: var(--primary); }
-.clean-table th.sortable::after {
-  content: '⇅';
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.7rem;
-  opacity: 0.4;
-}
-.clean-table th.sortable.sort-asc::after { content: '↑'; opacity: 1; color: var(--primary); }
-.clean-table th.sortable.sort-desc::after { content: '↓'; opacity: 1; color: var(--primary); }
 
 /* MAPPER TOOLBAR */
 .mapper-bar {
@@ -818,8 +726,6 @@ body {
     align-items: center !important;
     justify-content: space-between !important;
     width: 100% !important;
-    flex-wrap: wrap !important;
-    gap: 6px !important;
   }
   .topbar-left .back-link {
     width: 32px !important;
@@ -840,16 +746,11 @@ body {
   }
   .dataset-tag {
     font-size: 0.72rem !important;
-    padding: 4px 10px !important;
-    max-width: 100% !important;
+    padding: 3px 8px !important;
+    max-width: 130px !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
-    order: 3 !important;
-    width: 100% !important;
-    text-align: center !important;
-    background: rgba(67,97,238,0.06) !important;
-    border-radius: 6px !important;
   }
   .topbar-right {
     display: grid !important;
@@ -1119,7 +1020,7 @@ body {
       <div class="brand-icon">M</div>
       <div>Metriva <span style="font-weight:500; font-size:0.85rem; color:var(--text-light); margin-left:6px;">Workspace</span></div>
     </div>
-    <span class="dataset-tag" id="status-tag" style="display:none;"></span>
+    <span class="dataset-tag" id="status-tag">No dataset loaded</span>
   </div>
 
   <div class="topbar-right">
@@ -1202,6 +1103,50 @@ body {
         <p class="memo-col-text" id="memo-action">Formulating next steps...</p>
       </div>
     </div>
+
+    <!-- Inspectable Pareto Math & Cohort Audit Card (Kapil Chauhan Feedback) -->
+    <div id="memo-pareto-audit" style="display:none; margin-top:14px; background:rgba(15,23,42,0.7); border:1px solid rgba(56,189,248,0.22); border-radius:10px; overflow:hidden;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 18px; cursor:pointer; background:rgba(30,41,59,0.4); user-select:none;" onclick="toggleParetoAudit()">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span style="font-size:1.1rem;">⚖️</span>
+          <span style="font-size:0.85rem; font-weight:700; color:#38bdf8; text-transform:uppercase; letter-spacing:0.5px;">Inspect Pareto Math &amp; Cohort Grouping</span>
+          <span id="pareto-summary-pill" style="font-size:0.75rem; background:rgba(56,189,248,0.15); color:#bae6fd; padding:2px 10px; border-radius:12px; border:1px solid rgba(56,189,248,0.3); font-weight:600;"></span>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span id="pareto-toggle-label" style="font-size:0.8rem; color:#94a3b8; font-weight:600;">View Formula &amp; Math</span>
+          <span id="pareto-toggle-arrow" style="font-size:0.75rem; color:#94a3b8; transition:transform 0.2s;">▼</span>
+        </div>
+      </div>
+      <div id="pareto-audit-body" style="display:none; padding:16px 18px; border-top:1px solid rgba(56,189,248,0.15); font-size:0.85rem;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; margin-bottom:14px;">
+          <div style="background:rgba(2,6,23,0.5); padding:10px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);">
+            <div style="font-size:0.75rem; color:#94a3b8; text-transform:uppercase; font-weight:600;">Revenue Denominator</div>
+            <div id="audit-denom" style="font-size:1.15rem; font-weight:700; color:#f8fafc; margin-top:2px;">-</div>
+            <div id="audit-denom-sub" style="font-size:0.72rem; color:#64748b; margin-top:2px;">Total Dataset Revenue Base</div>
+          </div>
+          <div style="background:rgba(2,6,23,0.5); padding:10px 14px; border-radius:8px; border:1px solid rgba(56,189,248,0.2);">
+            <div style="font-size:0.75rem; color:#38bdf8; text-transform:uppercase; font-weight:600;">Core 80% Cohort</div>
+            <div id="audit-core" style="font-size:1.15rem; font-weight:700; color:#38bdf8; margin-top:2px;">-</div>
+            <div id="audit-core-sub" style="font-size:0.72rem; color:#94a3b8; margin-top:2px;">Accounts driving 80% volume</div>
+          </div>
+          <div style="background:rgba(2,6,23,0.5); padding:10px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);">
+            <div style="font-size:0.75rem; color:#a5b4fc; text-transform:uppercase; font-weight:600;">Long-Tail 20% Cohort</div>
+            <div id="audit-tail" style="font-size:1.15rem; font-weight:700; color:#cbd5e1; margin-top:2px;">-</div>
+            <div id="audit-tail-sub" style="font-size:0.72rem; color:#64748b; margin-top:2px;">Remaining customer accounts</div>
+          </div>
+        </div>
+
+        <div style="background:rgba(15,23,42,0.85); padding:12px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.08); margin-bottom:12px;">
+          <div style="font-size:0.75rem; color:#94a3b8; font-weight:600; margin-bottom:4px;">📐 EXACT MATHEMATICAL FORMULA</div>
+          <code id="audit-formula" style="font-size:0.85rem; color:#38bdf8; font-family:monospace; word-break:break-all;">-</code>
+        </div>
+
+        <div style="background:rgba(2,6,23,0.4); padding:12px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);">
+          <div style="font-size:0.75rem; color:#94a3b8; font-weight:600; margin-bottom:6px;">🏆 RANKED KEY CONTRIBUTORS</div>
+          <div id="audit-top-accounts" style="display:flex; flex-direction:column; gap:6px;"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- 2. Ask Metriva Natural Language Query Bar -->
@@ -1209,8 +1154,7 @@ body {
     <div class="ai-bar-title">
       <span>💬</span>
       <span>Ask Metriva</span>
-      <span style="font-size:0.75rem; font-weight:600; color:var(--text-light); margin-left:4px;">(Conversational Q&amp;A — full chat history)</span>
-      <button onclick="document.getElementById('ai-response-box').innerHTML=''; document.getElementById('ai-response-box').style.display='none';" style="margin-left:auto; background:none; border:1px solid var(--border-light); border-radius:6px; padding:3px 10px; font-size:0.72rem; color:var(--text-muted); cursor:pointer;" title="Clear chat history">Clear ✕</button>
+      <span style="font-size:0.75rem; font-weight:600; color:var(--text-light); margin-left:4px;">(Instant conversational Q&amp;A on your dataset)</span>
     </div>
     <div class="ai-input-wrap">
       <input type="text" class="ai-input" id="ai-query-input" placeholder="Ask anything: 'Who are our top 5 clients?', 'Show me anomalies', 'What is our 3-month forecast?'..." onkeydown="if(event.key==='Enter') executeAiQuery()">
@@ -1220,13 +1164,13 @@ body {
       </button>
     </div>
     <div class="ai-chips">
-      <span style="font-size:0.75rem; font-weight:700; color:var(--text-light);">Suggested:</span>
+      <span style="font-size:0.75rem; font-weight:700; color:var(--text-light);">Suggested Prompts:</span>
       <button class="ai-chip" onclick="askPrompt('Who are our top 5 clients by revenue?')">👑 Top 5 Clients</button>
-      <button class="ai-chip" onclick="askPrompt('What is our gross margin and profit leak?')">💰 Margin & Profit</button>
-      <button class="ai-chip" onclick="askPrompt('What is our monthly growth trend and projection?')">📈 Growth & Forecast</button>
-      <button class="ai-chip" onclick="askPrompt('Are there any anomalies or statistical outliers?')">🛡️ Anomalies</button>
-      <button class="ai-chip" onclick="askPrompt('Show Pareto 80/20 breakdown')">⚖️ Pareto 80/20</button>
-      <button class="ai-chip" onclick="askPrompt('What are your recommended strategic actions?')">🎯 Action Plan</button>
+      <button class="ai-chip" onclick="askPrompt('What is our gross margin and profit leak?')">💰 Gross Margin &amp; Profit</button>
+      <button class="ai-chip" onclick="askPrompt('What is our monthly growth trend and projection?')">📈 Growth &amp; Forecast</button>
+      <button class="ai-chip" onclick="askPrompt('Are there any anomalies or statistical outliers?')">🛡️ Anomaly &amp; Outlier Audit</button>
+      <button class="ai-chip" onclick="askPrompt('Show Pareto 80/20 breakdown')">⚖️ Pareto 80/20 Law</button>
+      <button class="ai-chip" onclick="askPrompt('What are your recommended strategic actions?')">🎯 Action Roadmap</button>
     </div>
     <div class="ai-response-box" id="ai-response-box"></div>
   </div>
@@ -1447,33 +1391,12 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-function showLoadingSkeleton() {
-  document.getElementById('dashboard-wrap').classList.add('active');
-  document.getElementById('executive-memo-card').style.display = 'block';
-  document.getElementById('mapper-bar').style.display = 'flex';
-  var kpiBox = document.getElementById('kpi-container');
-  kpiBox.innerHTML = '';
-  for (var i = 0; i < 4; i++) {
-    var sk = document.createElement('div');
-    sk.className = 'kpi-card skeleton skeleton-kpi';
-    kpiBox.appendChild(sk);
-  }
-  var chartBox = document.getElementById('charts-container');
-  chartBox.innerHTML = '';
-  for (var j = 0; j < 4; j++) {
-    var sc = document.createElement('div');
-    sc.className = 'chart-card skeleton skeleton-chart';
-    chartBox.appendChild(sc);
-  }
-}
-
 function handleFileUpload(file) {
   isDemoMode = false;
   if (!file) return;
   const formData = new FormData();
   formData.append('file', file);
   showToast('Parsing and profiling ' + file.name + '...');
-  showLoadingSkeleton();
   
   fetch('/api/upload', { method: 'POST', body: formData })
     .then(r => r.json())
@@ -1496,7 +1419,6 @@ function loadIndustry(ind) {
   if (btn) btn.classList.add('active');
 
   showToast('Loading ' + ind.toUpperCase() + ' dataset...');
-  showLoadingSkeleton();
   fetch('/api/sample?industry=' + ind)
     .then(r => r.json())
     .then(data => {
@@ -1505,52 +1427,6 @@ function loadIndustry(ind) {
       showToast('Dataset ready!');
     });
 }
-
-// Global chart renderer with retry - waits for Plotly to be ready
-window.__pendingCharts = [];
-window.__tryRenderCharts = function(attempt) {
-  attempt = attempt || 0;
-  if (typeof Plotly === 'undefined') {
-    if (attempt < 50) { // retry for up to 10 seconds (50 * 200ms)
-      // waiting for Plotly...
-      setTimeout(function() { window.__tryRenderCharts(attempt + 1); }, 200);
-    } else {
-      console.error('[Metriva] Plotly never loaded after 10s');
-      (window.__pendingCharts || []).forEach(function(item) {
-        var el = document.getElementById(item.id);
-        if (el) el.innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444;font-weight:600;">⚠️ Chart library failed to load.<br><small style="color:#94a3b8;font-weight:400;">Check your internet connection and refresh.</small></div>';
-      });
-    }
-    return;
-  }
-
-  (window.__pendingCharts || []).forEach(function(item) {
-    var el = document.getElementById(item.id);
-    if (!el) { console.warn('[Metriva] Missing element:', item.id); return; }
-    try {
-      var w = el.offsetWidth || el.clientWidth || 400;
-      item.chart.layout.width = w - 40; // account for padding
-      Plotly.newPlot(el, item.chart.data, item.chart.layout, {
-        responsive: true,
-        displayModeBar: false
-      }).then(function() {
-
-        // Remove loading placeholder
-        var hint = el.querySelector('.chart-loading-hint');
-        if (hint) hint.remove();
-        setTimeout(function() {
-          try { Plotly.Plots.resize(el); } catch(e) {}
-        }, 150);
-      }).catch(function(err) {
-        console.error('[Metriva] Chart error:', item.id, err);
-        el.innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444;">Chart failed: ' + (err.message || err) + '</div>';
-      });
-    } catch(err) {
-      console.error('[Metriva] newPlot threw:', item.id, err);
-      el.innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444;">Render error: ' + err.message + '</div>';
-    }
-  });
-};
 
 function renderAll(d) {
   const totalRecs = (d.rows != null ? d.rows : (d.quality && d.quality.rows != null ? d.quality.rows : 0));
@@ -1569,6 +1445,42 @@ function renderAll(d) {
     document.getElementById('memo-win').innerHTML = d.executive_memo.win || 'N/A';
     document.getElementById('memo-risk').innerHTML = d.executive_memo.risk || 'N/A';
     document.getElementById('memo-action').innerHTML = d.executive_memo.action || 'N/A';
+
+    // Render Pareto Audit box if present
+    const pAudit = d.executive_memo.pareto_audit;
+    const auditWrap = document.getElementById('memo-pareto-audit');
+    if (auditWrap && pAudit && pAudit.denominator) {
+      auditWrap.style.display = 'block';
+      const pill = document.getElementById('pareto-summary-pill');
+      if (pill) pill.textContent = `${pAudit.core_count} of ${pAudit.total_accounts} accounts (${pAudit.core_pct}%)`;
+      const dEl = document.getElementById('audit-denom');
+      if (dEl) dEl.textContent = pAudit.denominator;
+      const dSub = document.getElementById('audit-denom-sub');
+      if (dSub) dSub.textContent = `Total revenue base across ${pAudit.total_accounts} accounts`;
+      const cEl = document.getElementById('audit-core');
+      if (cEl) cEl.textContent = `${pAudit.core_rev} (${pAudit.core_rev_pct}%)`;
+      const cSub = document.getElementById('audit-core-sub');
+      if (cSub) cSub.textContent = `${pAudit.core_count} accounts • Avg ${pAudit.core_avg}/acct`;
+      const tEl = document.getElementById('audit-tail');
+      if (tEl) tEl.textContent = `${pAudit.tail_rev} (${pAudit.tail_rev_pct}%)`;
+      const tSub = document.getElementById('audit-tail-sub');
+      if (tSub) tSub.textContent = `${pAudit.tail_count} accounts • Avg ${pAudit.tail_avg}/acct`;
+      const fEl = document.getElementById('audit-formula');
+      if (fEl) fEl.textContent = pAudit.formula;
+      
+      const acctBox = document.getElementById('audit-top-accounts');
+      if (acctBox) {
+        acctBox.innerHTML = '';
+        (pAudit.top_accounts || []).forEach((a, idx) => {
+          const row = document.createElement('div');
+          row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.04);';
+          row.innerHTML = `<span><strong>#${idx+1} ${a.name}</strong></span><span style="color:#38bdf8; font-weight:600;">${a.revenue} <span style="color:#94a3b8; font-size:0.75rem;">(${a.pct})</span></span>`;
+          acctBox.appendChild(row);
+        });
+      }
+    } else if (auditWrap) {
+      auditWrap.style.display = 'none';
+    }
   }
 
   // 2. Render KPIs
@@ -1588,40 +1500,32 @@ function renderAll(d) {
   // 3. Render Charts
   const chartBox = document.getElementById('charts-container');
   chartBox.innerHTML = '';
-  window.__pendingCharts = [];
+  
+  function renderSinglePlot(wrapId, chartObj) {
+    if (typeof Plotly !== 'undefined') {
+      Plotly.newPlot(wrapId, chartObj.data, chartObj.layout, { responsive: true, displayModeBar: false });
+    } else {
+      setTimeout(() => renderSinglePlot(wrapId, chartObj), 150);
+    }
+  }
 
   const validCharts = (d.charts || []).filter(c => c && c.data && c.data.length > 0);
-
-
   if (validCharts.length === 0) {
-    chartBox.innerHTML = '<div style="grid-column:1/-1; padding:36px; text-align:center; color:var(--text-muted); background:#ffffff; border:1px dashed var(--border-light); border-radius:var(--radius-md);">No chart data available. Select dimensions from the mapping bar above.</div>';
+    chartBox.innerHTML = '<div style="grid-column:1/-1; padding:36px; text-align:center; color:var(--text-muted); background:#ffffff; border:1px dashed var(--border-light); border-radius:var(--radius-md);">Visualizing distributions... Please select dimensions from the mapping bar above.</div>';
   } else {
     validCharts.forEach((c, idx) => {
       const wrap = document.createElement('div');
       wrap.className = 'chart-card';
       wrap.id = 'chart-plot-' + idx;
-      wrap.style.position = 'relative';
-      // Add export button
-      var exportBtn = document.createElement('button');
-      exportBtn.className = 'chart-export-btn';
-      exportBtn.innerHTML = '<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> PNG';
-      exportBtn.onclick = (function(chartId) { return function(e) { e.stopPropagation(); exportChartPNG(chartId); }; })('chart-plot-' + idx);
-      wrap.appendChild(exportBtn);
-      wrap.innerHTML += '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:0.9rem;pointer-events:none;" class="chart-loading-hint">Loading chart...</div>';
       chartBox.appendChild(wrap);
       c.layout = c.layout || {};
       c.layout.autosize = true;
-      c.layout.height = 340;
-      c.layout.width = undefined;
       c.layout.margin = { l: 45, r: 25, t: 45, b: 40 };
       c.layout.paper_bgcolor = '#ffffff';
       c.layout.plot_bgcolor = '#ffffff';
-      window.__pendingCharts.push({ id: 'chart-plot-' + idx, chart: c });
+      renderSinglePlot(wrap.id, c);
     });
-    // Trigger chart rendering
-    window.__tryRenderCharts(0);
   }
-
 
   // 4. Render Insights
   const insBox = document.getElementById('insights-container');
@@ -1718,12 +1622,28 @@ function renderAll(d) {
       const totalC = (d.table_preview.total_cols != null ? d.table_preview.total_cols : (d.columns ? d.columns.length : 0));
       info.innerText = `Displaying sample rows of ${d.filename || 'dataset'} (${Number(totalR).toLocaleString()} total rows, ${totalC} columns)`;
     }
-    // Store for sorting
-    window.__tableColumns = d.table_preview.columns || [];
-    window.__tableRows = d.table_preview.rows || [];
-    window.__tableSortCol = null;
-    window.__tableSortDir = 'asc';
-    renderTablePreview(window.__tableColumns, window.__tableRows);
+    const thead = document.getElementById('preview-thead');
+    const tbody = document.getElementById('preview-tbody');
+    if (thead && tbody) {
+      thead.innerHTML = '<tr><th style="width:50px; text-align:center;">#</th>' + 
+        (d.table_preview.columns || []).map(col => `<th>${col}</th>`).join('') + '</tr>';
+      
+      tbody.innerHTML = '';
+      (d.table_preview.rows || []).forEach((row, rIdx) => {
+        const tr = document.createElement('tr');
+        let rowHtml = `<td style="text-align:center; font-weight:600; color:var(--text-muted); font-size:0.75rem;">${rIdx + 1}</td>`;
+        (d.table_preview.columns || []).forEach(col => {
+          let val = row[col];
+          if (val === null || val === undefined || val === '') {
+            rowHtml += `<td><span style="display:inline-block; padding:2px 6px; font-size:0.72rem; border-radius:4px; background:#fef2f2; color:#ef4444; font-weight:600;">null</span></td>`;
+          } else {
+            rowHtml += `<td>${val}</td>`;
+          }
+        });
+        tr.innerHTML = rowHtml;
+        tbody.appendChild(tr);
+      });
+    }
   }
 
   // 9. Populate Mappers
@@ -1760,19 +1680,14 @@ function switchTab(name, btn) {
   });
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
+  window.dispatchEvent(new Event('resize'));
   if (name === 'visuals' && currentData && currentData.charts) {
-    // Delay resize until after display:block takes effect
-    requestAnimationFrame(function() {
-      setTimeout(function() {
-        window.dispatchEvent(new Event('resize'));
-        currentData.charts.forEach((_, idx) => {
-          const el = document.getElementById('chart-plot-' + idx);
-          if (el && typeof Plotly !== 'undefined') {
-            try { Plotly.Plots.resize(el); } catch(e) {}
-          }
-        });
-      }, 80);
-    });
+    setTimeout(() => {
+      currentData.charts.forEach((_, idx) => {
+        const el = document.getElementById('chart-plot-' + idx);
+        if (el && typeof Plotly !== 'undefined') Plotly.Plots.resize(el);
+      });
+    }, 60);
   }
 }
 
@@ -1827,6 +1742,22 @@ function copyCurrentSlide() {
   showToast('Slide ' + (currentSlideIndex + 1) + ' copied to clipboard!');
 }
 
+function toggleParetoAudit() {
+  const body = document.getElementById('pareto-audit-body');
+  const arrow = document.getElementById('pareto-toggle-arrow');
+  const label = document.getElementById('pareto-toggle-label');
+  if (!body) return;
+  if (body.style.display === 'none') {
+    body.style.display = 'block';
+    if (arrow) arrow.style.transform = 'rotate(180deg)';
+    if (label) label.textContent = 'Hide Formula & Math';
+  } else {
+    body.style.display = 'none';
+    if (arrow) arrow.style.transform = 'rotate(0deg)';
+    if (label) label.textContent = 'View Formula & Math';
+  }
+}
+
 function copyExecutiveMemo() {
   if (!currentData || !currentData.executive_memo) return;
   const m = currentData.executive_memo;
@@ -1851,21 +1782,8 @@ function executeAiQuery() {
   if (!query) return;
 
   const box = document.getElementById('ai-response-box');
-  box.style.display = 'flex';
-
-  // Add user message bubble
-  var userMsg = document.createElement('div');
-  userMsg.className = 'ai-msg user';
-  userMsg.textContent = query;
-  box.appendChild(userMsg);
-
-  // Add loading bubble
-  var loadingMsg = document.createElement('div');
-  loadingMsg.className = 'ai-msg bot';
-  loadingMsg.innerHTML = '<span style="color:var(--text-light)">Analyzing...</span>';
-  box.appendChild(loadingMsg);
-  box.scrollTop = box.scrollHeight;
-  input.value = '';
+  box.style.display = 'block';
+  box.innerHTML = '<span style="color:var(--text-light)">Metriva AI is analyzing your numbers...</span>';
 
   fetch('/api/chat_query', {
     method: 'POST',
@@ -1874,74 +1792,11 @@ function executeAiQuery() {
   })
   .then(r => r.json())
   .then(res => {
-    loadingMsg.innerHTML = res.answer;
-    box.scrollTop = box.scrollHeight;
+    box.innerHTML = res.answer;
   })
   .catch(err => {
-    loadingMsg.innerHTML = '<span style="color:var(--danger)">Failed: ' + err + '</span>';
+    box.innerHTML = '<span style="color:var(--danger)">Failed to query assistant: ' + err + '</span>';
   });
-}
-
-// Chart Export as PNG
-function exportChartPNG(chartId) {
-  var el = document.getElementById(chartId);
-  if (el && typeof Plotly !== 'undefined') {
-    Plotly.downloadImage(el, { format: 'png', width: 1200, height: 600, filename: 'metriva-chart' });
-    showToast('Chart exported as PNG!');
-  }
-}
-
-// Sortable Table
-function renderTablePreview(columns, rows) {
-  var thead = document.getElementById('preview-thead');
-  var tbody = document.getElementById('preview-tbody');
-  if (!thead || !tbody) return;
-  thead.innerHTML = '<tr><th style="width:50px; text-align:center;">#</th>' + 
-    columns.map(function(col) {
-      var cls = 'sortable';
-      if (window.__tableSortCol === col) cls += (window.__tableSortDir === 'asc' ? ' sort-asc' : ' sort-desc');
-      return '<th class="' + cls + '" onclick="sortTable(\'' + col.replace(/'/g, "\\'" ) + '\')">' + col + '</th>';
-    }).join('') + '</tr>';
-  tbody.innerHTML = '';
-  rows.forEach(function(row, rIdx) {
-    var tr = document.createElement('tr');
-    var html = '<td style="text-align:center; font-weight:600; color:var(--text-muted); font-size:0.75rem;">' + (rIdx + 1) + '</td>';
-    columns.forEach(function(col) {
-      var val = row[col];
-      if (val === null || val === undefined || val === '') {
-        html += '<td><span style="display:inline-block; padding:2px 6px; font-size:0.72rem; border-radius:4px; background:#fef2f2; color:#ef4444; font-weight:600;">null</span></td>';
-      } else {
-        html += '<td>' + val + '</td>';
-      }
-    });
-    tr.innerHTML = html;
-    tbody.appendChild(tr);
-  });
-}
-
-function sortTable(col) {
-  if (window.__tableSortCol === col) {
-    window.__tableSortDir = (window.__tableSortDir === 'asc') ? 'desc' : 'asc';
-  } else {
-    window.__tableSortCol = col;
-    window.__tableSortDir = 'asc';
-  }
-  var sorted = (window.__tableRows || []).slice().sort(function(a, b) {
-    var va = a[col], vb = b[col];
-    if (va === null || va === undefined) va = '';
-    if (vb === null || vb === undefined) vb = '';
-    // Try numeric comparison
-    var na = parseFloat(String(va).replace(/[,$]/g, '')), nb = parseFloat(String(vb).replace(/[,$]/g, ''));
-    if (!isNaN(na) && !isNaN(nb)) {
-      return window.__tableSortDir === 'asc' ? na - nb : nb - na;
-    }
-    // String comparison
-    va = String(va).toLowerCase(); vb = String(vb).toLowerCase();
-    if (va < vb) return window.__tableSortDir === 'asc' ? -1 : 1;
-    if (va > vb) return window.__tableSortDir === 'asc' ? 1 : -1;
-    return 0;
-  });
-  renderTablePreview(window.__tableColumns, sorted);
 }
 
 function reAnalyze() {
